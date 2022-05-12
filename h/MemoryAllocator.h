@@ -15,6 +15,11 @@ public:
     jednog bloka, taj preostali prostor se pridruzuje ovom koji smo sad alocirali(jer nema poente da ostane nealociran)
     */
     static void* mem_alloc(size_t size);
+    /*
+    Oslobađa prostor prethodno zauzet pomoću mem_alloc.
+    Vraća 0 u slučaju uspeha, negativnu vrednost u slučaju greške
+
+    */
     static int mem_free(void* memSegment);
 
     struct FreeSegment { // Jednostruko ulancana lista slobodnih segmenata
@@ -33,6 +38,10 @@ public:
             curr->next = prev->next;
             prev->next = curr;
         }
+    };
+
+    enum memFreeFlags {
+        BAD_POINTER = -1 // nije koriscen pokazviac iz mem_alloc
     };
 
 private:

@@ -64,7 +64,29 @@ void *MemoryAllocator::mem_alloc(size_t size) {
 
     return nullptr; // ne postoji dovoljan slobodan prostor
 }
-
+/*
 int MemoryAllocator::mem_free(void *memSegment) {
+    size_t size = sizeof(memSegment);
+    if((char*)memSegment + size > HEAP_END_ADDR || memSegment == nullptr) {
+        return BAD_POINTER;
+    }
+
+    FreeSegment* curr = head, *prev = nullptr;
+    // Ako nema greske posle while: ((char*)prev->baseAddr + prev->size) <= memSegment < curr->baseAddr;
+    while(curr != nullptr && (char*)curr->baseAddr < (char*)memSegment) {
+        prev = curr;
+        curr = curr->next;
+    }
+
+    if(prev == nullptr) {
+        if(curr == nullptr) { // nije se nijednom pozvao mem_alloc
+            return BAD_POINTER;
+        }
+        else if(head == (FreeSegment*)HEAP_END_ADDR) { // ako ne postoji slobodna memorija
+            FreeSegment* newFreeSegment = (FreeSegment*)memSegment;
+
+        }
+    }
+
     return 0;
-}
+}*/

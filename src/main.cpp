@@ -8,11 +8,8 @@ int main() {
     *par = 5;
     *(par + 1) = 3;
 
-    char c = '0' + *par;
-    char c2 = '0' + par[1];
-    __putc(c);
-    __putc('\n');
-    __putc(c2);
+    int x = (size_t)par - (size_t)HEAP_START_ADDR;
+    __putc('0' + x);
 
     return 0;
 }
