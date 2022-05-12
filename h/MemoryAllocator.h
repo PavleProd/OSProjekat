@@ -43,7 +43,7 @@ private:
             prev->next = curr->next;
         }
 
-        // dodaje element curr u ulancanu listu nakon elementa prev(samo ulancava)
+        // dodaje element curr u ulancanu listu nakon elementa prev(samo menja prev->next curr->next)
         static void add(FreeSegment* prev, FreeSegment* curr) {
             curr->next = prev->next;
             prev->next = curr;
@@ -54,7 +54,7 @@ private:
         size_t size; // velicina segmenta(ukljucujuci i zaglavlje)
     };
 
-    static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
+
 
     static FreeSegment* head; // pocetak ulancane liste slobodnih segmenata
 
@@ -77,6 +77,8 @@ private:
     static inline bool isStartOfBlock(void* address) {
         return relativeAddress(address) % MEM_BLOCK_SIZE;
     }
+public:
+    static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
 };
 
 

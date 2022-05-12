@@ -19,7 +19,7 @@ void *MemoryAllocator::mem_alloc(size_t size) {
     FreeSegment *curr = head, *prev = nullptr;
     while(curr) {
         size_t freeSegSizeInBlocks = sizeInBlocks(curr->size);
-        size_t allocatedSize = 0;
+        size_t allocatedSize;
         void* startOfAllocatedSpace = curr->baseAddr;
         if(freeSegSizeInBlocks >= numOfBlocksToAllocate) {
             if(freeSegSizeInBlocks == numOfBlocksToAllocate) { // ako ce preostali slobodan segment da bude manji od jednog bloka onda i njega dodeljujemo memoriji
@@ -68,8 +68,11 @@ void *MemoryAllocator::mem_alloc(size_t size) {
 }
 
 int MemoryAllocator::mem_free(void *memSegment) {
-    size_t size = sizeof(memSegment);
-    if((char*)memSegment + size > HEAP_END_ADDR || memSegment == nullptr
+    if((size_t)memSegment - SegmentOffset < (size_t)HEAP_END_ADDR) return BAD_POINTER;
+
+    size_t size = *(size_t*)((char*)memSegment - MemoryAllocator::SegmentOffset); // velicina koja se cuva u zaglavlju
+    memSegment = (void*)((char*)memSegment - MemoryAllocator::SegmentOffset); // pocetak segmenta ukljucujuci i zaglavlje
+    if((char*)memSegment + size > (char*)HEAP_END_ADDR || memSegment == nullptr
         || !isStartOfBlock(memSegment) || size < MEM_BLOCK_SIZE) {
         return BAD_POINTER;
     }
@@ -85,11 +88,39 @@ int MemoryAllocator::mem_free(void *memSegment) {
         if(curr == nullptr) { // nije se nijednom pozvao mem_alloc
             return BAD_POINTER;
         }
-        else if(head == (FreeSegment*)HEAP_END_ADDR) { // ako ne postoji slobodna memorija
+        else {
             FreeSegment* newFreeSegment = (FreeSegment*)memSegment;
-            newFreeSegment->next = nullptr;
             newFreeSegment->size = size;
             newFreeSegment->baseAddr = memSegment;
+
+            if((char*)head->baseAddr == ((char*)newFreeSegment->baseAddr + newFreeSegment->size)) { // spajamo head i novi slobodan segment ako su susedni
+                newFreeSegment->size += head->size;
+                newFreeSegment->next = head->next;
+            }
+            else {
+                newFreeSegment->next = head;
+            }
+            head = newFreeSegment;
+
+            return 0;
+        }
+    }
+    else {
+        if((char*)prev->baseAddr + prev->size == (char*)memSegment) { // spajamo prethodni i novi slobodni segment ako su susedni
+            prev->size += size;
+        }
+        else {
+            FreeSegment *newFreeSegment = (FreeSegment *) memSegment;
+            newFreeSegment->size = size;
+            newFreeSegment->baseAddr = memSegment;
+
+            FreeSegment::add(prev, newFreeSegment); // ulancavamo prev i newFreeSegment
+            prev = newFreeSegment;
+        }
+
+        if(curr && (char*)curr->baseAddr == ((char*)prev->baseAddr + prev->size)) { // ako postoji susedni desni segment spajamo ga sa prethodnim
+            prev->size += curr->size;
+            prev->next = curr->next;
         }
     }
 
