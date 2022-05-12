@@ -7,6 +7,7 @@ class MemoryAllocator {
 public:
     /*
     Alocira (najmanje) size bajtova memorije, zaokruženo i poravnato na blokove veličine MEM_BLOCK_SIZE.
+    Svaki alocirani segment ima zaglavlje sa velicinom tog segmenta(vraca se adresa nakon tog zaglavlja)
 
     Vraća:
     pokazivač na alocirani deo memorije u slučaju uspeha, nullptr u slučaju neuspeha
@@ -22,32 +23,40 @@ public:
     */
     static int mem_free(void* memSegment);
 
+    enum memFreeFlags {
+        BAD_POINTER = -1 // nije koriscen pokazviac iz mem_alloc
+    };
+
+private:
+    MemoryAllocator() {} // da bi se zabranilo pravljenje objekata
+
     struct FreeSegment { // Jednostruko ulancana lista slobodnih segmenata
         void* baseAddr; // pocetna adresa u segmentu
         size_t size; // velicina segmenta
         FreeSegment* next; // sledeci element u ulancanoj listi
 
-        static void remove(FreeSegment* prev) { // brise element iz ulancane liste koji se nalazi posle elementa prev
+        // brise element iz ulancane liste koji se nalazi posle elementa prev
+        static void remove(FreeSegment* prev) {
             if(!prev->next) return;
 
             FreeSegment* curr = prev->next;
             prev->next = curr->next;
         }
 
-        static void add(FreeSegment* prev, FreeSegment* curr) { // dodaje element curr u ulancanu listu nakon elementa prev(samo ulancava)
+        // dodaje element curr u ulancanu listu nakon elementa prev(samo ulancava)
+        static void add(FreeSegment* prev, FreeSegment* curr) {
             curr->next = prev->next;
             prev->next = curr;
         }
     };
 
-    enum memFreeFlags {
-        BAD_POINTER = -1 // nije koriscen pokazviac iz mem_alloc
+    struct AllocatedSpaceHeader { // Zaglavlje zauzetog segmenta
+        size_t size; // velicina segmenta(ukljucujuci i zaglavlje)
     };
 
-private:
+    static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
+
     static FreeSegment* head; // pocetak ulancane liste slobodnih segmenata
-    static MemoryAllocator* memAllocator;
-    MemoryAllocator() {}
 
     // Vraca minimalan potreban broj blokova za alokaciju memorije velicine size bajtova
     static inline size_t sizeInBlocks(size_t size) {
@@ -57,6 +66,16 @@ private:
     // Vraca velicinu numOfBlocks blokova u bajtovima
     static inline size_t blocksInSize(size_t numOfBlocks) {
         return numOfBlocks * MEM_BLOCK_SIZE;
+    }
+
+    // vraca relativnu adresu u odnosu na pocetak HEAP-a
+    static inline size_t relativeAddress(void* address) {
+        return (size_t)address - (size_t)HEAP_START_ADDR;
+    }
+
+    // vraca true ako je adresa pocetak bloka(relativno u odnosu na pocetak heap-a)
+    static inline bool isStartOfBlock(void* address) {
+        return relativeAddress(address) % MEM_BLOCK_SIZE;
     }
 };
 
