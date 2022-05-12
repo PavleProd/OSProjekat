@@ -21,7 +21,7 @@ void *MemoryAllocator::mem_alloc(size_t size) {
         size_t freeSegSizeInBlocks = sizeInBlocks(curr->size);
         size_t allocatedSize;
         void* startOfAllocatedSpace = curr->baseAddr;
-        if(freeSegSizeInBlocks >= numOfBlocksToAllocate) {
+        if(curr->size >= size && freeSegSizeInBlocks >= numOfBlocksToAllocate) {
             if(freeSegSizeInBlocks == numOfBlocksToAllocate) { // ako ce preostali slobodan segment da bude manji od jednog bloka onda i njega dodeljujemo memoriji
                 allocatedSize = curr->size;
 
@@ -68,13 +68,23 @@ void *MemoryAllocator::mem_alloc(size_t size) {
 }
 
 int MemoryAllocator::mem_free(void *memSegment) {
-    if((size_t)memSegment - SegmentOffset < (size_t)HEAP_END_ADDR) return BAD_POINTER;
+    if(!memSegment || (size_t)memSegment - SegmentOffset < (size_t)HEAP_START_ADDR) return BAD_POINTER;
 
     size_t size = *(size_t*)((char*)memSegment - MemoryAllocator::SegmentOffset); // velicina koja se cuva u zaglavlju
     memSegment = (void*)((char*)memSegment - MemoryAllocator::SegmentOffset); // pocetak segmenta ukljucujuci i zaglavlje
-    if((char*)memSegment + size > (char*)HEAP_END_ADDR || memSegment == nullptr
+    if((char*)memSegment + size - 1 > (char*)HEAP_END_ADDR || memSegment == nullptr
         || !isStartOfBlock(memSegment) || size < MEM_BLOCK_SIZE) {
         return BAD_POINTER;
+    }
+
+    if(head == HEAP_END_ADDR) { // ako je memorija puna onda samo oslobadja dati deo
+        FreeSegment* newFreeSegment = (FreeSegment*)memSegment;
+        newFreeSegment->size = size;
+        newFreeSegment->baseAddr = memSegment;
+        newFreeSegment->next = nullptr;
+
+        head = newFreeSegment;
+        return 0;
     }
 
     FreeSegment* curr = head, *prev = nullptr;

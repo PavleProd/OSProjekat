@@ -18,8 +18,8 @@ public:
     static void* mem_alloc(size_t size);
     /*
     Oslobađa prostor prethodno zauzet pomoću mem_alloc.
-    Vraća 0 u slučaju uspeha, negativnu vrednost u slučaju greške
-
+    Vraća 0 u slučaju uspeha, BAD_POINTER  flag ako je dostavljen los pokazivac.
+    Ako je moguce, spaja dva susedna slobodna segmenta u jedan veci
     */
     static int mem_free(void* memSegment);
 
@@ -54,7 +54,7 @@ private:
         size_t size; // velicina segmenta(ukljucujuci i zaglavlje)
     };
 
-
+    static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
 
     static FreeSegment* head; // pocetak ulancane liste slobodnih segmenata
 
@@ -75,10 +75,8 @@ private:
 
     // vraca true ako je adresa pocetak bloka(relativno u odnosu na pocetak heap-a)
     static inline bool isStartOfBlock(void* address) {
-        return relativeAddress(address) % MEM_BLOCK_SIZE;
+        return relativeAddress(address) % MEM_BLOCK_SIZE == 0;
     }
-public:
-    static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
 };
 
 
