@@ -1,13 +1,13 @@
 #include "../h/syscall_c.h"
 #include "../h/MemoryAllocator.h"
 
-extern "C" void* interrupt(); // u interrupt treba dodati i cuvanje konteksta
+extern "C" void interrupt(); // u interrupt treba dodati i cuvanje konteksta
 // prelazak u sistemski rezim i prelazak na sistemsku funkciju zadatu u registru stvec(asemblerska funkcija interrupt)
 void* callInterrupt() {
+    void* res;
     asm volatile("csrw stvec, %0" : : "r" (&interrupt));
     asm volatile("ecall");
 
-    void* res;
     asm volatile("mv %0, a0" : "=r" (res));
     return res;
 }
@@ -15,7 +15,7 @@ void* callInterrupt() {
 extern "C" void* interruptHandler() { // extern C da kompajler ne bi menjao ime funkcije
     uint64 scause;
     asm volatile("csrr %0, scause" : "=r" (scause)); // citanje vrednosti scause
-    if(scause == 8) { // sistemski poziv iz korisnickog rezima
+    if(scause == 9 || scause == 8) { // sistemski poziv iz korisnickog(8) ili sistemskog(9) rezima
         uint64 code;
         asm volatile("mv %0, a0" : "=r" (code));
         switch(code) {
@@ -24,6 +24,7 @@ extern "C" void* interruptHandler() { // extern C da kompajler ne bi menjao ime 
                 size_t size = 0;
                 asm volatile("mv %0, a1" : "=r" (size));
                 size = MemoryAllocator::blocksInSize(size);
+
                 return MemoryAllocator::mem_alloc(size);
             }
             case 0x2: // mem_free(void* memSegment)
