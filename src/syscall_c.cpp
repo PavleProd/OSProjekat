@@ -42,17 +42,17 @@ extern "C" void* interruptHandler() { // extern C da kompajler ne bi menjao ime 
 
 void* mem_alloc(size_t size) {
     uint64 code = 0x01; // kod sistemskog poziva
-    asm volatile("sd a0, %0" : : "r" (code));
+    asm volatile("sd a0, %0" : : "r" (code)); // a0 = code
     // size je dat u bajtovima, a mi treba da ga prebacimo u blokove i onda opet upisemo u a1
     size = MemoryAllocator::sizeInBlocks(size);
-    asm volatile("sd a1, %0" : : "r" (size));
+    asm volatile("sd a1, %0" : : "r" (size)); // a1 = size
 
     return callIntertupt();
 }
 
 int mem_free (void* memSegment) {
     uint64 code = 0x02; // kod sistemskog poziva
-    asm volatile("sd a0, $0" : : "r" (code));
+    asm volatile("sd a0, $0" : : "r" (code)); // a0 = code
 
     return (uint64)(interrupt());
 }
