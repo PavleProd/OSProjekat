@@ -27,6 +27,15 @@ public:
         BAD_POINTER = -1 // nije koriscen pokazviac iz mem_alloc
     };
 
+    // Vraca minimalan potreban broj blokova za alokaciju memorije velicine size bajtova
+    static inline size_t sizeInBlocks(size_t size) {
+        return (size / MEM_BLOCK_SIZE) + (size % MEM_BLOCK_SIZE > 0);
+    }
+
+    // Vraca velicinu numOfBlocks blokova u bajtovima
+    static inline size_t blocksInSize(size_t numOfBlocks) {
+        return numOfBlocks * MEM_BLOCK_SIZE;
+    }
 private:
     MemoryAllocator() {} // da bi se zabranilo pravljenje objekata
 
@@ -57,16 +66,6 @@ private:
     static const size_t SegmentOffset = sizeof(AllocatedSpaceHeader);
 
     static FreeSegment* head; // pocetak ulancane liste slobodnih segmenata
-
-    // Vraca minimalan potreban broj blokova za alokaciju memorije velicine size bajtova
-    static inline size_t sizeInBlocks(size_t size) {
-        return (size / MEM_BLOCK_SIZE) + (size % MEM_BLOCK_SIZE > 0);
-    }
-
-    // Vraca velicinu numOfBlocks blokova u bajtovima
-    static inline size_t blocksInSize(size_t numOfBlocks) {
-        return numOfBlocks * MEM_BLOCK_SIZE;
-    }
 
     // vraca relativnu adresu u odnosu na pocetak HEAP-a
     static inline size_t relativeAddress(void* address) {
