@@ -1,6 +1,8 @@
 #include "../lib/hw.h"
 #include "../lib/console.h"
 #include "../h/MemoryAllocator.h"
+#include "../h/syscall_c.h"
+#include "../h/print.h"
 
 void checkNullptr(void* p) {
     static int x = 0;
@@ -21,35 +23,11 @@ void checkStatus(int status) {
 }
 
 int main() {
-    int n = 16;
-    char** matrix = (char**)MemoryAllocator::mem_alloc(n*sizeof(char*));
-    checkNullptr(matrix);
-    for(int i = 0; i < n; i++) {
-        matrix[i] = (char *) MemoryAllocator::mem_alloc(n * sizeof(char));
-        checkNullptr(matrix[i]);
-    }
+    int* par = (int*)mem_alloc(2*sizeof(int));
+    par[0] = 1;
+    par[1] = 2;
 
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            matrix[i][j] = (char)('0' + (i+j)%10);
-        }
-    }
-
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            __putc(matrix[i][j]);
-            __putc(' ');
-        }
-        __putc('\n');
-    }
-
-
-    for(int i = 0; i < n; i++) {
-        int status = MemoryAllocator::mem_free(matrix[i]);
-        checkStatus(status);
-    }
-    int status = MemoryAllocator::mem_free(matrix);
-    checkStatus(status);
-
+    printInteger(par[0]);
+    printInteger(par[1]);
     return 0;
 }

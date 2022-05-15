@@ -1,6 +1,6 @@
-.extern handleInterrupt
+.extern interruptHandler
 .align 4
 .global interrupt
 interrupt:
-    call handleInterrupt
+    call interruptHandler
     sret
