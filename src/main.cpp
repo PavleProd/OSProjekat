@@ -2,28 +2,54 @@
 #include "../lib/console.h"
 #include "../h/MemoryAllocator.h"
 
-int main() {
-    int velicinaZaglavlja = sizeof(size_t); // meni je ovoliko
-
-    char* niz = (char*)MemoryAllocator::mem_alloc((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR + 1 - velicinaZaglavlja); // celokupan prostor
-    if(niz == nullptr) {
+void checkNullptr(void* p) {
+    static int x = 0;
+    if(p == nullptr) {
         __putc('?');
+        __putc('0' + x);
     }
+    x++;
+}
 
-    int n = 10;
-    char* niz2 = (char*)MemoryAllocator::mem_alloc(n*sizeof(char));
-    if(niz2 == nullptr) {
-        __putc('k');
-    }
-
-    int status = MemoryAllocator::mem_free(niz);
+void checkStatus(int status) {
+    static int y = 0;
     if(status) {
+        __putc('0' + y);
         __putc('?');
     }
-    niz2 = (char*)MemoryAllocator::mem_alloc(n*sizeof(char));
-    if(niz2 == nullptr) {
-        __putc('?');
+    y++;
+}
+
+int main() {
+    int n = 16;
+    char** matrix = (char**)MemoryAllocator::mem_alloc(n*sizeof(char*));
+    checkNullptr(matrix);
+    for(int i = 0; i < n; i++) {
+        matrix[i] = (char *) MemoryAllocator::mem_alloc(n * sizeof(char));
+        checkNullptr(matrix[i]);
     }
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            matrix[i][j] = (char)('0' + (i+j)%10);
+        }
+    }
+
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            __putc(matrix[i][j]);
+            __putc(' ');
+        }
+        __putc('\n');
+    }
+
+
+    for(int i = 0; i < n; i++) {
+        int status = MemoryAllocator::mem_free(matrix[i]);
+        checkStatus(status);
+    }
+    int status = MemoryAllocator::mem_free(matrix);
+    checkStatus(status);
 
     return 0;
 }
