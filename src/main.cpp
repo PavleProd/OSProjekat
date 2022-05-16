@@ -24,10 +24,14 @@ void checkStatus(int status) {
 
 int main() {
     int* par = (int*)mem_alloc(2*sizeof(int));
+    checkNullptr(par);
     par[0] = 1;
     par[1] = 2;
 
     printInteger(par[0]);
     printInteger(par[1]);
+
+    int status = mem_free(par);
+    checkStatus(status);
     return 0;
 }
