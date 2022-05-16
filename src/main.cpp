@@ -23,15 +23,33 @@ void checkStatus(int status) {
 }
 
 int main() {
-    int* par = (int*)mem_alloc(2*sizeof(int));
-    checkNullptr(par);
-    par[0] = 1;
-    par[1] = 2;
+    int n = 16;
+    char** matrix = (char**)new char(n*sizeof(char*));
+    checkNullptr(matrix);
+    for(int i = 0; i < n; i++) {
+        matrix[i] = (char *) new char(n * sizeof(char));
+        checkNullptr(matrix[i]);
+    }
 
-    printInteger(par[0]);
-    printInteger(par[1]);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            matrix[i][j] = 'k';
+        }
+    }
 
-    int status = mem_free(par);
-    checkStatus(status);
+    for(int i = 0; i < n; i++) {
+        for(int j = 0; j < n; j++) {
+            __putc(matrix[i][j]);
+            __putc(' ');
+        }
+        __putc('\n');
+    }
+
+
+    for(int i = 0; i < n; i++) {
+        delete(matrix[i]);
+    }
+    delete(matrix);
+
     return 0;
 }
