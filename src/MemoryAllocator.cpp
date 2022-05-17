@@ -18,7 +18,7 @@ void *MemoryAllocator::mem_alloc(size_t size) {
 
     FreeSegment *curr = head, *prev = nullptr;
     while(curr) {
-        size_t freeSegSizeInBlocks = sizeInBlocks(curr->size);
+        size_t freeSegSizeInBlocks = (curr->size/MEM_BLOCK_SIZE); // zaokruzujemo da donji ceo deo
         size_t allocatedSize;
         void* startOfAllocatedSpace = curr->baseAddr;
         if(curr->size >= size && freeSegSizeInBlocks >= numOfBlocksToAllocate) {

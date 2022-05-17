@@ -23,33 +23,28 @@ void checkStatus(int status) {
 }
 
 int main() {
-    int n = 16;
-    char** matrix = (char**)new char(n*sizeof(char*));
-    checkNullptr(matrix);
-    for(int i = 0; i < n; i++) {
-        matrix[i] = (char *) new char(n * sizeof(char));
-        checkNullptr(matrix[i]);
+    int velicinaZaglavlja = sizeof(size_t); // meni je ovoliko
+
+    const size_t celaMemorija = (((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR - velicinaZaglavlja)/MEM_BLOCK_SIZE - 1)*MEM_BLOCK_SIZE ;
+    char* niz = (char*)mem_alloc(celaMemorija); // celokupan prostor
+    if(niz == nullptr) {
+        __putc('?');
     }
 
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            matrix[i][j] = 'k';
-        }
+    int n = 10;
+    char* niz2 = (char*)mem_alloc(n*sizeof(char));
+    if(niz2 == nullptr) {
+        __putc('k');
     }
 
-    for(int i = 0; i < n; i++) {
-        for(int j = 0; j < n; j++) {
-            __putc(matrix[i][j]);
-            __putc(' ');
-        }
-        __putc('\n');
+    int status = mem_free(niz);
+    if(status) {
+        __putc('?');
     }
-
-
-    for(int i = 0; i < n; i++) {
-        delete(matrix[i]);
+    niz2 = (char*)mem_alloc(n*sizeof(char));
+    if(niz2 == nullptr) {
+        __putc('?');
     }
-    delete(matrix);
 
     return 0;
 }
