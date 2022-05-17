@@ -15,3 +15,15 @@ popRegisters:
     .endr
     addi sp, sp, 256
     ret
+
+.global _ZN3PCB13switchContextEPNS_7ContextES1_
+_ZN3PCB13switchContextEPNS_7ContextES1_:
+    // a0 - &old->context
+    // a1 - &running->context
+    sd ra, 0 * 8(a0)
+    sd sp, 1 * 8(a0)
+
+    ld ra, 0 * 8(a1)
+    ld sp, 1 * 8(a1)
+
+    ret

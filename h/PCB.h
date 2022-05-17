@@ -1,10 +1,13 @@
 #ifndef PCB_H
 #define PCB_H
 
-#include "../lib/hw.h"
+#include "hw.h"
+
+
 class PCB {
 friend class Scheduler;
 public:
+    // vraca true ako se proces zavrsio, false ako nije
     bool isFinished() const {
         return finished;
     }
@@ -12,28 +15,36 @@ public:
         finished = finished_;
     }
 
-    using proccessMain = void(*)(); // pokazivac na void funkciju bez argumenata
+    using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
 
-    static PCB* createProccess(proccessMain main);
+    static PCB* createProccess(processMain main);
+    // Cuva kontekst trenutnog procesa, vrsi promenu tekuceg procesa i vraca kontekst novog procesa
     static void yield();
-    static PCB* running;
+    static PCB* running; // tekuci proces
+
+    ~PCB();
 
 private:
-
-    // pokazivac na sledeci proces u listi spremnih procesa (ako nije u listi spremnih nullptr, ako jeste bice garantovano razlicit on nullptr)
-    // jer ce poslednji element pokazivati na idle proces(TODO: treba da bude private!!!)
-    PCB* nextReady = nullptr;
+    PCB(processMain main);
 
     struct Context {
-        uint64 ra; // (x1) kada menjamo kontekst moramo da sacuvamo dokle je proces stigao sa obradom
-        uint64 sp; // (x2) kada menjamo kontekst nazad na proces da bismo skinuli registre sa steka moramo znati sp
+        size_t ra; // (x1) kada menjamo kontekst moramo da sacuvamo dokle je proces stigao sa obradom
+        size_t sp; // (x2) kada menjamo kontekst nazad na proces da bismo skinuli registre sa steka moramo znati sp
     };
-    uint64* stack; // stek procesa, na njemu se cuva kontest procesa
+
+    // pokazivac na sledeci proces u listi spremnih procesa (ako nije u listi spremnih nullptr, ako jeste bice garantovano razlicit on nullptr)
+    // jer ce poslednji element pokazivati na idle proces
+    PCB* nextReady = nullptr;
+    size_t* stack; // stek procesa, na njemu se cuva kontest procesa
     Context context; // kontekst procesa
+    processMain main; // glavna funkcija koju proces izvrsava
+    bool finished; // govori da li se proces zavrsio
 
-    proccessMain main; // glavna funkcija koju proces izvrsava
-    bool finished;
+    // iz reda spremnih procesa uzima jedan proces i postavlja ga kao tekuci proces
+    static void dispatch();
 
+    // Asemblerska funkcija cuva ra(x1) i sp(x2) starog konteksta, a ucitava ra i sp novog konteksta
+    static void switchContext(Context* oldContext, Context* newContext);
 };
 
 

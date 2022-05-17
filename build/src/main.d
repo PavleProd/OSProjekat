@@ -1,9 +1,9 @@
-build/src/main.o: src/main.cpp src/../lib/hw.h src/../lib/console.h \
+build/src/main.o: src/main.cpp src/../h/hw.h src/../h/console.h \
  src/../h/MemoryAllocator.h src/../h/syscall_c.h src/../h/print.h
 
-src/../lib/hw.h:
+src/../h/hw.h:
 
-src/../lib/console.h:
+src/../h/console.h:
 
 src/../h/MemoryAllocator.h:
 

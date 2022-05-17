@@ -1,7 +1,7 @@
 #ifndef SYSCALL_C_H
 #define SYSCALL_C_H
 
-#include "../lib/hw.h"
+#include "hw.h"
 
 /*
     Alocira (najmanje) size bajtova memorije, zaokruženo i poravnato na blokove veličine MEM_BLOCK_SIZE.

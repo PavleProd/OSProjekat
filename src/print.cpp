@@ -1,5 +1,5 @@
 #include "../h/print.h"
-#include "../lib/console.h"
+#include "../h/console.h"
 
 void printString(char const *string)
 {

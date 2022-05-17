@@ -1,5 +1,5 @@
-#include "../lib/hw.h"
-#include "../lib/console.h"
+#include "../h/hw.h"
+#include "../h/console.h"
 #include "../h/MemoryAllocator.h"
 #include "../h/syscall_c.h"
 #include "../h/print.h"

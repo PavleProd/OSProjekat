@@ -1,7 +1,7 @@
 #ifndef PRINT_H
 #define PRINT_H
 
-#include "../lib/hw.h"
+#include "hw.h"
 
 extern void printString(char const *string);
 

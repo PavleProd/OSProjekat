@@ -1,7 +1,7 @@
 #ifndef PROJECT_BASE_MEMORYALLOCATOR_H
 #define PROJECT_BASE_MEMORYALLOCATOR_H
 
-#include "../lib/hw.h"
+#include "hw.h"
 
 class MemoryAllocator {
 public:
