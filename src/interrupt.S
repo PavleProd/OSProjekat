@@ -12,7 +12,6 @@ interrupt:
     .endr
 
     call interruptHandler
-    csrc sip, 0x02 // brisemo zahtev za prekidom
 
     // uvecavanje sepc za 4
     csrr t1, sepc

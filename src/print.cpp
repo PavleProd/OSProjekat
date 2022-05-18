@@ -1,5 +1,6 @@
 #include "../h/print.h"
 #include "../h/console.h"
+#include "../h/kernel.h"
 
 void printString(char const *string)
 {
@@ -10,7 +11,7 @@ void printString(char const *string)
     }
 }
 
-void printInteger(uint64 integer)
+void printInteger(size_t integer)
 {
     static char digits[] = "0123456789";
     char buf[16];
@@ -37,4 +38,13 @@ void printInteger(uint64 integer)
 
     while (--i >= 0)
         __putc(buf[i]);
+}
+
+void printError() {
+    printString("scause: ");
+    printInteger(Kernel::r_scause());
+    printString("\nsepc: ");
+    printInteger(Kernel::r_sepc());
+    printString("\nstval: ");
+    printInteger(Kernel::r_stval());
 }

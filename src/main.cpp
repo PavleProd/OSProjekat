@@ -25,26 +25,24 @@ void checkStatus(int status) {
 int main() {
     int velicinaZaglavlja = sizeof(size_t); // meni je ovoliko
 
-    const size_t celaMemorija = (((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR - velicinaZaglavlja)/MEM_BLOCK_SIZE - 1)*MEM_BLOCK_SIZE ;
-    char* niz = (char*)mem_alloc(celaMemorija); // celokupan prostor
-    if(niz == nullptr) {
-        __putc('?');
-    }
+    int *p1 = (int*)MemoryAllocator::mem_alloc(15*sizeof(int)); // trebalo bi da predje jedan blok od 64
+    checkNullptr(p1);
+    int *p2 = (int*)MemoryAllocator::mem_alloc(30*sizeof(int));
+    checkNullptr(p2);
 
-    int n = 10;
-    char* niz2 = (char*)mem_alloc(n*sizeof(char));
-    if(niz2 == nullptr) {
-        __putc('k');
-    }
+    int *p3 = (int*)MemoryAllocator::mem_alloc(30*sizeof(int));
+    checkNullptr(p3);
 
-    int status = mem_free(niz);
-    if(status) {
-        __putc('?');
-    }
-    niz2 = (char*)mem_alloc(n*sizeof(char));
-    if(niz2 == nullptr) {
-        __putc('?');
-    }
+    checkStatus(MemoryAllocator::mem_free(p1));
+    checkStatus(MemoryAllocator::mem_free(p3));
+    checkStatus(MemoryAllocator::mem_free(p2)); // p2 treba da se spoji sa p1 i p3
+
+    const size_t maxMemorija = (((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR - velicinaZaglavlja)/MEM_BLOCK_SIZE - 1)*MEM_BLOCK_SIZE ;
+    int *celaMemorija = (int*)MemoryAllocator::mem_alloc(maxMemorija);
+    checkNullptr(celaMemorija);
+
+    checkStatus(MemoryAllocator::mem_free(celaMemorija));
+
 
     return 0;
 }

@@ -16,7 +16,7 @@ popRegisters:
     addi sp, sp, 256
     ret
 
-.global _ZN3PCB13switchContextEPNS_7ContextES1_
+.global _ZN3PCB13switchContextEPNS_7ContextES1_ // switchContext
 _ZN3PCB13switchContextEPNS_7ContextES1_:
     // a0 - &old->context
     // a1 - &running->context

@@ -1,4 +1,4 @@
-GAS LISTING /tmp/ccrsJ40F.s 			page 1
+GAS LISTING /tmp/ccalT72N.s 			page 1
 
 
    1              		.file	"main.cpp"
@@ -58,7 +58,7 @@ GAS LISTING /tmp/ccrsJ40F.s 			page 1
   39 0030 97000000 		call	__putc@plt
   39      E7800000 
   40              	.LVL2:
-GAS LISTING /tmp/ccrsJ40F.s 			page 2
+GAS LISTING /tmp/ccalT72N.s 			page 2
 
 
   11:src/main.cpp  ****     }
@@ -118,7 +118,7 @@ GAS LISTING /tmp/ccrsJ40F.s 			page 1
   82 0088 2322F700 		sw	a5,4(a4)
   83 008c 67800000 		ret
   84              	.L14:
-GAS LISTING /tmp/ccrsJ40F.s 			page 3
+GAS LISTING /tmp/ccalT72N.s 			page 3
 
 
   16:src/main.cpp  ****     static int y = 0;
@@ -178,410 +178,430 @@ GAS LISTING /tmp/ccrsJ40F.s 			page 1
   25:src/main.cpp  **** int main() {
  130              		.loc 1 25 12 is_stmt 1
  131              		.cfi_startproc
-GAS LISTING /tmp/ccrsJ40F.s 			page 4
+GAS LISTING /tmp/ccalT72N.s 			page 4
 
 
- 132 00e8 130101FE 		addi	sp,sp,-32
- 133              		.cfi_def_cfa_offset 32
- 134 00ec 233C1100 		sd	ra,24(sp)
- 135 00f0 23388100 		sd	s0,16(sp)
- 136 00f4 23349100 		sd	s1,8(sp)
- 137              		.cfi_offset 1, -8
- 138              		.cfi_offset 8, -16
- 139              		.cfi_offset 9, -24
- 140 00f8 13040102 		addi	s0,sp,32
- 141              		.cfi_def_cfa 8, 0
+ 132 00e8 130101FD 		addi	sp,sp,-48
+ 133              		.cfi_def_cfa_offset 48
+ 134 00ec 23341102 		sd	ra,40(sp)
+ 135 00f0 23308102 		sd	s0,32(sp)
+ 136 00f4 233C9100 		sd	s1,24(sp)
+ 137 00f8 23382101 		sd	s2,16(sp)
+ 138 00fc 23343101 		sd	s3,8(sp)
+ 139              		.cfi_offset 1, -8
+ 140              		.cfi_offset 8, -16
+ 141              		.cfi_offset 9, -24
+ 142              		.cfi_offset 18, -32
+ 143              		.cfi_offset 19, -40
+ 144 0100 13040103 		addi	s0,sp,48
+ 145              		.cfi_def_cfa 8, 0
   26:src/main.cpp  ****     int velicinaZaglavlja = sizeof(size_t); // meni je ovoliko
- 142              		.loc 1 26 5
- 143              	.LVL8:
+ 146              		.loc 1 26 5
+ 147              	.LVL8:
   27:src/main.cpp  **** 
-  28:src/main.cpp  ****     const size_t celaMemorija = (((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR - velicinaZaglavl
- 144              		.loc 1 28 5
- 145              		.loc 1 28 57 is_stmt 0
- 146 00fc 97070000 		la	a5,HEAP_END_ADDR
- 146      83B70700 
- 147 0104 03B50700 		ld	a0,0(a5)
- 148 0108 97070000 		la	a5,HEAP_START_ADDR
- 148      83B70700 
- 149 0110 83B70700 		ld	a5,0(a5)
- 150 0114 3305F540 		sub	a0,a0,a5
- 151              		.loc 1 28 83
- 152 0118 130585FF 		addi	a0,a0,-8
- 153              		.loc 1 28 103
- 154 011c 13556500 		srli	a0,a0,6
- 155              		.loc 1 28 119
- 156 0120 1305F5FF 		addi	a0,a0,-1
- 157              	.LVL9:
-  29:src/main.cpp  ****     char* niz = (char*)mem_alloc(celaMemorija); // celokupan prostor
- 158              		.loc 1 29 5 is_stmt 1
- 159              		.loc 1 29 33 is_stmt 0
- 160 0124 13156500 		slli	a0,a0,6
- 161              	.LVL10:
- 162 0128 97000000 		call	_Z9mem_allocm@plt
+  28:src/main.cpp  ****     int *p1 = (int*)MemoryAllocator::mem_alloc(15*sizeof(int)); // trebalo bi da predje jedan blok 
+ 148              		.loc 1 28 5
+ 149              		.loc 1 28 47 is_stmt 0
+ 150 0104 1305C003 		li	a0,60
+ 151 0108 97000000 		call	_ZN15MemoryAllocator9mem_allocEm@plt
+ 151      E7800000 
+ 152              	.LVL9:
+ 153 0110 93090500 		mv	s3,a0
+ 154              	.LVL10:
+  29:src/main.cpp  ****     checkNullptr(p1);
+ 155              		.loc 1 29 5 is_stmt 1
+ 156              		.loc 1 29 17 is_stmt 0
+ 157 0114 97000000 		call	_Z12checkNullptrPv
+ 157      E7800000 
+ 158              	.LVL11:
+  30:src/main.cpp  ****     int *p2 = (int*)MemoryAllocator::mem_alloc(30*sizeof(int));
+ 159              		.loc 1 30 5 is_stmt 1
+ 160              		.loc 1 30 47 is_stmt 0
+ 161 011c 13058007 		li	a0,120
+ 162 0120 97000000 		call	_ZN15MemoryAllocator9mem_allocEm@plt
  162      E7800000 
- 163              	.LVL11:
- 164 0130 93040500 		mv	s1,a0
- 165              	.LVL12:
-  30:src/main.cpp  ****     if(niz == nullptr) {
- 166              		.loc 1 30 5 is_stmt 1
- 167 0134 63060504 		beqz	a0,.L21
- 168              	.L16:
-  31:src/main.cpp  ****         __putc('?');
-  32:src/main.cpp  ****     }
-  33:src/main.cpp  **** 
-  34:src/main.cpp  ****     int n = 10;
- 169              		.loc 1 34 5
- 170              	.LVL13:
-  35:src/main.cpp  ****     char* niz2 = (char*)mem_alloc(n*sizeof(char));
- 171              		.loc 1 35 5
- 172              		.loc 1 35 34 is_stmt 0
- 173 0138 1305A000 		li	a0,10
- 174 013c 97000000 		call	_Z9mem_allocm@plt
- 174      E7800000 
-GAS LISTING /tmp/ccrsJ40F.s 			page 5
+ 163              	.LVL12:
+ 164 0128 93040500 		mv	s1,a0
+ 165              	.LVL13:
+  31:src/main.cpp  ****     checkNullptr(p2);
+ 166              		.loc 1 31 5 is_stmt 1
+ 167              		.loc 1 31 17 is_stmt 0
+ 168 012c 97000000 		call	_Z12checkNullptrPv
+ 168      E7800000 
+ 169              	.LVL14:
+  32:src/main.cpp  **** 
+  33:src/main.cpp  ****     int *p3 = (int*)MemoryAllocator::mem_alloc(30*sizeof(int));
+ 170              		.loc 1 33 5 is_stmt 1
+ 171              		.loc 1 33 47 is_stmt 0
+ 172 0134 13058007 		li	a0,120
+ 173 0138 97000000 		call	_ZN15MemoryAllocator9mem_allocEm@plt
+ 173      E7800000 
+ 174              	.LVL15:
+ 175 0140 13090500 		mv	s2,a0
+GAS LISTING /tmp/ccalT72N.s 			page 5
 
 
- 175              	.LVL14:
-  36:src/main.cpp  ****     if(niz2 == nullptr) {
- 176              		.loc 1 36 5 is_stmt 1
- 177 0144 63060504 		beqz	a0,.L22
- 178              	.LVL15:
- 179              	.L17:
-  37:src/main.cpp  ****         __putc('k');
-  38:src/main.cpp  ****     }
+ 176              	.LVL16:
+  34:src/main.cpp  ****     checkNullptr(p3);
+ 177              		.loc 1 34 5 is_stmt 1
+ 178              		.loc 1 34 17 is_stmt 0
+ 179 0144 97000000 		call	_Z12checkNullptrPv
+ 179      E7800000 
+ 180              	.LVL17:
+  35:src/main.cpp  **** 
+  36:src/main.cpp  ****     checkStatus(MemoryAllocator::mem_free(p1));
+ 181              		.loc 1 36 5 is_stmt 1
+ 182              		.loc 1 36 16 is_stmt 0
+ 183 014c 13850900 		mv	a0,s3
+ 184 0150 97000000 		call	_ZN15MemoryAllocator8mem_freeEPv@plt
+ 184      E7800000 
+ 185              	.LVL18:
+ 186 0158 97000000 		call	_Z11checkStatusi
+ 186      E7800000 
+ 187              	.LVL19:
+  37:src/main.cpp  ****     checkStatus(MemoryAllocator::mem_free(p3));
+ 188              		.loc 1 37 5 is_stmt 1
+ 189              		.loc 1 37 16 is_stmt 0
+ 190 0160 13050900 		mv	a0,s2
+ 191 0164 97000000 		call	_ZN15MemoryAllocator8mem_freeEPv@plt
+ 191      E7800000 
+ 192              	.LVL20:
+ 193 016c 97000000 		call	_Z11checkStatusi
+ 193      E7800000 
+ 194              	.LVL21:
+  38:src/main.cpp  ****     checkStatus(MemoryAllocator::mem_free(p2)); // p2 treba da se spoji sa p1 i p3
+ 195              		.loc 1 38 5 is_stmt 1
+ 196              		.loc 1 38 16 is_stmt 0
+ 197 0174 13850400 		mv	a0,s1
+ 198 0178 97000000 		call	_ZN15MemoryAllocator8mem_freeEPv@plt
+ 198      E7800000 
+ 199              	.LVL22:
+ 200 0180 97000000 		call	_Z11checkStatusi
+ 200      E7800000 
+ 201              	.LVL23:
   39:src/main.cpp  **** 
-  40:src/main.cpp  ****     int status = mem_free(niz);
- 180              		.loc 1 40 5
- 181              		.loc 1 40 26 is_stmt 0
- 182 0148 13850400 		mv	a0,s1
- 183 014c 97000000 		call	_Z8mem_freePv@plt
- 183      E7800000 
- 184              	.LVL16:
-  41:src/main.cpp  ****     if(status) {
- 185              		.loc 1 41 5 is_stmt 1
- 186 0154 63160504 		bnez	a0,.L23
- 187              	.LVL17:
- 188              	.L18:
-  42:src/main.cpp  ****         __putc('?');
-  43:src/main.cpp  ****     }
-  44:src/main.cpp  ****     niz2 = (char*)mem_alloc(n*sizeof(char));
- 189              		.loc 1 44 5
- 190              		.loc 1 44 28 is_stmt 0
- 191 0158 1305A000 		li	a0,10
- 192 015c 97000000 		call	_Z9mem_allocm@plt
- 192      E7800000 
- 193              	.LVL18:
-  45:src/main.cpp  ****     if(niz2 == nullptr) {
- 194              		.loc 1 45 5 is_stmt 1
- 195 0164 63060504 		beqz	a0,.L24
- 196              	.LVL19:
- 197              	.L19:
-  46:src/main.cpp  ****         __putc('?');
-  47:src/main.cpp  ****     }
-  48:src/main.cpp  **** 
-  49:src/main.cpp  ****     return 0;
- 198              		.loc 1 49 5
-  50:src/main.cpp  **** }
- 199              		.loc 1 50 1 is_stmt 0
- 200 0168 13050000 		li	a0,0
- 201 016c 83308101 		ld	ra,24(sp)
- 202              		.cfi_remember_state
- 203              		.cfi_restore 1
- 204 0170 03340101 		ld	s0,16(sp)
- 205              		.cfi_restore 8
- 206              		.cfi_def_cfa 2, 32
- 207 0174 83348100 		ld	s1,8(sp)
- 208              		.cfi_restore 9
- 209              	.LVL20:
- 210 0178 13010102 		addi	sp,sp,32
- 211              		.cfi_def_cfa_offset 0
- 212 017c 67800000 		jr	ra
- 213              	.LVL21:
- 214              	.L21:
-GAS LISTING /tmp/ccrsJ40F.s 			page 6
+  40:src/main.cpp  ****     const size_t maxMemorija = (((size_t)HEAP_END_ADDR - (size_t)HEAP_START_ADDR - velicinaZaglavlj
+ 202              		.loc 1 40 5 is_stmt 1
+ 203              		.loc 1 40 56 is_stmt 0
+ 204 0188 97070000 		la	a5,HEAP_END_ADDR
+ 204      83B70700 
+ 205 0190 03B50700 		ld	a0,0(a5)
+ 206 0194 97070000 		la	a5,HEAP_START_ADDR
+ 206      83B70700 
+ 207 019c 83B70700 		ld	a5,0(a5)
+ 208 01a0 3305F540 		sub	a0,a0,a5
+ 209              		.loc 1 40 82
+ 210 01a4 130585FF 		addi	a0,a0,-8
+ 211              		.loc 1 40 102
+ 212 01a8 13556500 		srli	a0,a0,6
+ 213              		.loc 1 40 118
+ 214 01ac 1305F5FF 		addi	a0,a0,-1
+ 215              	.LVL24:
+  41:src/main.cpp  ****     int *celaMemorija = (int*)MemoryAllocator::mem_alloc(maxMemorija);
+GAS LISTING /tmp/ccalT72N.s 			page 6
 
 
- 215              		.cfi_restore_state
-  31:src/main.cpp  ****     }
- 216              		.loc 1 31 9 is_stmt 1
-  31:src/main.cpp  ****     }
- 217              		.loc 1 31 15 is_stmt 0
- 218 0180 1305F003 		li	a0,63
- 219 0184 97000000 		call	__putc@plt
- 219      E7800000 
- 220              	.LVL22:
- 221 018c 6FF0DFFA 		j	.L16
- 222              	.LVL23:
- 223              	.L22:
-  37:src/main.cpp  ****     }
- 224              		.loc 1 37 9 is_stmt 1
-  37:src/main.cpp  ****     }
- 225              		.loc 1 37 15 is_stmt 0
- 226 0190 1305B006 		li	a0,107
- 227              	.LVL24:
- 228 0194 97000000 		call	__putc@plt
- 228      E7800000 
- 229              	.LVL25:
- 230 019c 6FF0DFFA 		j	.L17
- 231              	.LVL26:
- 232              	.L23:
-  42:src/main.cpp  ****     }
- 233              		.loc 1 42 9 is_stmt 1
-  42:src/main.cpp  ****     }
- 234              		.loc 1 42 15 is_stmt 0
- 235 01a0 1305F003 		li	a0,63
- 236              	.LVL27:
- 237 01a4 97000000 		call	__putc@plt
- 237      E7800000 
- 238              	.LVL28:
- 239 01ac 6FF0DFFA 		j	.L18
- 240              	.LVL29:
- 241              	.L24:
-  46:src/main.cpp  ****     }
- 242              		.loc 1 46 9 is_stmt 1
-  46:src/main.cpp  ****     }
- 243              		.loc 1 46 15 is_stmt 0
- 244 01b0 1305F003 		li	a0,63
- 245              	.LVL30:
- 246 01b4 97000000 		call	__putc@plt
- 246      E7800000 
- 247              	.LVL31:
- 248 01bc 6FF0DFFA 		j	.L19
- 249              		.cfi_endproc
- 250              	.LFE11:
- 252              		.bss
- 253              		.align	2
- 254              		.set	.LANCHOR0,. + 0
- 257              	_ZZ12checkNullptrPvE1x:
- 258 0000 00000000 		.zero	4
- 261              	_ZZ11checkStatusiE1y:
- 262 0004 00000000 		.zero	4
- 263              		.text
- 264              	.Letext0:
-GAS LISTING /tmp/ccrsJ40F.s 			page 7
+ 216              		.loc 1 41 5 is_stmt 1
+ 217              		.loc 1 41 57 is_stmt 0
+ 218 01b0 13156500 		slli	a0,a0,6
+ 219              	.LVL25:
+ 220 01b4 97000000 		call	_ZN15MemoryAllocator9mem_allocEm@plt
+ 220      E7800000 
+ 221              	.LVL26:
+ 222 01bc 93040500 		mv	s1,a0
+ 223              	.LVL27:
+  42:src/main.cpp  ****     checkNullptr(celaMemorija);
+ 224              		.loc 1 42 5 is_stmt 1
+ 225              		.loc 1 42 17 is_stmt 0
+ 226 01c0 97000000 		call	_Z12checkNullptrPv
+ 226      E7800000 
+ 227              	.LVL28:
+  43:src/main.cpp  **** 
+  44:src/main.cpp  ****     checkStatus(MemoryAllocator::mem_free(celaMemorija));
+ 228              		.loc 1 44 5 is_stmt 1
+ 229              		.loc 1 44 16 is_stmt 0
+ 230 01c8 13850400 		mv	a0,s1
+ 231 01cc 97000000 		call	_ZN15MemoryAllocator8mem_freeEPv@plt
+ 231      E7800000 
+ 232              	.LVL29:
+ 233 01d4 97000000 		call	_Z11checkStatusi
+ 233      E7800000 
+ 234              	.LVL30:
+  45:src/main.cpp  **** 
+  46:src/main.cpp  **** 
+  47:src/main.cpp  ****     return 0;
+ 235              		.loc 1 47 5 is_stmt 1
+  48:src/main.cpp  **** }
+ 236              		.loc 1 48 1 is_stmt 0
+ 237 01dc 13050000 		li	a0,0
+ 238 01e0 83308102 		ld	ra,40(sp)
+ 239              		.cfi_restore 1
+ 240 01e4 03340102 		ld	s0,32(sp)
+ 241              		.cfi_restore 8
+ 242              		.cfi_def_cfa 2, 48
+ 243 01e8 83348101 		ld	s1,24(sp)
+ 244              		.cfi_restore 9
+ 245              	.LVL31:
+ 246 01ec 03390101 		ld	s2,16(sp)
+ 247              		.cfi_restore 18
+ 248              	.LVL32:
+ 249 01f0 83398100 		ld	s3,8(sp)
+ 250              		.cfi_restore 19
+ 251              	.LVL33:
+ 252 01f4 13010103 		addi	sp,sp,48
+ 253              		.cfi_def_cfa_offset 0
+ 254 01f8 67800000 		jr	ra
+ 255              		.cfi_endproc
+ 256              	.LFE11:
+ 258              		.bss
+ 259              		.align	2
+ 260              		.set	.LANCHOR0,. + 0
+ 263              	_ZZ12checkNullptrPvE1x:
+ 264 0000 00000000 		.zero	4
+GAS LISTING /tmp/ccalT72N.s 			page 7
 
 
- 265              		.file 2 "src/../h/hw.h"
- 266              		.file 3 "src/../h/syscall_c.h"
- 267              		.file 4 "src/../h/console.h"
-GAS LISTING /tmp/ccrsJ40F.s 			page 8
+ 267              	_ZZ11checkStatusiE1y:
+ 268 0004 00000000 		.zero	4
+ 269              		.text
+ 270              	.Letext0:
+ 271              		.file 2 "src/../h/hw.h"
+ 272              		.file 3 "src/../h/MemoryAllocator.h"
+ 273              		.file 4 "src/../h/console.h"
+GAS LISTING /tmp/ccalT72N.s 			page 8
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.cpp
-     /tmp/ccrsJ40F.s:9      .text:0000000000000000 _Z12checkNullptrPv
-     /tmp/ccrsJ40F.s:13     .text:0000000000000000 .L0 
-     /tmp/ccrsJ40F.s:15     .text:0000000000000000 .L0 
-     /tmp/ccrsJ40F.s:16     .text:0000000000000000 .L0 
-     /tmp/ccrsJ40F.s:17     .text:0000000000000000 .L0 
-     /tmp/ccrsJ40F.s:19     .text:0000000000000004 .L0 
-     /tmp/ccrsJ40F.s:20     .text:0000000000000004 .L0 
-     /tmp/ccrsJ40F.s:27     .text:000000000000001c .L0 
-     /tmp/ccrsJ40F.s:28     .text:0000000000000020 .L0 
-     /tmp/ccrsJ40F.s:31     .text:0000000000000028 .L0 
-     /tmp/ccrsJ40F.s:32     .text:0000000000000028 .L0 
-     /tmp/ccrsJ40F.s:34     .text:000000000000002c .L0 
-     /tmp/ccrsJ40F.s:36     .text:000000000000002c .L0 
-     /tmp/ccrsJ40F.s:37     .text:000000000000002c .L0 
-     /tmp/ccrsJ40F.s:42     .text:0000000000000038 .L0 
-     /tmp/ccrsJ40F.s:43     .text:0000000000000038 .L0 
-     /tmp/ccrsJ40F.s:49     .text:0000000000000050 .L0 
-     /tmp/ccrsJ40F.s:50     .text:0000000000000050 .L0 
-     /tmp/ccrsJ40F.s:55     .text:0000000000000064 .L0 
-     /tmp/ccrsJ40F.s:56     .text:0000000000000068 .L0 
-     /tmp/ccrsJ40F.s:58     .text:000000000000006c .L0 
-     /tmp/ccrsJ40F.s:59     .text:000000000000006c .L0 
-     /tmp/ccrsJ40F.s:61     .text:0000000000000070 .L0 
-     /tmp/ccrsJ40F.s:63     .text:0000000000000074 .L0 
-     /tmp/ccrsJ40F.s:69     .text:0000000000000074 _Z11checkStatusi
-     /tmp/ccrsJ40F.s:72     .text:0000000000000074 .L0 
-     /tmp/ccrsJ40F.s:74     .text:0000000000000074 .L0 
-     /tmp/ccrsJ40F.s:75     .text:0000000000000074 .L0 
-     /tmp/ccrsJ40F.s:76     .text:0000000000000074 .L0 
-     /tmp/ccrsJ40F.s:78     .text:0000000000000078 .L0 
-     /tmp/ccrsJ40F.s:79     .text:0000000000000078 .L0 
-     /tmp/ccrsJ40F.s:86     .text:0000000000000090 .L0 
-     /tmp/ccrsJ40F.s:87     .text:0000000000000094 .L0 
-     /tmp/ccrsJ40F.s:90     .text:000000000000009c .L0 
-     /tmp/ccrsJ40F.s:91     .text:000000000000009c .L0 
-     /tmp/ccrsJ40F.s:93     .text:00000000000000a0 .L0 
-     /tmp/ccrsJ40F.s:95     .text:00000000000000a0 .L0 
-     /tmp/ccrsJ40F.s:96     .text:00000000000000a0 .L0 
-     /tmp/ccrsJ40F.s:103    .text:00000000000000b8 .L0 
-     /tmp/ccrsJ40F.s:104    .text:00000000000000b8 .L0 
-     /tmp/ccrsJ40F.s:108    .text:00000000000000c4 .L0 
-     /tmp/ccrsJ40F.s:109    .text:00000000000000c4 .L0 
-     /tmp/ccrsJ40F.s:114    .text:00000000000000d8 .L0 
-     /tmp/ccrsJ40F.s:115    .text:00000000000000dc .L0 
-     /tmp/ccrsJ40F.s:117    .text:00000000000000e0 .L0 
-     /tmp/ccrsJ40F.s:118    .text:00000000000000e0 .L0 
-     /tmp/ccrsJ40F.s:120    .text:00000000000000e4 .L0 
-     /tmp/ccrsJ40F.s:122    .text:00000000000000e8 .L0 
-     /tmp/ccrsJ40F.s:128    .text:00000000000000e8 main
-     /tmp/ccrsJ40F.s:131    .text:00000000000000e8 .L0 
-     /tmp/ccrsJ40F.s:132    .text:00000000000000e8 .L0 
-     /tmp/ccrsJ40F.s:133    .text:00000000000000ec .L0 
-     /tmp/ccrsJ40F.s:137    .text:00000000000000f8 .L0 
-     /tmp/ccrsJ40F.s:138    .text:00000000000000f8 .L0 
-     /tmp/ccrsJ40F.s:139    .text:00000000000000f8 .L0 
-GAS LISTING /tmp/ccrsJ40F.s 			page 9
+     /tmp/ccalT72N.s:9      .text:0000000000000000 _Z12checkNullptrPv
+     /tmp/ccalT72N.s:13     .text:0000000000000000 .L0 
+     /tmp/ccalT72N.s:15     .text:0000000000000000 .L0 
+     /tmp/ccalT72N.s:16     .text:0000000000000000 .L0 
+     /tmp/ccalT72N.s:17     .text:0000000000000000 .L0 
+     /tmp/ccalT72N.s:19     .text:0000000000000004 .L0 
+     /tmp/ccalT72N.s:20     .text:0000000000000004 .L0 
+     /tmp/ccalT72N.s:27     .text:000000000000001c .L0 
+     /tmp/ccalT72N.s:28     .text:0000000000000020 .L0 
+     /tmp/ccalT72N.s:31     .text:0000000000000028 .L0 
+     /tmp/ccalT72N.s:32     .text:0000000000000028 .L0 
+     /tmp/ccalT72N.s:34     .text:000000000000002c .L0 
+     /tmp/ccalT72N.s:36     .text:000000000000002c .L0 
+     /tmp/ccalT72N.s:37     .text:000000000000002c .L0 
+     /tmp/ccalT72N.s:42     .text:0000000000000038 .L0 
+     /tmp/ccalT72N.s:43     .text:0000000000000038 .L0 
+     /tmp/ccalT72N.s:49     .text:0000000000000050 .L0 
+     /tmp/ccalT72N.s:50     .text:0000000000000050 .L0 
+     /tmp/ccalT72N.s:55     .text:0000000000000064 .L0 
+     /tmp/ccalT72N.s:56     .text:0000000000000068 .L0 
+     /tmp/ccalT72N.s:58     .text:000000000000006c .L0 
+     /tmp/ccalT72N.s:59     .text:000000000000006c .L0 
+     /tmp/ccalT72N.s:61     .text:0000000000000070 .L0 
+     /tmp/ccalT72N.s:63     .text:0000000000000074 .L0 
+     /tmp/ccalT72N.s:69     .text:0000000000000074 _Z11checkStatusi
+     /tmp/ccalT72N.s:72     .text:0000000000000074 .L0 
+     /tmp/ccalT72N.s:74     .text:0000000000000074 .L0 
+     /tmp/ccalT72N.s:75     .text:0000000000000074 .L0 
+     /tmp/ccalT72N.s:76     .text:0000000000000074 .L0 
+     /tmp/ccalT72N.s:78     .text:0000000000000078 .L0 
+     /tmp/ccalT72N.s:79     .text:0000000000000078 .L0 
+     /tmp/ccalT72N.s:86     .text:0000000000000090 .L0 
+     /tmp/ccalT72N.s:87     .text:0000000000000094 .L0 
+     /tmp/ccalT72N.s:90     .text:000000000000009c .L0 
+     /tmp/ccalT72N.s:91     .text:000000000000009c .L0 
+     /tmp/ccalT72N.s:93     .text:00000000000000a0 .L0 
+     /tmp/ccalT72N.s:95     .text:00000000000000a0 .L0 
+     /tmp/ccalT72N.s:96     .text:00000000000000a0 .L0 
+     /tmp/ccalT72N.s:103    .text:00000000000000b8 .L0 
+     /tmp/ccalT72N.s:104    .text:00000000000000b8 .L0 
+     /tmp/ccalT72N.s:108    .text:00000000000000c4 .L0 
+     /tmp/ccalT72N.s:109    .text:00000000000000c4 .L0 
+     /tmp/ccalT72N.s:114    .text:00000000000000d8 .L0 
+     /tmp/ccalT72N.s:115    .text:00000000000000dc .L0 
+     /tmp/ccalT72N.s:117    .text:00000000000000e0 .L0 
+     /tmp/ccalT72N.s:118    .text:00000000000000e0 .L0 
+     /tmp/ccalT72N.s:120    .text:00000000000000e4 .L0 
+     /tmp/ccalT72N.s:122    .text:00000000000000e8 .L0 
+     /tmp/ccalT72N.s:128    .text:00000000000000e8 main
+     /tmp/ccalT72N.s:131    .text:00000000000000e8 .L0 
+     /tmp/ccalT72N.s:132    .text:00000000000000e8 .L0 
+     /tmp/ccalT72N.s:133    .text:00000000000000ec .L0 
+     /tmp/ccalT72N.s:139    .text:0000000000000100 .L0 
+     /tmp/ccalT72N.s:140    .text:0000000000000100 .L0 
+     /tmp/ccalT72N.s:141    .text:0000000000000100 .L0 
+GAS LISTING /tmp/ccalT72N.s 			page 9
 
 
-     /tmp/ccrsJ40F.s:141    .text:00000000000000fc .L0 
-     /tmp/ccrsJ40F.s:144    .text:00000000000000fc .L0 
-     /tmp/ccrsJ40F.s:145    .text:00000000000000fc .L0 
-     /tmp/ccrsJ40F.s:146    .text:00000000000000fc .L0 
-     /tmp/ccrsJ40F.s:152    .text:0000000000000118 .L0 
-     /tmp/ccrsJ40F.s:154    .text:000000000000011c .L0 
-     /tmp/ccrsJ40F.s:156    .text:0000000000000120 .L0 
-     /tmp/ccrsJ40F.s:159    .text:0000000000000124 .L0 
-     /tmp/ccrsJ40F.s:160    .text:0000000000000124 .L0 
-     /tmp/ccrsJ40F.s:167    .text:0000000000000134 .L0 
-     /tmp/ccrsJ40F.s:171    .text:0000000000000138 .L0 
-     /tmp/ccrsJ40F.s:172    .text:0000000000000138 .L0 
-     /tmp/ccrsJ40F.s:173    .text:0000000000000138 .L0 
-     /tmp/ccrsJ40F.s:177    .text:0000000000000144 .L0 
-     /tmp/ccrsJ40F.s:181    .text:0000000000000148 .L0 
-     /tmp/ccrsJ40F.s:182    .text:0000000000000148 .L0 
-     /tmp/ccrsJ40F.s:186    .text:0000000000000154 .L0 
-     /tmp/ccrsJ40F.s:190    .text:0000000000000158 .L0 
-     /tmp/ccrsJ40F.s:191    .text:0000000000000158 .L0 
-     /tmp/ccrsJ40F.s:195    .text:0000000000000164 .L0 
-     /tmp/ccrsJ40F.s:199    .text:0000000000000168 .L0 
-     /tmp/ccrsJ40F.s:200    .text:0000000000000168 .L0 
-     /tmp/ccrsJ40F.s:202    .text:0000000000000170 .L0 
-     /tmp/ccrsJ40F.s:203    .text:0000000000000170 .L0 
-     /tmp/ccrsJ40F.s:205    .text:0000000000000174 .L0 
-     /tmp/ccrsJ40F.s:206    .text:0000000000000174 .L0 
-     /tmp/ccrsJ40F.s:208    .text:0000000000000178 .L0 
-     /tmp/ccrsJ40F.s:211    .text:000000000000017c .L0 
-     /tmp/ccrsJ40F.s:215    .text:0000000000000180 .L0 
-     /tmp/ccrsJ40F.s:217    .text:0000000000000180 .L0 
-     /tmp/ccrsJ40F.s:218    .text:0000000000000180 .L0 
-     /tmp/ccrsJ40F.s:225    .text:0000000000000190 .L0 
-     /tmp/ccrsJ40F.s:226    .text:0000000000000190 .L0 
-     /tmp/ccrsJ40F.s:234    .text:00000000000001a0 .L0 
-     /tmp/ccrsJ40F.s:235    .text:00000000000001a0 .L0 
-     /tmp/ccrsJ40F.s:243    .text:00000000000001b0 .L0 
-     /tmp/ccrsJ40F.s:244    .text:00000000000001b0 .L0 
-     /tmp/ccrsJ40F.s:249    .text:00000000000001c0 .L0 
-     /tmp/ccrsJ40F.s:254    .bss:0000000000000000 .LANCHOR0
-     /tmp/ccrsJ40F.s:257    .bss:0000000000000000 _ZZ12checkNullptrPvE1x
-     /tmp/ccrsJ40F.s:261    .bss:0000000000000004 _ZZ11checkStatusiE1y
-     /tmp/ccrsJ40F.s:268    .text:00000000000001c0 .L0 
-     /tmp/ccrsJ40F.s:20     .text:0000000000000004 .L0 
-     /tmp/ccrsJ40F.s:43     .text:0000000000000038 .L0 
-     /tmp/ccrsJ40F.s:50     .text:0000000000000050 .L0 
-     /tmp/ccrsJ40F.s:79     .text:0000000000000078 .L0 
-     /tmp/ccrsJ40F.s:96     .text:00000000000000a0 .L0 
-     /tmp/ccrsJ40F.s:109    .text:00000000000000c4 .L0 
-     /tmp/ccrsJ40F.s:146    .text:00000000000000fc .L0 
-     /tmp/ccrsJ40F.s:148    .text:0000000000000108 .L0 
-     /tmp/ccrsJ40F.s:25     .text:000000000000001c .L7
-     /tmp/ccrsJ40F.s:84     .text:0000000000000090 .L14
-     /tmp/ccrsJ40F.s:214    .text:0000000000000180 .L21
-     /tmp/ccrsJ40F.s:223    .text:0000000000000190 .L22
-     /tmp/ccrsJ40F.s:232    .text:00000000000001a0 .L23
-     /tmp/ccrsJ40F.s:241    .text:00000000000001b0 .L24
-     /tmp/ccrsJ40F.s:168    .text:0000000000000138 .L16
-GAS LISTING /tmp/ccrsJ40F.s 			page 10
+     /tmp/ccalT72N.s:142    .text:0000000000000100 .L0 
+     /tmp/ccalT72N.s:143    .text:0000000000000100 .L0 
+     /tmp/ccalT72N.s:145    .text:0000000000000104 .L0 
+     /tmp/ccalT72N.s:148    .text:0000000000000104 .L0 
+     /tmp/ccalT72N.s:149    .text:0000000000000104 .L0 
+     /tmp/ccalT72N.s:150    .text:0000000000000104 .L0 
+     /tmp/ccalT72N.s:156    .text:0000000000000114 .L0 
+     /tmp/ccalT72N.s:157    .text:0000000000000114 .L0 
+     /tmp/ccalT72N.s:160    .text:000000000000011c .L0 
+     /tmp/ccalT72N.s:161    .text:000000000000011c .L0 
+     /tmp/ccalT72N.s:167    .text:000000000000012c .L0 
+     /tmp/ccalT72N.s:168    .text:000000000000012c .L0 
+     /tmp/ccalT72N.s:171    .text:0000000000000134 .L0 
+     /tmp/ccalT72N.s:172    .text:0000000000000134 .L0 
+     /tmp/ccalT72N.s:178    .text:0000000000000144 .L0 
+     /tmp/ccalT72N.s:179    .text:0000000000000144 .L0 
+     /tmp/ccalT72N.s:182    .text:000000000000014c .L0 
+     /tmp/ccalT72N.s:183    .text:000000000000014c .L0 
+     /tmp/ccalT72N.s:189    .text:0000000000000160 .L0 
+     /tmp/ccalT72N.s:190    .text:0000000000000160 .L0 
+     /tmp/ccalT72N.s:196    .text:0000000000000174 .L0 
+     /tmp/ccalT72N.s:197    .text:0000000000000174 .L0 
+     /tmp/ccalT72N.s:203    .text:0000000000000188 .L0 
+     /tmp/ccalT72N.s:204    .text:0000000000000188 .L0 
+     /tmp/ccalT72N.s:210    .text:00000000000001a4 .L0 
+     /tmp/ccalT72N.s:212    .text:00000000000001a8 .L0 
+     /tmp/ccalT72N.s:214    .text:00000000000001ac .L0 
+     /tmp/ccalT72N.s:217    .text:00000000000001b0 .L0 
+     /tmp/ccalT72N.s:218    .text:00000000000001b0 .L0 
+     /tmp/ccalT72N.s:225    .text:00000000000001c0 .L0 
+     /tmp/ccalT72N.s:226    .text:00000000000001c0 .L0 
+     /tmp/ccalT72N.s:229    .text:00000000000001c8 .L0 
+     /tmp/ccalT72N.s:230    .text:00000000000001c8 .L0 
+     /tmp/ccalT72N.s:236    .text:00000000000001dc .L0 
+     /tmp/ccalT72N.s:237    .text:00000000000001dc .L0 
+     /tmp/ccalT72N.s:239    .text:00000000000001e4 .L0 
+     /tmp/ccalT72N.s:241    .text:00000000000001e8 .L0 
+     /tmp/ccalT72N.s:242    .text:00000000000001e8 .L0 
+     /tmp/ccalT72N.s:244    .text:00000000000001ec .L0 
+     /tmp/ccalT72N.s:247    .text:00000000000001f0 .L0 
+     /tmp/ccalT72N.s:250    .text:00000000000001f4 .L0 
+     /tmp/ccalT72N.s:253    .text:00000000000001f8 .L0 
+     /tmp/ccalT72N.s:255    .text:00000000000001fc .L0 
+     /tmp/ccalT72N.s:260    .bss:0000000000000000 .LANCHOR0
+     /tmp/ccalT72N.s:263    .bss:0000000000000000 _ZZ12checkNullptrPvE1x
+     /tmp/ccalT72N.s:267    .bss:0000000000000004 _ZZ11checkStatusiE1y
+     /tmp/ccalT72N.s:274    .text:00000000000001fc .L0 
+     /tmp/ccalT72N.s:20     .text:0000000000000004 .L0 
+     /tmp/ccalT72N.s:43     .text:0000000000000038 .L0 
+     /tmp/ccalT72N.s:50     .text:0000000000000050 .L0 
+     /tmp/ccalT72N.s:79     .text:0000000000000078 .L0 
+     /tmp/ccalT72N.s:96     .text:00000000000000a0 .L0 
+     /tmp/ccalT72N.s:109    .text:00000000000000c4 .L0 
+     /tmp/ccalT72N.s:204    .text:0000000000000188 .L0 
+     /tmp/ccalT72N.s:206    .text:0000000000000194 .L0 
+     /tmp/ccalT72N.s:25     .text:000000000000001c .L7
+     /tmp/ccalT72N.s:84     .text:0000000000000090 .L14
+GAS LISTING /tmp/ccalT72N.s 			page 10
 
 
-     /tmp/ccrsJ40F.s:179    .text:0000000000000148 .L17
-     /tmp/ccrsJ40F.s:188    .text:0000000000000158 .L18
-     /tmp/ccrsJ40F.s:197    .text:0000000000000168 .L19
-     /tmp/ccrsJ40F.s:641    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
-     /tmp/ccrsJ40F.s:1104   .debug_str:000000000000004f .LASF33
-     /tmp/ccrsJ40F.s:1132   .debug_str:00000000000001b2 .LASF34
-     /tmp/ccrsJ40F.s:1154   .debug_str:0000000000000243 .LASF35
-     /tmp/ccrsJ40F.s:5      .text:0000000000000000 .Ltext0
-     /tmp/ccrsJ40F.s:264    .text:00000000000001c0 .Letext0
-     /tmp/ccrsJ40F.s:1088   .debug_line:0000000000000000 .Ldebug_line0
-     /tmp/ccrsJ40F.s:1134   .debug_str:00000000000001bf .LASF0
-     /tmp/ccrsJ40F.s:1122   .debug_str:000000000000016d .LASF1
-     /tmp/ccrsJ40F.s:1116   .debug_str:0000000000000141 .LASF2
-     /tmp/ccrsJ40F.s:1100   .debug_str:0000000000000043 .LASF4
-     /tmp/ccrsJ40F.s:1120   .debug_str:000000000000015b .LASF3
-     /tmp/ccrsJ40F.s:1096   .debug_str:000000000000002e .LASF5
-     /tmp/ccrsJ40F.s:1092   .debug_str:000000000000000e .LASF6
-     /tmp/ccrsJ40F.s:1112   .debug_str:000000000000011f .LASF7
-     /tmp/ccrsJ40F.s:1140   .debug_str:00000000000001e5 .LASF8
-     /tmp/ccrsJ40F.s:1098   .debug_str:0000000000000035 .LASF9
-     /tmp/ccrsJ40F.s:1160   .debug_str:0000000000000273 .LASF10
-     /tmp/ccrsJ40F.s:1114   .debug_str:0000000000000132 .LASF11
-     /tmp/ccrsJ40F.s:1150   .debug_str:0000000000000229 .LASF12
-     /tmp/ccrsJ40F.s:1144   .debug_str:000000000000020b .LASF13
-     /tmp/ccrsJ40F.s:1124   .debug_str:0000000000000180 .LASF14
-     /tmp/ccrsJ40F.s:1106   .debug_str:00000000000000f1 .LASF15
-     /tmp/ccrsJ40F.s:1142   .debug_str:00000000000001f5 .LASF16
-     /tmp/ccrsJ40F.s:1102   .debug_str:000000000000004a .LASF17
-     /tmp/ccrsJ40F.s:1128   .debug_str:000000000000019f .LASF23
-     /tmp/ccrsJ40F.s:129    .text:00000000000000e8 .LFB11
-     /tmp/ccrsJ40F.s:250    .text:00000000000001c0 .LFE11
-     /tmp/ccrsJ40F.s:1136   .debug_str:00000000000001cc .LASF18
-     /tmp/ccrsJ40F.s:1094   .debug_str:0000000000000021 .LASF19
-     /tmp/ccrsJ40F.s:978    .debug_loc:0000000000000000 .LLST2
-     /tmp/ccrsJ40F.s:993    .debug_loc:000000000000003a .LLST3
-     /tmp/ccrsJ40F.s:1004   .debug_loc:0000000000000070 .LLST4
-     /tmp/ccrsJ40F.s:1158   .debug_str:000000000000026e .LASF20
-     /tmp/ccrsJ40F.s:1017   .debug_loc:00000000000000a8 .LLST5
-     /tmp/ccrsJ40F.s:1108   .debug_str:0000000000000107 .LASF21
-     /tmp/ccrsJ40F.s:1036   .debug_loc:0000000000000104 .LLST6
-     /tmp/ccrsJ40F.s:163    .text:0000000000000130 .LVL11
-     /tmp/ccrsJ40F.s:175    .text:0000000000000144 .LVL14
-     /tmp/ccrsJ40F.s:184    .text:0000000000000154 .LVL16
-     /tmp/ccrsJ40F.s:193    .text:0000000000000164 .LVL18
-     /tmp/ccrsJ40F.s:220    .text:000000000000018c .LVL22
-     /tmp/ccrsJ40F.s:229    .text:000000000000019c .LVL25
-     /tmp/ccrsJ40F.s:238    .text:00000000000001ac .LVL28
-     /tmp/ccrsJ40F.s:247    .text:00000000000001bc .LVL31
-     /tmp/ccrsJ40F.s:1148   .debug_str:0000000000000224 .LASF22
-     /tmp/ccrsJ40F.s:1118   .debug_str:000000000000014f .LASF24
-     /tmp/ccrsJ40F.s:1110   .debug_str:000000000000010e .LASF26
-     /tmp/ccrsJ40F.s:70     .text:0000000000000074 .LFB10
-     /tmp/ccrsJ40F.s:123    .text:00000000000000e8 .LFE10
-     /tmp/ccrsJ40F.s:1047   .debug_loc:000000000000013a .LLST1
-     /tmp/ccrsJ40F.s:101    .text:00000000000000b8 .LVL6
-     /tmp/ccrsJ40F.s:106    .text:00000000000000c4 .LVL7
-     /tmp/ccrsJ40F.s:1156   .debug_str:0000000000000261 .LASF25
-GAS LISTING /tmp/ccrsJ40F.s 			page 11
+     /tmp/ccalT72N.s:839    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccalT72N.s:1521   .debug_str:0000000000000042 .LASF44
+     /tmp/ccalT72N.s:1563   .debug_str:0000000000000243 .LASF45
+     /tmp/ccalT72N.s:1607   .debug_str:00000000000003f9 .LASF46
+     /tmp/ccalT72N.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccalT72N.s:270    .text:00000000000001fc .Letext0
+     /tmp/ccalT72N.s:1507   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccalT72N.s:1565   .debug_str:0000000000000250 .LASF0
+     /tmp/ccalT72N.s:1547   .debug_str:00000000000001c8 .LASF1
+     /tmp/ccalT72N.s:1537   .debug_str:0000000000000183 .LASF2
+     /tmp/ccalT72N.s:1513   .debug_str:0000000000000023 .LASF47
+     /tmp/ccalT72N.s:1543   .debug_str:00000000000001aa .LASF3
+     /tmp/ccalT72N.s:1509   .debug_str:0000000000000000 .LASF4
+     /tmp/ccalT72N.s:1531   .debug_str:0000000000000140 .LASF5
+     /tmp/ccalT72N.s:1573   .debug_str:0000000000000285 .LASF6
+     /tmp/ccalT72N.s:1517   .debug_str:000000000000002f .LASF7
+     /tmp/ccalT72N.s:1613   .debug_str:0000000000000426 .LASF8
+     /tmp/ccalT72N.s:1533   .debug_str:0000000000000153 .LASF9
+     /tmp/ccalT72N.s:1605   .debug_str:00000000000003e9 .LASF10
+     /tmp/ccalT72N.s:1581   .debug_str:00000000000002dc .LASF11
+     /tmp/ccalT72N.s:1549   .debug_str:00000000000001db .LASF12
+     /tmp/ccalT72N.s:1523   .debug_str:00000000000000e4 .LASF13
+     /tmp/ccalT72N.s:1577   .debug_str:00000000000002bd .LASF14
+     /tmp/ccalT72N.s:1511   .debug_str:0000000000000013 .LASF26
+     /tmp/ccalT72N.s:1545   .debug_str:00000000000001bc .LASF48
+     /tmp/ccalT72N.s:1579   .debug_str:00000000000002d3 .LASF15
+     /tmp/ccalT72N.s:1611   .debug_str:0000000000000421 .LASF16
+     /tmp/ccalT72N.s:1515   .debug_str:000000000000002a .LASF17
+     /tmp/ccalT72N.s:1553   .debug_str:00000000000001f4 .LASF30
+     /tmp/ccalT72N.s:1587   .debug_str:000000000000031e .LASF32
+     /tmp/ccalT72N.s:1603   .debug_str:00000000000003bb .LASF49
+     /tmp/ccalT72N.s:1609   .debug_str:0000000000000417 .LASF18
+     /tmp/ccalT72N.s:1599   .debug_str:000000000000038e .LASF20
+     /tmp/ccalT72N.s:1583   .debug_str:00000000000002ec .LASF19
+     /tmp/ccalT72N.s:1535   .debug_str:0000000000000162 .LASF21
+     /tmp/ccalT72N.s:1595   .debug_str:000000000000036e .LASF22
+     /tmp/ccalT72N.s:1555   .debug_str:00000000000001fb .LASF23
+     /tmp/ccalT72N.s:1539   .debug_str:0000000000000191 .LASF24
+     /tmp/ccalT72N.s:1527   .debug_str:000000000000010a .LASF25
+     /tmp/ccalT72N.s:1559   .debug_str:0000000000000225 .LASF28
+     /tmp/ccalT72N.s:1591   .debug_str:0000000000000353 .LASF50
+     /tmp/ccalT72N.s:1561   .debug_str:000000000000023e .LASF51
+     /tmp/ccalT72N.s:1525   .debug_str:00000000000000fa .LASF27
+     /tmp/ccalT72N.s:1585   .debug_str:00000000000002f5 .LASF29
+     /tmp/ccalT72N.s:1567   .debug_str:000000000000025d .LASF31
+     /tmp/ccalT72N.s:1575   .debug_str:0000000000000295 .LASF33
+     /tmp/ccalT72N.s:1519   .debug_str:000000000000003d .LASF34
+     /tmp/ccalT72N.s:1557   .debug_str:0000000000000220 .LASF38
+     /tmp/ccalT72N.s:129    .text:00000000000000e8 .LFB11
+     /tmp/ccalT72N.s:256    .text:00000000000001fc .LFE11
+     /tmp/ccalT72N.s:1569   .debug_str:000000000000026c .LASF35
+     /tmp/ccalT72N.s:1415   .debug_loc:0000000000000000 .LLST2
+     /tmp/ccalT72N.s:1426   .debug_loc:0000000000000036 .LLST3
+     /tmp/ccalT72N.s:1433   .debug_loc:0000000000000059 .LLST4
+     /tmp/ccalT72N.s:1601   .debug_str:00000000000003af .LASF36
+     /tmp/ccalT72N.s:1444   .debug_loc:000000000000008f .LLST5
+     /tmp/ccalT72N.s:1551   .debug_str:00000000000001e7 .LASF37
+GAS LISTING /tmp/ccalT72N.s 			page 11
 
 
-     /tmp/ccrsJ40F.s:1126   .debug_str:000000000000018c .LASF27
-     /tmp/ccrsJ40F.s:10     .text:0000000000000000 .LFB9
-     /tmp/ccrsJ40F.s:64     .text:0000000000000074 .LFE9
-     /tmp/ccrsJ40F.s:1061   .debug_loc:0000000000000173 .LLST0
-     /tmp/ccrsJ40F.s:40     .text:0000000000000038 .LVL2
-     /tmp/ccrsJ40F.s:47     .text:0000000000000050 .LVL3
-     /tmp/ccrsJ40F.s:1130   .debug_str:00000000000001a4 .LASF28
-     /tmp/ccrsJ40F.s:1152   .debug_str:0000000000000239 .LASF30
-     /tmp/ccrsJ40F.s:1090   .debug_str:0000000000000000 .LASF29
-     /tmp/ccrsJ40F.s:1146   .debug_str:000000000000021b .LASF31
-     /tmp/ccrsJ40F.s:1138   .debug_str:00000000000001de .LASF32
-     /tmp/ccrsJ40F.s:157    .text:0000000000000124 .LVL9
-     /tmp/ccrsJ40F.s:161    .text:0000000000000128 .LVL10
-     /tmp/ccrsJ40F.s:165    .text:0000000000000134 .LVL12
-     /tmp/ccrsJ40F.s:209    .text:0000000000000178 .LVL20
-     /tmp/ccrsJ40F.s:213    .text:0000000000000180 .LVL21
-     /tmp/ccrsJ40F.s:170    .text:0000000000000138 .LVL13
-     /tmp/ccrsJ40F.s:222    .text:0000000000000190 .LVL23
-     /tmp/ccrsJ40F.s:178    .text:0000000000000148 .LVL15
-     /tmp/ccrsJ40F.s:196    .text:0000000000000168 .LVL19
-     /tmp/ccrsJ40F.s:227    .text:0000000000000194 .LVL24
-     /tmp/ccrsJ40F.s:240    .text:00000000000001b0 .LVL29
-     /tmp/ccrsJ40F.s:245    .text:00000000000001b4 .LVL30
-     /tmp/ccrsJ40F.s:187    .text:0000000000000158 .LVL17
-     /tmp/ccrsJ40F.s:231    .text:00000000000001a0 .LVL26
-     /tmp/ccrsJ40F.s:236    .text:00000000000001a4 .LVL27
-     /tmp/ccrsJ40F.s:73     .text:0000000000000074 .LVL4
-     /tmp/ccrsJ40F.s:97     .text:00000000000000a8 .LVL5
-     /tmp/ccrsJ40F.s:14     .text:0000000000000000 .LVL0
-     /tmp/ccrsJ40F.s:38     .text:0000000000000030 .LVL1
-     /tmp/ccrsJ40F.s:269    .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccalT72N.s:1459   .debug_loc:00000000000000c9 .LLST6
+     /tmp/ccalT72N.s:152    .text:0000000000000110 .LVL9
+     /tmp/ccalT72N.s:158    .text:000000000000011c .LVL11
+     /tmp/ccalT72N.s:163    .text:0000000000000128 .LVL12
+     /tmp/ccalT72N.s:169    .text:0000000000000134 .LVL14
+     /tmp/ccalT72N.s:174    .text:0000000000000140 .LVL15
+     /tmp/ccalT72N.s:180    .text:000000000000014c .LVL17
+     /tmp/ccalT72N.s:185    .text:0000000000000158 .LVL18
+     /tmp/ccalT72N.s:187    .text:0000000000000160 .LVL19
+     /tmp/ccalT72N.s:192    .text:000000000000016c .LVL20
+     /tmp/ccalT72N.s:194    .text:0000000000000174 .LVL21
+     /tmp/ccalT72N.s:199    .text:0000000000000180 .LVL22
+     /tmp/ccalT72N.s:201    .text:0000000000000188 .LVL23
+     /tmp/ccalT72N.s:221    .text:00000000000001bc .LVL26
+     /tmp/ccalT72N.s:227    .text:00000000000001c8 .LVL28
+     /tmp/ccalT72N.s:232    .text:00000000000001d4 .LVL29
+     /tmp/ccalT72N.s:234    .text:00000000000001dc .LVL30
+     /tmp/ccalT72N.s:1541   .debug_str:000000000000019e .LASF39
+     /tmp/ccalT72N.s:1529   .debug_str:000000000000012f .LASF41
+     /tmp/ccalT72N.s:70     .text:0000000000000074 .LFB10
+     /tmp/ccalT72N.s:123    .text:00000000000000e8 .LFE10
+     /tmp/ccalT72N.s:1589   .debug_str:000000000000034c .LASF43
+     /tmp/ccalT72N.s:1466   .debug_loc:00000000000000ec .LLST1
+     /tmp/ccalT72N.s:101    .text:00000000000000b8 .LVL6
+     /tmp/ccalT72N.s:106    .text:00000000000000c4 .LVL7
+     /tmp/ccalT72N.s:1593   .debug_str:0000000000000361 .LASF40
+     /tmp/ccalT72N.s:1597   .debug_str:000000000000037b .LASF42
+     /tmp/ccalT72N.s:10     .text:0000000000000000 .LFB9
+     /tmp/ccalT72N.s:64     .text:0000000000000074 .LFE9
+     /tmp/ccalT72N.s:1480   .debug_loc:0000000000000125 .LLST0
+     /tmp/ccalT72N.s:40     .text:0000000000000038 .LVL2
+     /tmp/ccalT72N.s:47     .text:0000000000000050 .LVL3
+     /tmp/ccalT72N.s:1571   .debug_str:000000000000027e .LASF52
+     /tmp/ccalT72N.s:154    .text:0000000000000114 .LVL10
+     /tmp/ccalT72N.s:251    .text:00000000000001f4 .LVL33
+     /tmp/ccalT72N.s:165    .text:000000000000012c .LVL13
+     /tmp/ccalT72N.s:223    .text:00000000000001c0 .LVL27
+     /tmp/ccalT72N.s:176    .text:0000000000000144 .LVL16
+     /tmp/ccalT72N.s:248    .text:00000000000001f0 .LVL32
+     /tmp/ccalT72N.s:215    .text:00000000000001b0 .LVL24
+     /tmp/ccalT72N.s:219    .text:00000000000001b4 .LVL25
+     /tmp/ccalT72N.s:245    .text:00000000000001ec .LVL31
+     /tmp/ccalT72N.s:73     .text:0000000000000074 .LVL4
+     /tmp/ccalT72N.s:97     .text:00000000000000a8 .LVL5
+     /tmp/ccalT72N.s:14     .text:0000000000000000 .LVL0
+     /tmp/ccalT72N.s:38     .text:0000000000000030 .LVL1
+     /tmp/ccalT72N.s:275    .debug_info:0000000000000000 .Ldebug_info0
 
 UNDEFINED SYMBOLS
 __putc
+_ZN15MemoryAllocator9mem_allocEm
+_ZN15MemoryAllocator8mem_freeEPv
 HEAP_END_ADDR
 HEAP_START_ADDR
-_Z9mem_allocm
-_Z8mem_freePv
