@@ -7,8 +7,8 @@
 PCB* PCB::running = nullptr;
 size_t PCB::timeSliceCounter = 0;
 
-PCB *PCB::createProccess(PCB::processMain main) {
-    return new PCB(main, DEFAULT_TIME_SLICE);
+PCB *PCB::createProccess(PCB::processMain main, void* arguments) {
+    return new PCB(main, DEFAULT_TIME_SLICE, arguments);
 }
 
 void PCB::yield() {
@@ -28,12 +28,13 @@ void PCB::dispatch() {
 }
 
 // main == nullptr ako smo u glavnom procesu
-PCB::PCB(PCB::processMain main_, size_t timeSlice_)
+PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_)
 : stack(main_ != nullptr ? new size_t[DEFAULT_STACK_SIZE] : nullptr),
 context({(size_t)(&proccessWrapper), stack != nullptr ? (size_t)&stack[DEFAULT_STACK_SIZE] : 0}) {
     finished = false;
     main = main_;
     timeSlice = timeSlice_;
+    mainArguments = mainArguments_;
     if(main != nullptr) Scheduler::put(this); // ako nismo u glavnom procesu(koji se vec izvrsava i ne treba da ga stavljamo u scheduler)
 }
 
@@ -49,8 +50,10 @@ void PCB::operator delete(void *memSegment) {
     MemoryAllocator::mem_free(memSegment);
 }
 
-void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde
+void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde kada prvi put ulazimo u nit
     Kernel::popSppSpie(); // izlazimo iz prekidne rutine
+    void* arg = PCB::running->mainArguments;
+    asm volatile("mv a0, %0" : : "r" (arg)); // u a0 postavljamo argument glavne funkcije procesa
     running->main();
     running->setFinished(true);
     PCB::yield(); // nit je gotova pa predajemo procesor drugom precesu

@@ -21,4 +21,13 @@ extern void* mem_alloc(size_t size);
 */
 extern int mem_free (void* memSegment);
 
+class PCB;
+typedef PCB* thread_t;
+/*
+Pokreće nit nad funkcijom start_routine, pozivajući je sa argumentom arg.
+U slučaju uspeha, u *handle upisuje „ručku“ novokreirane niti i vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške).
+„Ručka“ je interni identifikator koji jezgro koristi da bi identifikovalo nit (pokazivac na PCB)
+*/
+int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg);
+
 #endif //SYSCALL_C_H

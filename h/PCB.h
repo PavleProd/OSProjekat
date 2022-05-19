@@ -19,7 +19,8 @@ public:
 
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
 
-    static PCB* createProccess(processMain main);
+    // Pravi novi proces koji izvrasva funkciju main
+    static PCB* createProccess(processMain main, void* arguments);
     // Cuva kontekst trenutnog procesa, vrsi promenu tekuceg procesa i vraca kontekst novog procesa
     static void yield();
     static PCB* running; // tekuci proces
@@ -30,7 +31,7 @@ public:
     void* operator new(size_t size);
     void operator delete(void* memSegment);
 private:
-    PCB(processMain main, size_t timeSlice);
+    PCB(processMain main, size_t timeSlice, void* mainArguments);
 
     struct Context {
         size_t ra; // (x1) kada menjamo kontekst moramo da sacuvamo dokle je proces stigao sa obradom
@@ -46,6 +47,7 @@ private:
     processMain main; // glavna funkcija koju proces izvrsava
     bool finished; // govori da li se proces zavrsio
 
+    void* mainArguments; // argumenti main funkcije procesa
     size_t timeSlice; // vremenski odsecak dodeljen procesu
     static size_t timeSliceCounter; // koliko je vremenskih odsecaka trenutno izvrsio proces
 
@@ -56,9 +58,10 @@ private:
     // Asemblerska funkcija cuva ra(x1) i sp(x2) starog konteksta, a ucitava ra i sp novog konteksta
     static void switchContext(Context* oldContext, Context* newContext);
 
-
     // okruzujuca funkcija main funkcije procesa, kada se izvrsi promena konteksta, skace se na ovu metodu
     static void proccessWrapper();
+
+
 };
 
 

@@ -4,15 +4,20 @@
 
 void printString(char const *string)
 {
+    size_t sstatus = Kernel::r_sstatus();
+    Kernel::mc_sstatus(Kernel::SSTATUS_SIE);
     while (*string != '\0')
     {
         __putc(*string);
         string++;
     }
+    Kernel::ms_sstatus(sstatus & Kernel::SSTATUS_SIE ? Kernel::SSTATUS_SIE : 0);
 }
 
 void printInteger(size_t integer)
 {
+    size_t sstatus = Kernel::r_sstatus();
+    Kernel::mc_sstatus(Kernel::SSTATUS_SIE);
     static char digits[] = "0123456789";
     char buf[16];
     int i, neg;
@@ -36,10 +41,9 @@ void printInteger(size_t integer)
     if (neg)
         buf[i++] = '-';
 
-    while (--i >= 0)
-        __putc(buf[i]);
+    while (--i >= 0) { __putc(buf[i]); }
+    Kernel::ms_sstatus(sstatus & Kernel::SSTATUS_SIE ? Kernel::SSTATUS_SIE : 0);
 }
-
 void printError() {
     printString("scause: ");
     printInteger(Kernel::r_scause());
