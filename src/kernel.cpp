@@ -91,3 +91,8 @@ void Kernel::w_sstatus(size_t sstatus)
 {
     __asm__ volatile ("csrw sstatus, %[sstatus]" : : [sstatus] "r"(sstatus));
 }
+
+void Kernel::popSppSpie() {
+    asm volatile("csrw sepc, ra"); // da bi se funkcija vratila u wrapper
+    asm volatile("sret");
+}

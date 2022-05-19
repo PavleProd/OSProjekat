@@ -13,11 +13,6 @@ interrupt:
 
     call interruptHandler
 
-    // uvecavanje sepc za 4
-    csrr t1, sepc
-    addi t1, t1, 4
-    csrw sepc, t1
-
     // upisujemo povratnu vrednost iz interruptHandlera u a0(x10) na steku da bi ostala nakon restauiranja
     sd a0, 10 * 8(sp)
 

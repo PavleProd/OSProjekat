@@ -2,7 +2,7 @@
 #include "../h/changeContext.h"
 #include "../h/Scheduler.h"
 #include "../h/MemoryAllocator.h"
-
+#include "../h/kernel.h"
 
 PCB* PCB::running = nullptr;
 size_t PCB::timeSliceCounter = 0;
@@ -12,9 +12,7 @@ PCB *PCB::createProccess(PCB::processMain main) {
 }
 
 void PCB::yield() {
-    pushRegisters();
-    dispatch();
-    popRegisters();
+    asm volatile("ecall"); // prelazimo u prekidnu rutinu koja cuva registre i vrsi promenu konteksta
 }
 
 void PCB::dispatch() {
@@ -50,7 +48,9 @@ void PCB::operator delete(void *memSegment) {
 }
 
 void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde
+    Kernel::popSppSpie(); // izlazimo iz prekidne rutine
     running->main();
     running->setFinished(true);
+    PCB::yield(); // nit je gotova pa predajemo procesor drugom precesu
 }
 

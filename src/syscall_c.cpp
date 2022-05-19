@@ -55,7 +55,12 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
             }
             break;
             default:
-                printError();
+                size_t volatile sepc = Kernel::r_sepc() + 4; // TODO: pogledaj sta se desava ako se ne sacuva sepc
+                size_t sstatus = Kernel::r_sstatus();
+                PCB::dispatch(); // vrsimo promenu konteksta ako je istekao time slice procesa
+                PCB::timeSliceCounter = 0;
+                Kernel::w_sepc(sepc);
+                Kernel::w_sstatus(sstatus);
                 break;
         }
     }
