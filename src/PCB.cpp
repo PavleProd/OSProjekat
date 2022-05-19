@@ -12,6 +12,8 @@ PCB *PCB::createProccess(PCB::processMain main) {
 }
 
 void PCB::yield() {
+    size_t code = Kernel::sysCallCodes::thread_dispatch;
+    asm volatile("mv a0, %0" : : "r" (code));
     asm volatile("ecall"); // prelazimo u prekidnu rutinu koja cuva registre i vrsi promenu konteksta
 }
 

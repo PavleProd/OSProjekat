@@ -11,6 +11,7 @@ void Scheduler::put(PCB *process) {
     }
     else {
         tail->nextReady = process;
+        tail = tail->nextReady;
     }
 }
 

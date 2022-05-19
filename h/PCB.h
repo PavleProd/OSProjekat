@@ -26,6 +26,9 @@ public:
 
     ~PCB();
 
+    // new i delete ne zovu sistemski poziv, vec direktno alociraju memoriju preko C++ API
+    void* operator new(size_t size);
+    void operator delete(void* memSegment);
 private:
     PCB(processMain main, size_t timeSlice);
 
@@ -53,9 +56,6 @@ private:
     // Asemblerska funkcija cuva ra(x1) i sp(x2) starog konteksta, a ucitava ra i sp novog konteksta
     static void switchContext(Context* oldContext, Context* newContext);
 
-    // new i delete ne zovu sistemski poziv, vec direktno alociraju memoriju preko C++ API
-    void* operator new(size_t size);
-    void operator delete(void* memSegment);
 
     // okruzujuca funkcija main funkcije procesa, kada se izvrsi promena konteksta, skace se na ovu metodu
     static void proccessWrapper();
