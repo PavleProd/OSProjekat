@@ -1,6 +1,4 @@
 .extern interruptHandler
-.extern popRegisters
-.extern pushRegisters
 .align 4
 .global interrupt
 interrupt:

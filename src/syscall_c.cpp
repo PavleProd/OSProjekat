@@ -12,6 +12,7 @@ void* callInterrupt() {
     return res;
 }
 
+// a0 code a1 size
 void* mem_alloc(size_t size) {
     size_t code = Kernel::sysCallCodes::mem_alloc; // kod sistemskog poziva
     // size je dat u bajtovima, a mi treba da ga prebacimo u blokove i onda opet upisemo u a1
@@ -22,6 +23,7 @@ void* mem_alloc(size_t size) {
     return (void*)callInterrupt();
 }
 
+// a0 code a1 memSegment
 int mem_free (void* memSegment) {
     size_t code = Kernel::sysCallCodes::mem_free; // kod sistemskog poziva
     asm volatile("mv a1, a0"); // a1 = memSegment
@@ -30,8 +32,22 @@ int mem_free (void* memSegment) {
     return (size_t)(callInterrupt());
 }
 
+// a0 - code a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace
 int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg) {
-    *handle = PCB::createProccess((PCB::processMain)startRoutine, arg);
+    size_t code = Kernel::sysCallCodes::thread_create;
+    asm volatile("mv a3, a2"); // a3 = arg
+    asm volatile("mv a2, a1"); // a2 = startRoutine
+    asm volatile("mv a4, a0"); // a5 = handle privremeno cuvamo da bismo posle vratili u a1
+
+    size_t* stack = new size_t[DEFAULT_STACK_SIZE]; // pravimo stack procesa
+    if(stack == nullptr) return -1;
+
+    asm volatile("mv a1, a4"); // a1 = a5(handle)
+    asm volatile("mv a4, %0" : : "r" (stack));
+    asm volatile("mv a0, %0" : : "r" (code)); // a0 = code
+
+    // *handle = PCB::createProccess((PCB::processMain)startRoutine, arg);
+    handle = (thread_t*)(callInterrupt()); // vraca se pokazivac na PCB, ili nullptr ako je neuspesna alokacija
     if(*handle == nullptr) {
         return -1;
     }

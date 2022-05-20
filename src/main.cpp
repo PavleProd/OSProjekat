@@ -26,7 +26,6 @@ void nitB(void* c) {
 }
 extern "C" void interrupt();
 int main() {
-
     asm volatile("csrw stvec, %0" : : "r" (&interrupt));
 
     thread_t procesi[5];
@@ -37,7 +36,9 @@ int main() {
     int x = 11;
     char c = 'k';
     thread_create(&procesi[1], (pFunc)nitA, &x);
+    __putc('A');
     thread_create(&procesi[2], (pFunc)nitB, &c);
+    __putc('B');
 
     while(!procesi[1]->isFinished() || !procesi[2]->isFinished()) {
         PCB::yield();

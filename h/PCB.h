@@ -36,13 +36,14 @@ private:
     struct Context {
         size_t ra; // (x1) kada menjamo kontekst moramo da sacuvamo dokle je proces stigao sa obradom
         size_t sp; // (x2) kada menjamo kontekst nazad na proces da bismo skinuli registre sa steka moramo znati sp
-        //size_t ssp; // sistemski stek niti, koristimo ga za cuvanje i vracanje konteksta, sp i ssp menjaju mesta na pocetku prekidne rutine, vracaju na kraju
+        size_t ssp; // sistemski stek niti, koristimo ga za cuvanje i vracanje konteksta, sp i ssp menjaju mesta na pocetku prekidne rutine, vracaju na kraju
     };
 
     // pokazivac na sledeci proces u listi spremnih procesa (ako nije u listi spremnih nullptr, ako jeste bice garantovano razlicit on nullptr)
     // jer ce poslednji element pokazivati na idle proces
     PCB* nextReady = nullptr;
-    size_t* stack; // stek procesa, na njemu se cuva kontest procesa
+    size_t* stack; // korisnicki stek procesa
+    size_t* sysStack; // sistemski stek procesa
     Context context; // kontekst procesa
     processMain main; // glavna funkcija koju proces izvrsava
     bool finished; // govori da li se proces zavrsio

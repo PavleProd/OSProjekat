@@ -27,14 +27,14 @@ void PCB::dispatch() {
     switchContext(&old->context, &running->context);
 }
 
-// main == nullptr ako smo u glavnom procesu
+// main_ == nullptr ako smo u glavnom procesu
 PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_)
-: stack(main_ != nullptr ? new size_t[DEFAULT_STACK_SIZE] : nullptr),
-context({(size_t)(&proccessWrapper), stack != nullptr ? (size_t)&stack[DEFAULT_STACK_SIZE] : 0}) {
+: context({(size_t)(&proccessWrapper), 0, 0}) { // sp cemo dodeliti u sistemskom pozivu thread_create
     finished = false;
     main = main_;
     timeSlice = timeSlice_;
     mainArguments = mainArguments_;
+    stack = sysStack = nullptr; // stek pravimo u sistemskom pozivu thread_create (koja takodje poziva sistemski poziv)
     if(main != nullptr) Scheduler::put(this); // ako nismo u glavnom procesu(koji se vec izvrsava i ne treba da ga stavljamo u scheduler)
 }
 
