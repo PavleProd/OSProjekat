@@ -1,5 +1,4 @@
 #include "../h/PCB.h"
-#include "../h/changeContext.h"
 #include "../h/Scheduler.h"
 #include "../h/MemoryAllocator.h"
 #include "../h/kernel.h"
@@ -24,18 +23,29 @@ void PCB::dispatch() {
     }
     running = Scheduler::get();
 
-    switchContext(&old->context, &running->context);
+    if(PCB::running->firstCall) {
+        PCB::running->firstCall = false;
+        switchContext1(old->registers, running->registers);
+    }
+    else {
+        switchContext2(old->registers, running->registers);
+    }
+
 }
 
 // main_ == nullptr ako smo u glavnom procesu
-PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_)
-: context({(size_t)(&proccessWrapper), 0, 0}) { // sp cemo dodeliti u sistemskom pozivu thread_create
+PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
     finished = false;
     main = main_;
     timeSlice = timeSlice_;
     mainArguments = mainArguments_;
-    stack = sysStack = nullptr; // stek pravimo u sistemskom pozivu thread_create (koja takodje poziva sistemski poziv)
+    registers = (size_t*)MemoryAllocator::mem_alloc(33*sizeof(size_t)); // mozemo direktno jer se zove iz sistemskog rezima samo
+    sysStack = (size_t*)MemoryAllocator::mem_alloc(DEFAULT_STACK_SIZE*sizeof(size_t));
+    registers[0] = (size_t)&sysStack[DEFAULT_STACK_SIZE]; // ssp postavljamo na vrh steka
+    registers[32] = (size_t)&proccessWrapper; // u ra cuvamo proccessWrapper
+    stack = nullptr; // stek pravimo u sistemskom pozivu thread_create
     if(main != nullptr) Scheduler::put(this); // ako nismo u glavnom procesu(koji se vec izvrsava i ne treba da ga stavljamo u scheduler)
+    else firstCall = false; // jer je glavni proces vec pokrenut, necemo ici u process_wrapper
 }
 
 PCB::~PCB() {
@@ -58,4 +68,9 @@ void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde kada prvi put u
     running->setFinished(true);
     PCB::yield(); // nit je gotova pa predajemo procesor drugom precesu
 }
+
+size_t *PCB::getContext() {
+    return running->registers;
+}
+
 
