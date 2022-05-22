@@ -18,6 +18,7 @@ public:
         thread_create = 0x11,
         thread_exit = 0x12,
         thread_dispatch = 0x13,
+        thread_start = 0x14,
         sem_open = 0x21,
         sem_close = 0x22,
         sem_wait = 0x23,

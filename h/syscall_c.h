@@ -24,11 +24,28 @@ extern int mem_free (void* memSegment);
 class PCB;
 typedef PCB* thread_t;
 /*
-Pokreće nit nad funkcijom start_routine, pozivajući je sa argumentom arg.
+Pravi nit nad funkcijom start_routine, pozivajući je sa argumentom arg i stavlja je u scheduler
 U slučaju uspeha, u *handle upisuje „ručku“ novokreirane niti i vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške).
 „Ručka“ je interni identifikator koji jezgro koristi da bi identifikovalo nit (pokazivac na PCB)
  Funkcija treba da alocira stek i prosledi ga prekidnoj rutini
 */
 int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg);
+
+/*
+Pravi nit nad funkcijom start_routine, pozivajući je sa argumentom arg(ne stavlja je u scheduler)
+U slučaju uspeha, u *handle upisuje „ručku“ novokreirane niti i vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške).
+„Ručka“ je interni identifikator koji jezgro koristi da bi identifikovalo nit (pokazivac na PCB)
+ Funkcija treba da alocira stek i prosledi ga prekidnoj rutini
+*/
+int thread_create_only(thread_t* handle, void(*startRoutine)(void*), void* arg);
+
+// Gasi tekuću nit. U slučaju neuspeha vraća negativnu vrednost (kod greske)
+int thread_exit ();
+
+// Pokrece nit na koju pokazuje rucka handle(stavlja nit u scheduler)
+void thread_start(thread_t* handle);
+
+// Potencijalno oduzima procesor tekućoj i daje nekoj drugoj (ili istoj) niti.
+void thread_dispatch ();
 
 #endif //SYSCALL_C_H

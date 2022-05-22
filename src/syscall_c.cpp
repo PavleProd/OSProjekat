@@ -33,7 +33,7 @@ int mem_free (void* memSegment) {
 }
 
 // a0 - code a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace
-int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg) {
+int thread_create_only (thread_t* handle, void(*startRoutine)(void*), void* arg) {
     size_t code = Kernel::sysCallCodes::thread_create;
     asm volatile("mv a3, a2"); // a3 = arg
     asm volatile("mv a2, a1"); // a2 = startRoutine
@@ -46,7 +46,6 @@ int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg) {
     asm volatile("mv a4, %0" : : "r" (stack));
     asm volatile("mv a0, %0" : : "r" (code)); // a0 = code
 
-    // *handle = PCB::createProccess((PCB::processMain)startRoutine, arg);
     handle = (thread_t*)(callInterrupt()); // vraca se pokazivac na PCB, ili nullptr ako je neuspesna alokacija
     if(*handle == nullptr) {
         return -1;
@@ -54,6 +53,28 @@ int thread_create (thread_t* handle, void(*startRoutine)(void*), void* arg) {
     return 0;
 }
 
+int thread_create(thread_t* handle, void(*startRoutine)(void*), void* arg) {
+    int res = thread_create_only(handle, startRoutine, arg);
+    thread_start(handle);
+    return res;
+}
 
+void thread_dispatch () {
+    size_t code = Kernel::sysCallCodes::thread_dispatch;
+    asm volatile("mv a0, %0" : : "r" (code)); // a0 = code
+    callInterrupt();
+}
+
+int thread_exit () {
+    size_t code = Kernel::sysCallCodes::thread_exit;
+    asm volatile("mv a0, %0" : : "r" (code));
+    return (size_t)(callInterrupt());
+}
+
+void thread_start(thread_t* handle) {
+    size_t code = Kernel::sysCallCodes::thread_start;
+    asm volatile("mv a0, %0" : : "r" (code)); // a0 = code
+    callInterrupt();
+}
 
 

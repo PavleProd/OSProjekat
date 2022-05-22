@@ -44,8 +44,7 @@ PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
     registers[0] = (size_t)&sysStack[DEFAULT_STACK_SIZE]; // ssp postavljamo na vrh steka
     registers[32] = (size_t)&proccessWrapper; // u ra cuvamo proccessWrapper
     stack = nullptr; // stek pravimo u sistemskom pozivu thread_create
-    if(main != nullptr) Scheduler::put(this); // ako nismo u glavnom procesu(koji se vec izvrsava i ne treba da ga stavljamo u scheduler)
-    else firstCall = false; // jer je glavni proces vec pokrenut, necemo ici u process_wrapper
+    if(main == nullptr) firstCall = false; //  jer je glavni proces vec pokrenut, necemo ici u process_wrapper
 }
 
 PCB::~PCB() {

@@ -11,6 +11,7 @@ void workerBodyA()
 {
     for (size_t i = 0; i < 10; i++)
     {
+        if(i==5)thread_exit();
         printString("A: i=");
         printInteger(i);
         printString("\n");
@@ -96,7 +97,7 @@ void workerBodyD()
 
     printString("D: yield\n");
     __asm__ ("li t1, 5");
-    PCB::yield();
+    thread_dispatch();
 
     size_t result = fibonacci(16);
     printString("D: fibonaci=");
@@ -128,7 +129,7 @@ int main() {
 
 
     while(!procesi[0]->isFinished() || !procesi[1]->isFinished() || !procesi[2]->isFinished() || !procesi[3]->isFinished()) {
-        PCB::yield();
+        thread_dispatch();
     }
 
     for(auto& proces : procesi) {

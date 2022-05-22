@@ -32,8 +32,14 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 break;
             }
             case Kernel::sysCallCodes::thread_dispatch:
-                PCB::dispatch(); // vrsimo promenu konteksta ako je istekao time slice procesa
+                PCB::dispatch();
                 PCB::timeSliceCounter = 0;
+                break;
+            case Kernel::sysCallCodes::thread_exit:
+                PCB::running->finished=true;
+                PCB::dispatch();
+                PCB::timeSliceCounter = 0;
+                asm volatile("mv a0, x0"); // a0 = 0
                 break;
             case Kernel::sysCallCodes::thread_create: // a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace
             {
