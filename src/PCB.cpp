@@ -19,7 +19,7 @@ void PCB::yield() {
 
 void PCB::dispatch() {
     PCB* old = running;
-    if(!old->isFinished()) {
+    if(!old->isFinished() && !old->blocked) { // ako se nije zavrsio i nije blokiran
         Scheduler::put(old);
     }
     running = Scheduler::get();
@@ -36,7 +36,7 @@ void PCB::dispatch() {
 
 // main_ == nullptr ako smo u glavnom procesu
 PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
-    finished = false;
+    finished = blocked = false;
     main = main_;
     timeSlice = timeSlice_;
     mainArguments = mainArguments_;
@@ -50,6 +50,7 @@ PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
 
 PCB::~PCB() {
     delete[] stack;
+    delete[] sysStack;
 }
 
 void *PCB::operator new(size_t size) {

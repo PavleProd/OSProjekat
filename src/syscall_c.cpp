@@ -73,4 +73,45 @@ void thread_start(thread_t* handle) {
     callInterrupt(code);
 }
 
+int sem_open (sem_t* handle, unsigned init) {
+    size_t code = Kernel::sysCallCodes::sem_open;
+
+    asm volatile("mv a2, a1"); // a2 = init
+    asm volatile("mv a1, a0"); // a1 = handle
+
+    handle = (sem_t*)callInterrupt(code);
+    if(*handle == nullptr) {
+        return -1;
+    }
+
+    return 0;
+}
+
+int sem_wait (sem_t volatile id) {
+    size_t code = Kernel::sysCallCodes::sem_wait;
+    if(id == nullptr) return -1;
+    asm volatile("mv a1, a0");
+
+    if(callInterrupt(code)) {
+        thread_dispatch();
+    }
+
+    if(id == nullptr) return -2; // ?
+
+    return 0;
+}
+
+int sem_signal (sem_t id) {
+    size_t code = Kernel::sysCallCodes::sem_signal;
+    if(id == nullptr) return -1;
+    asm volatile("mv a1, a0");
+
+    PCB* process = (PCB*)callInterrupt(code);
+    if(process) {
+        thread_start(&process);
+    }
+
+    return 0;
+}
+
 

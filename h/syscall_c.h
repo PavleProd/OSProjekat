@@ -48,4 +48,26 @@ void thread_start(thread_t* handle);
 // Potencijalno oduzima procesor tekućoj i daje nekoj drugoj (ili istoj) niti.
 void thread_dispatch ();
 
+class SCB;
+typedef SCB* sem_t;
+/*Kreira semafor sa inicijalnom vrednošću init. U slučaju uspeha, u *handle upisuje ručku novokreiranog semafora i
+vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške). Rucka je pokazivac na SCB(Semaphore Control Block)
+*/
+int sem_open (sem_t* handle, unsigned init);
+
+/*Operacija wait na semaforu sa datom ručkom. U slučaju uspeha vraća 0, a u slučaju neuspeha, uključujući i slučaj
+kada je semafor dealociran dok je pozivajuća nit na njemu čekala, vraća negativnu vrednost (kôd greške).*/
+int sem_wait (sem_t id);
+
+/* Operacija signal na semaforu sa datom ručkom. U slučaju
+uspeha vraća 0, a u slučaju neuspeha vraća negativnu
+vrednost (kôd greške).*/
+int sem_signal (sem_t id);
+
+/*Oslobađa semafor sa datom ručkom. Sve niti koje su se
+zatekle da čekaju na semaforu se deblokiraju, pri čemu njihov
+wait vraća grešku. U slučaju uspeha vraća 0, a u slučaju
+neuspeha vraća negativnu vrednost (kôd greške).*/
+int sem_close (sem_t handle);
+
 #endif //SYSCALL_C_H

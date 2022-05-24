@@ -7,6 +7,7 @@ extern "C" void interruptHandler();
 
 class PCB {
 friend class Scheduler;
+friend class SCB;
 friend void interruptHandler();
 friend class Kernel;
 public:
@@ -44,12 +45,14 @@ private:
 
     // pokazivac na sledeci proces u listi spremnih procesa (ako nije u listi spremnih nullptr, ako jeste bice garantovano razlicit on nullptr)
     // jer ce poslednji element pokazivati na idle proces
-    PCB* nextReady = nullptr;
+    // Pokazivac u listi: uspavanih, blokiranih i spremnih procesa(nijedno stanje se ne desava u isto vreme);
+    PCB* nextInList = nullptr;
     size_t* stack; // korisnicki stek procesa
     size_t* sysStack; // sistemski stek procesa
     size_t* registers = nullptr; // kontekst procesora(ssp x1..31)
     processMain main; // glavna funkcija koju proces izvrsava
     bool finished; // govori da li se proces zavrsio
+    bool blocked; // govori da li je proces blokiran(sleep ili semafor)
 
     void* mainArguments; // argumenti main funkcije procesa
     size_t timeSlice; // vremenski odsecak dodeljen procesu
@@ -63,6 +66,7 @@ private:
     static void switchContext1(size_t* oldContext, size_t* newContext); // kada se prvi put poziva
     static void switchContext2(size_t* oldContext, size_t* newContext); // kada se ne poziva prvi put
 
+    // da li se proces poziva prvi put(ide se u wrapper, ne vraca se kontekst)
     bool firstCall = true;
 
     // okruzujuca funkcija main funkcije procesa, kada se izvrsi promena konteksta, skace se na ovu metodu

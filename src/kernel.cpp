@@ -4,6 +4,7 @@
 #include "../h/console.h"
 #include "../h/print.h"
 #include "../h/Scheduler.h"
+#include "../h/SCB.h"
 
 void Kernel::popSppSpie() {
     asm volatile("csrw sepc, ra"); // da bi se funkcija vratila u wrapper
@@ -61,13 +62,39 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 PCB **handle = (PCB**)PCB::running->registers[11];
                 *handle = PCB::createProccess(main, arg);
 
+                // stavljamo handle u a0 (verovatno vec jeste ali za svaki slucaj)
+                PCB::running->registers[10] = (size_t)handle;
+
+                if(*handle == nullptr) break;
                 // dodeljujemo alociran stek procesu
                 size_t* stack = (size_t*)PCB::running->registers[14];
                 (*handle)->stack = stack;
                 (*handle)->registers[2] = (size_t)&stack[DEFAULT_STACK_SIZE]; // sp(x2)
 
-                // stavljamo handle u a0 (verovatno vec jeste ali za svaki slucaj)
+                break;
+            }
+            case Kernel::sysCallCodes::sem_open: // a1 = handle a2 = init
+            {
+                SCB **handle = (SCB**) PCB::running->registers[11];
+                size_t init = (int) PCB::running->registers[12];
+
+                (*handle) = SCB::createSemaphore(init);
+
                 PCB::running->registers[10] = (size_t)handle;
+                break;
+            }
+            case Kernel::sysCallCodes::sem_wait: // a1 = sem
+            {
+                SCB* sem = (SCB*) PCB::running->registers[11];
+
+                PCB::running->registers[10] = sem->wait(); // true kao proces treba da se blokira, false ako ne
+                break;
+            }
+            case Kernel::sysCallCodes::sem_signal:
+            {
+                SCB* sem = (SCB*) PCB::running->registers[11];
+
+                PCB::running->registers[10] = (size_t)sem->signal(); // vraca pokazivac na PCB ako ga treba staviti u Scheduler
                 break;
             }
             default:

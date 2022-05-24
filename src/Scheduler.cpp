@@ -5,13 +5,14 @@ PCB* Scheduler::head = nullptr;
 PCB* Scheduler::tail = nullptr;
 
 void Scheduler::put(PCB *process) {
-    process->nextReady = nullptr;
+    if(!process) return;
+    process->nextInList = nullptr;
     if(tail == nullptr) { // ako ne postoji kraj liste nece postojati ni pocetak
         head = tail = process;
     }
     else {
-        tail->nextReady = process;
-        tail = tail->nextReady;
+        tail->nextInList = process;
+        tail = tail->nextInList;
     }
 }
 
@@ -20,7 +21,7 @@ PCB *Scheduler::get() {
         return idleProcess;
     }
     PCB* curr = head;
-    head = head->nextReady;
+    head = head->nextInList;
     if(tail == curr) {
         tail = head;
     }
