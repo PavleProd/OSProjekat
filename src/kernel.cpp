@@ -3,6 +3,7 @@
 #include "../h/MemoryAllocator.h"
 #include "../h/console.h"
 #include "../h/print.h"
+#include "../h/Scheduler.h"
 
 void Kernel::popSppSpie() {
     asm volatile("csrw sepc, ra"); // da bi se funkcija vratila u wrapper
@@ -15,32 +16,42 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
     size_t volatile sstatus = Kernel::r_sstatus();
     if(scause == 9 || scause == 8) { // sistemski poziv iz korisnickog(8) ili sistemskog(9) rezima
         sepc += 4; // da bi se sret vratio na pravo mesto
-        size_t code = PCB::running->registers[10]; // a0
+        size_t volatile code = PCB::running->registers[10]; // a0
         switch(code) {
             case Kernel::sysCallCodes::mem_alloc: // mem_alloc(size_t size) a1 - size
             {
                 size_t size = PCB::running->registers[11];
                 size = MemoryAllocator::blocksInSize(size);
 
-                MemoryAllocator::mem_alloc(size);
+                PCB::running->registers[10] = (size_t)MemoryAllocator::mem_alloc(size);
                 break;
             }
             case Kernel::sysCallCodes::mem_free: // mem_free(void* memSegment) a1 - memSegment
             {
                 void* memSegment = (void*)PCB::running->registers[11];
-                MemoryAllocator::mem_free(memSegment);
+                PCB::running->registers[10] = (size_t)MemoryAllocator::mem_free(memSegment);
                 break;
             }
             case Kernel::sysCallCodes::thread_dispatch:
-                PCB::dispatch();
+            {
                 PCB::timeSliceCounter = 0;
+                PCB::dispatch();
                 break;
+            }
             case Kernel::sysCallCodes::thread_exit:
-                PCB::running->finished=true;
-                PCB::dispatch();
+            {
+                PCB::running->finished = true;
                 PCB::timeSliceCounter = 0;
-                asm volatile("mv a0, x0"); // a0 = 0
+                PCB::dispatch();
+                PCB::running->registers[10] = (size_t)0;
                 break;
+            }
+            case Kernel::sysCallCodes::thread_start: // a1 - handle
+            {
+                PCB **handle = (PCB **) PCB::running->registers[11];
+                Scheduler::put(*handle);
+                break;
+            }
             case Kernel::sysCallCodes::thread_create: // a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace
             {
                 // argumenti
@@ -56,8 +67,7 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 (*handle)->registers[2] = (size_t)&stack[DEFAULT_STACK_SIZE]; // sp(x2)
 
                 // stavljamo handle u a0 (verovatno vec jeste ali za svaki slucaj)
-                asm volatile("mv a0, %0" : : "r" (handle));
-
+                PCB::running->registers[10] = (size_t)handle;
                 break;
             }
             default:
@@ -71,9 +81,8 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
     else if(scause == (1UL << 63 | 1)) { // softverski prekid od tajmera
         PCB::timeSliceCounter++;
         if(PCB::timeSliceCounter >= PCB::running->timeSlice) {
-
-            PCB::dispatch(); // vrsimo promenu konteksta ako je istekao time slice procesa
             PCB::timeSliceCounter = 0;
+            PCB::dispatch(); // vrsimo promenu konteksta ako je istekao time slice procesa
             Kernel::w_sepc(sepc);
             Kernel::w_sstatus(sstatus);
         }

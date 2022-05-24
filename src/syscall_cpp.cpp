@@ -36,15 +36,15 @@ void Thread::dispatch() {
 }
 
 int Thread::start() {
-    run();
+    thread_start(&myHandle);
     return 0;
 }
 
 void threadWrapper(void* thread);
 Thread::Thread() {
-    thread_create_only(&myHandle, threadWrapper, nullptr);
+    thread_create_only(&myHandle, threadWrapper, this);
 }
 
 void threadWrapper(void* thread) {
-    ((Thread*)thread)->start();
+    ((Thread*)thread)->run();
 }

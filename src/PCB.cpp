@@ -2,6 +2,7 @@
 #include "../h/Scheduler.h"
 #include "../h/MemoryAllocator.h"
 #include "../h/kernel.h"
+#include "../h/syscall_c.h"
 
 PCB* PCB::running = nullptr;
 size_t PCB::timeSliceCounter = 0;
@@ -64,12 +65,9 @@ void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde kada prvi put u
     void* arg = PCB::running->mainArguments;
     asm volatile("mv a0, %0" : : "r" (arg)); // u a0 postavljamo argument glavne funkcije procesa
     running->main();
-    running->setFinished(true);
-    PCB::yield(); // nit je gotova pa predajemo procesor drugom precesu
+    thread_exit();
 }
 
 size_t *PCB::getContext() {
     return running->registers;
 }
-
-

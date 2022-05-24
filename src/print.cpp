@@ -45,10 +45,13 @@ void printInteger(size_t integer)
     Kernel::ms_sstatus(sstatus & Kernel::SSTATUS_SIE ? Kernel::SSTATUS_SIE : 0);
 }
 void printError() {
+    size_t sstatus = Kernel::r_sstatus();
+    Kernel::mc_sstatus(Kernel::SSTATUS_SIE);
     printString("scause: ");
     printInteger(Kernel::r_scause());
     printString("\nsepc: ");
     printInteger(Kernel::r_sepc());
     printString("\nstval: ");
     printInteger(Kernel::r_stval());
+    Kernel::ms_sstatus(sstatus & Kernel::SSTATUS_SIE ? Kernel::SSTATUS_SIE : 0);
 }
