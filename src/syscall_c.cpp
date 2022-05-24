@@ -87,23 +87,23 @@ int sem_open (sem_t* handle, unsigned init) {
     return 0;
 }
 
-int sem_wait (sem_t volatile id) {
+int sem_wait (sem_t volatile handle) {
     size_t code = Kernel::sysCallCodes::sem_wait;
-    if(id == nullptr) return -1;
+    if(handle == nullptr) return -1;
     asm volatile("mv a1, a0");
 
     if(callInterrupt(code)) {
         thread_dispatch();
     }
 
-    if(id == nullptr) return -2; // ?
+    if(PCB::running->isSemaphoreDeleted()) return -2; // semafor je obrisan pre nego sto je proces odblokiran
 
     return 0;
 }
 
-int sem_signal (sem_t id) {
+int sem_signal (sem_t handle) {
     size_t code = Kernel::sysCallCodes::sem_signal;
-    if(id == nullptr) return -1;
+    if(handle == nullptr) return -1;
     asm volatile("mv a1, a0");
 
     PCB* process = (PCB*)callInterrupt(code);
@@ -111,6 +111,15 @@ int sem_signal (sem_t id) {
         thread_start(&process);
     }
 
+    return 0;
+}
+
+int sem_close (sem_t handle) {
+    size_t code = Kernel::sysCallCodes::sem_close;
+    if(handle == nullptr) return -1;
+
+    asm volatile("mv a1, a0");
+    callInterrupt(code);
     return 0;
 }
 

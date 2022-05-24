@@ -15,8 +15,9 @@ public:
     bool isFinished() const {
         return finished;
     }
-    void setFinished(bool finished_) {
-        finished = finished_;
+    // vraca true ako je semafor obrisan pre nego sto je proces odblokiran
+    bool isSemaphoreDeleted() const {
+        return semDeleted;
     }
 
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
@@ -53,6 +54,7 @@ private:
     processMain main; // glavna funkcija koju proces izvrsava
     bool finished; // govori da li se proces zavrsio
     bool blocked; // govori da li je proces blokiran(sleep ili semafor)
+    bool semDeleted; // govori da li se semafor obrisao pre nego sto je proces odblokiran
 
     void* mainArguments; // argumenti main funkcije procesa
     size_t timeSlice; // vremenski odsecak dodeljen procesu

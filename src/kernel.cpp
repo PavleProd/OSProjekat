@@ -90,11 +90,20 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 PCB::running->registers[10] = sem->wait(); // true kao proces treba da se blokira, false ako ne
                 break;
             }
-            case Kernel::sysCallCodes::sem_signal:
+            case Kernel::sysCallCodes::sem_signal: // a1 = sem
             {
                 SCB* sem = (SCB*) PCB::running->registers[11];
 
                 PCB::running->registers[10] = (size_t)sem->signal(); // vraca pokazivac na PCB ako ga treba staviti u Scheduler
+                break;
+            }
+            case Kernel::sysCallCodes::sem_close: // a1 = sem
+            {
+                SCB* sem = (SCB*) PCB::running->registers[11];
+
+                sem->signalClosing();
+                delete sem; // destruktor ce signalizirati svim procesima da je obrisan
+
                 break;
             }
             default:

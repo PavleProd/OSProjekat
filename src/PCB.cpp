@@ -36,7 +36,7 @@ void PCB::dispatch() {
 
 // main_ == nullptr ako smo u glavnom procesu
 PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
-    finished = blocked = false;
+    finished = blocked = semDeleted = false;
     main = main_;
     timeSlice = timeSlice_;
     mainArguments = mainArguments_;

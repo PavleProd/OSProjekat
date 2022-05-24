@@ -54,3 +54,15 @@ void SCB::operator delete(void *memSegment) {
     MemoryAllocator::mem_free(memSegment);
 }
 
+void SCB::signalClosing() {
+    PCB* curr = head;
+    while(curr) {
+        PCB* last = curr;
+        curr->semDeleted = true;
+        curr->blocked = false;
+        curr = curr->nextInList;
+        Scheduler::put(last);
+    }
+    head = tail = nullptr;
+}
+

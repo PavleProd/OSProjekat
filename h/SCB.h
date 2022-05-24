@@ -2,6 +2,7 @@
 #define PROJECT_BASE_SCB_H
 
 #include "PCB.h"
+#include "Scheduler.h"
 
 class SCB { // Semaphore Control Block
 public:
@@ -21,6 +22,9 @@ public:
     static SCB* createSemaphore(int semValue = 1) {
         return new SCB(semValue);
     }
+
+    // Pre zatvaranja svim procesima koji su cekali na semaforu signalizira da je semafor obrisan i budi ih
+    void signalClosing();
 private:
     SCB(int semValue_ = 1) {
         semValue = semValue_;

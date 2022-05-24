@@ -12,13 +12,14 @@ SCB* semafor;
 
 void workerBodyA(void* arg)
 {
-    sem_wait(semafor);
-
+    int status = sem_wait(semafor);
+    printString("Nit broj: ");
+    printInteger(*(int*)arg);
+    printString("\nStatus: ");
+    printInteger(status+2);
+    printString("\n");
     for (uint64 i = 0; i < 3; i++) {
         printString("A: i="); printInteger(i); printString("\n");
-        printString("Nit broj: ");
-        printInteger(*(int*)arg);
-        printString("\n");
         for (uint64 j = 0; j < 10000; j++) {
             for (uint64 k = 0; k < 30000; k++) { /* busy wait */ }
             thread_dispatch();
@@ -26,6 +27,10 @@ void workerBodyA(void* arg)
     }
     printString("A finished!\n");
     sem_signal(semafor);
+    if(*(int*)arg == 0) {
+        sem_close(semafor);
+        semafor = nullptr;
+    }
 }
 
 extern "C" void interrupt();
