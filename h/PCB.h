@@ -7,7 +7,6 @@ extern "C" void interruptHandler();
 
 class PCB {
 friend class Scheduler;
-friend class SCB;
 friend void interruptHandler();
 friend class Kernel;
 public:
@@ -18,6 +17,30 @@ public:
     // vraca true ako je semafor obrisan pre nego sto je proces odblokiran
     bool isSemaphoreDeleted() const {
         return semDeleted;
+    }
+
+    size_t getTimeSleeping() const {
+        return timeSleeping;
+    }
+
+    void setTimeSleeping(size_t newTime) {
+        timeSleeping = newTime;
+    }
+
+    PCB* getNextInList() const {
+        return nextInList;
+    }
+
+    void setNextInList(PCB* next) {
+        nextInList = next;
+    }
+
+    void setBlocked(bool newState) {
+        blocked = newState;
+    }
+
+    void setSemDeleted(bool newState) {
+        semDeleted = newState;
     }
 
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
@@ -55,6 +78,7 @@ private:
     bool finished; // govori da li se proces zavrsio
     bool blocked; // govori da li je proces blokiran(sleep ili semafor)
     bool semDeleted; // govori da li se semafor obrisao pre nego sto je proces odblokiran
+    size_t timeSleeping = 0; // broj perioda tajmera na koju je proces uspavan
 
     void* mainArguments; // argumenti main funkcije procesa
     size_t timeSlice; // vremenski odsecak dodeljen procesu

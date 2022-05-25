@@ -23,7 +23,7 @@ public:
         sem_close = 0x22,
         sem_wait = 0x23,
         sem_signal = 0x24,
-        tim_sleep = 0x31,
+        time_sleep = 0x31,
         getc = 0x41,
         putc = 0x42
     };

@@ -70,4 +70,11 @@ wait vraća grešku. U slučaju uspeha vraća 0, a u slučaju
 neuspeha vraća negativnu vrednost (kôd greške).*/
 int sem_close (sem_t handle);
 
+typedef unsigned long time_t;
+/*Uspavljuje pozivajuću nit na zadati period u internim
+jedinicama vremena (periodama tajmera). U slučaju uspeha
+vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške).
+*/
+int time_sleep (time_t time);
+
 #endif //SYSCALL_C_H

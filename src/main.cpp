@@ -8,52 +8,46 @@
 #include "../h/syscall_cpp.h"
 #include "../h/SCB.h"
 
-SCB* semafor;
+bool finished[2];
 
-void workerBodyA(void* arg)
-{
-    int status = sem_wait(semafor);
-    printString("Nit broj: ");
-    printInteger(*(int*)arg);
-    printString("\nStatus: ");
-    printInteger(status+2);
-    printString("\n");
-    for (uint64 i = 0; i < 3; i++) {
-        printString("A: i="); printInteger(i); printString("\n");
-        for (uint64 j = 0; j < 10000; j++) {
-            for (uint64 k = 0; k < 30000; k++) { /* busy wait */ }
-            thread_dispatch();
-        }
+void sleepyRun(void *arg) {
+    time_t sleep_time = *((time_t *) arg);
+    int i = 6;
+    while (--i > 0) {
+
+        printString("Hello ");
+        printInteger(sleep_time);
+        printString(" !\n");
+        time_sleep(sleep_time);
     }
-    printString("A finished!\n");
-    sem_signal(semafor);
-    if(*(int*)arg == 0) {
-        sem_close(semafor);
-        semafor = nullptr;
-    }
+    finished[sleep_time/10-1] = true;
 }
 
+
+// Kernel inicijalizaccija
+void idleProcess() {
+    while(true) {}
+}
 extern "C" void interrupt();
+// ------------
 int main() {
+    // Kernel inicijalizacija
     asm volatile("csrw stvec, %0" : : "r" (&interrupt));
     PCB* main = PCB::createProccess(nullptr, nullptr); // main
     PCB::running = main;
+    Scheduler::idleProcess = PCB::createProccess(idleProcess, nullptr);
     Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
+    // ----
 
-    sem_open(&semafor, 1);
-    PCB* procesi[4];
-    int niz[4] = {0,1,2,3};
-    for(int i = 0; i < 4; i++) {
-        thread_create(&procesi[i], workerBodyA, &niz[i]);
+    const int sleepy_thread_count = 2;
+    time_t sleep_times[sleepy_thread_count] = {10, 20};
+    thread_t sleepyThread[sleepy_thread_count];
+
+    for (int i = 0; i < sleepy_thread_count; i++) {
+        thread_create(&sleepyThread[i], sleepyRun, sleep_times + i);
     }
 
-    while(!procesi[0]->isFinished() || !procesi[1]->isFinished() || !procesi[2]->isFinished() || !procesi[3]->isFinished()) {
-        Thread::dispatch();
-    }
-
-    for(auto& proces : procesi) {
-        delete proces;
-    }
+    while (!(finished[0] && finished[1])) {}
 
     return 0;
 }

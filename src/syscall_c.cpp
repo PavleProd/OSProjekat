@@ -123,4 +123,16 @@ int sem_close (sem_t handle) {
     return 0;
 }
 
+int time_sleep (time_t time) {
+    size_t code = Kernel::sysCallCodes::time_sleep;
+    if(time <= 0) return -1;
+
+    asm volatile("mv a1, a0");
+    callInterrupt(code);
+
+    thread_dispatch(); // radimo odmah dispatch da bi zaustavili tekuci proces
+
+    return 0;
+}
+
 

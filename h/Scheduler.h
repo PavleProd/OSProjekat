@@ -6,11 +6,12 @@
 class Scheduler {
 private:
     static PCB *head, *tail; // pokazuje na pocetak i kraj liste spremnih procesa(u strukturama se nalaze next pokazivaci)
-    static PCB* idleProcess;
 
     // zabrana bilo kakvog pravljenja objekata
     Scheduler() = default;
 public:
+    static PCB* idleProcess;
+
     // stavlja process na kraj liste za cekanje u Scheduleru
     static void put(PCB* proccess);
 

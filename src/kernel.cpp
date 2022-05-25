@@ -5,6 +5,7 @@
 #include "../h/print.h"
 #include "../h/Scheduler.h"
 #include "../h/SCB.h"
+#include "../h/SleepingProcesses.h"
 
 void Kernel::popSppSpie() {
     asm volatile("csrw sepc, ra"); // da bi se funkcija vratila u wrapper
@@ -106,6 +107,13 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
 
                 break;
             }
+            case Kernel::sysCallCodes::time_sleep: // a1 = time
+            {
+                size_t time = (size_t)PCB::running->registers[11];
+                PCB::running->timeSleeping = time;
+                SleepingProcesses::putToSleep(PCB::running);
+                break;
+            }
             default:
                 printError();
                 break;
@@ -116,6 +124,7 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
     }
     else if(scause == (1UL << 63 | 1)) { // softverski prekid od tajmera
         PCB::timeSliceCounter++;
+        SleepingProcesses::wakeUp(); // budi uspavane procese ako su postojali, ako ne smanjuje periodu cekanja za 1
         if(PCB::timeSliceCounter >= PCB::running->timeSlice) {
             PCB::timeSliceCounter = 0;
             PCB::dispatch(); // vrsimo promenu konteksta ako je istekao time slice procesa

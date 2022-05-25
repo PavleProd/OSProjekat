@@ -3,27 +3,26 @@
 #include "../h/MemoryAllocator.h"
 
 void SCB::block() {
-    PCB::running->nextInList = nullptr;
+    PCB::running->setNextInList(nullptr);
     if(tail == nullptr) { // ako ne postoji kraj liste nece postojati ni pocetak
         head = tail = PCB::running;
     }
     else {
-        tail->nextInList = PCB::running;
-        tail = tail->nextInList;
+        tail->setNextInList(PCB::running);
+        tail = tail->getNextInList();
     }
-    PCB::running->blocked = true;
-    //PCB::yield(); // ovo treba da radi sistemski poziv
+    PCB::running->setBlocked(true);
 }
 
 PCB* SCB::unblock() {
     if(head == nullptr) return nullptr;
     PCB* curr = head;
-    head = head->nextInList;
+    head = head->getNextInList();
     if(tail == curr) {
         tail = head;
     }
-    curr->blocked = false;
-    curr->nextInList = nullptr;
+    curr->setBlocked(false);
+    curr->setNextInList(nullptr);
     return curr;
 }
 
@@ -58,9 +57,9 @@ void SCB::signalClosing() {
     PCB* curr = head;
     while(curr) {
         PCB* last = curr;
-        curr->semDeleted = true;
-        curr->blocked = false;
-        curr = curr->nextInList;
+        curr->setSemDeleted(true);
+        curr->setBlocked(false);
+        curr = curr->getNextInList();
         Scheduler::put(last);
     }
     head = tail = nullptr;
