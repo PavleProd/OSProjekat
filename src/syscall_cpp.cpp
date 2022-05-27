@@ -41,13 +41,20 @@ int Thread::start() {
     return 0;
 }
 
+struct threadArg {
+    void* thread;
+    void (Thread::* run)();
+};
+
 void threadWrapper(void* thread);
 Thread::Thread() {
-    thread_create_only(&myHandle, threadWrapper, this);
+    threadArg* tArg = new threadArg{this, &Thread::run}; // oslobodice se u destruktoru PCB-a
+    thread_create_only(&myHandle, threadWrapper, tArg);
 }
 
 void threadWrapper(void* thread) {
-    ((Thread*)thread)->run();
+    threadArg tArg = *(threadArg*)thread;
+    (((Thread*)tArg.thread)->*(tArg.run))();
 }
 
 int Thread::sleep(time_t time) {
@@ -78,6 +85,24 @@ void *Semaphore::operator new(size_t size) {
     return MemoryAllocator::mem_alloc(size);
 }
 
-PeriodicThread::PeriodicThread(time_t period) {
+struct periodicThreadArg {
+    void* periodicThread;
+    void (PeriodicThread::*periodicActivation)();
+    time_t period;
+};
 
+void periodicThreadWrapper(void* periodicThread) {
+    periodicThreadArg pArg = *(periodicThreadArg*)periodicThread;
+    while(true) {
+        (((PeriodicThread*)pArg.periodicThread)->*((pArg.periodicActivation)))();
+        Thread::sleep(pArg.period);
+    }
 }
+
+PeriodicThread::PeriodicThread(time_t period)
+: Thread(periodicThreadWrapper, new periodicThreadArg {this, &PeriodicThread::periodicActivation, period})
+{}
+
+
+
+

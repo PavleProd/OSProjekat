@@ -27,22 +27,18 @@ PCB* SCB::unblock() {
 }
 
 bool SCB::wait() {
-    //Kernel::mc_sstatus(Kernel::SSTATUS_SIE); // zabranjuju se prekidi
     if((int)(--semValue)<0) {
         block();
         return true;
     }
     return false;
-    //Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
 }
 
 PCB* SCB::signal() {
-    //Kernel::mc_sstatus(Kernel::SSTATUS_SIE); // zabranjuju se prekidi
     if((int)(++semValue)<=0) {
         return unblock();
     }
     return nullptr;
-    //Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
 }
 
 void *SCB::operator new(size_t size) {

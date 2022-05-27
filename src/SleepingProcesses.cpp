@@ -5,8 +5,10 @@ PCB* SleepingProcesses::head = nullptr;
 
 void SleepingProcesses::putToSleep(PCB *process) {
     PCB* curr = head, *prev = nullptr;
-    while(curr && curr->getTimeSleeping() < process->getTimeSleeping()) { // ako su iste vrednosti oba ce biti izvadjena
+    size_t time = process->getTimeSleeping();
+    while(curr && curr->getTimeSleeping() < time) { // ako su iste vrednosti oba ce biti izvadjena
         prev = curr;
+        time -= curr->getTimeSleeping();
         curr = curr->getNextInList();
     }
 
@@ -14,12 +16,18 @@ void SleepingProcesses::putToSleep(PCB *process) {
     if(!prev) {
         head = process;
         process->setNextInList(curr);
+        if(curr) {
+            curr->setTimeSleeping(curr->getTimeSleeping() - process->getTimeSleeping());
+        }
     }
     else {
         prev->setNextInList(process);
-        process->setNextInList(curr);
         // vrednost ce biti relativna u odnosu na prosli clan pa cemo moci da izbacimo samo prvih k elemenata
-        process->setTimeSleeping(process->getTimeSleeping() - prev->getTimeSleeping());
+        process->setTimeSleeping(time); // razlika izmedju tekuceg i proslog
+        process->setNextInList(curr);
+        if(curr) {
+            curr->setTimeSleeping(curr->getTimeSleeping() - process->getTimeSleeping());
+        }
     }
 }
 

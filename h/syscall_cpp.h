@@ -10,7 +10,6 @@ void operator delete (void* memSegment) noexcept;
 void operator delete[] (void* memSegment) noexcept;
 
 class Thread {
-    friend void threadWrapper(void* thread);
 public:
     void* operator new(size_t size);
     void operator delete(void* memSegment);
