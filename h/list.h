@@ -58,7 +58,7 @@ public:
         return ret;
     }
 
-    // vraca element sa pocetka liste0
+    // vraca element sa pocetka liste
     T *peekFirst()
     {
         if (!head) { return 0; }

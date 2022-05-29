@@ -43,6 +43,8 @@ public:
         semDeleted = newState;
     }
 
+
+
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
 
     // Pravi novi proces koji izvrasva funkciju main

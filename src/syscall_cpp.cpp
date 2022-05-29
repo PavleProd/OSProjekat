@@ -2,7 +2,7 @@
 #include "../h/MemoryAllocator.h"
 #include "../h/PCB.h"
 #include "../h/SCB.h"
-
+#include "../h/kernel.h"
 void* operator new (size_t size) {
     return mem_alloc(size);
 }
@@ -53,8 +53,9 @@ Thread::Thread() {
 }
 
 void threadWrapper(void* thread) {
-    threadArg tArg = *(threadArg*)thread;
-    (((Thread*)tArg.thread)->*(tArg.run))();
+    threadArg *tArg = (threadArg*)thread;
+    (((Thread*)tArg->thread)->*(tArg->run))();
+    delete tArg;
 }
 
 int Thread::sleep(time_t time) {
@@ -92,11 +93,12 @@ struct periodicThreadArg {
 };
 
 void periodicThreadWrapper(void* periodicThread) {
-    periodicThreadArg pArg = *(periodicThreadArg*)periodicThread;
+    periodicThreadArg *pArg = (periodicThreadArg*)periodicThread;
     while(true) {
-        (((PeriodicThread*)pArg.periodicThread)->*((pArg.periodicActivation)))();
-        Thread::sleep(pArg.period);
+        (((PeriodicThread*)pArg->periodicThread)->*((pArg->periodicActivation)))();
+        Thread::sleep(pArg->period);
     }
+    delete pArg;
 }
 
 PeriodicThread::PeriodicThread(time_t period)
@@ -104,5 +106,10 @@ PeriodicThread::PeriodicThread(time_t period)
 {}
 
 
+char Console::getc() {
+    return ::getc();
+}
 
-
+void Console::putc(char c) {
+    return ::putc(c);
+}

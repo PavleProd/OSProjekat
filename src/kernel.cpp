@@ -6,7 +6,8 @@
 #include "../h/Scheduler.h"
 #include "../h/SCB.h"
 #include "../h/SleepingProcesses.h"
-
+#include "../h/CCB.h"
+#include "../h/syscall_c.h"
 void Kernel::popSppSpie() {
     asm volatile("csrw sepc, ra"); // da bi se funkcija vratila u wrapper
     asm volatile("sret");
@@ -114,6 +115,22 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 SleepingProcesses::putToSleep(PCB::running);
                 break;
             }
+            case Kernel::sysCallCodes::putc: // a1 = character
+            {
+                char character = PCB::running->registers[11];
+                CCB::outputBuffer.pushBack(character);
+                break;
+            }
+            case Kernel::sysCallCodes::getc:
+            {
+                while(CCB::inputBuffer.peekFront() == 0) {
+                    sem_wait(CCB::inputBufferEmpty);
+                    //PCB::dispatch();
+                }
+
+                PCB::running->registers[10] = CCB::inputBuffer.popFront();
+                break;
+            }
             default:
                 printError();
                 break;
@@ -134,7 +151,17 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
         Kernel::mc_sip(Kernel::SIP_SSIE); // postavljamo SSIE na 0 jer smo obradili softverski prekid od tajmera
     }
     else if(scause == (1UL << 63 | 9)) { // spoljasnji prekid od konzole
-        console_handler(); // TODO: zameniti sa svojim console_handlerom()
+        if(plic_claim() == CONSOLE_IRQ) {
+            if(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) { // putc
+                CCB::semOutput->signal();
+            }
+            if(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) { // getc
+                CCB::semInput->signal();
+            }
+        }
+        else {
+            plic_complete(CONSOLE_IRQ);
+        }
     }
     else { // neka vrsta greske, neocekivan skok na prekidnu rutinu
         printError();

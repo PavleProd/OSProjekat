@@ -37,8 +37,7 @@ U slučaju uspeha, u *handle upisuje „ručku“ novokreirane niti i vraća 0, 
 „Ručka“ je interni identifikator koji jezgro koristi da bi identifikovalo nit (pokazivac na PCB)
  Funkcija treba da alocira stek i prosledi ga prekidnoj rutini
 */
-int thread_create_only(thread_t* handle, void(*startRoutine)(void*), void* arg);
-
+int thread_create_only (thread_t* handle, void(*startRoutine)(void*), void* arg);
 // Gasi tekuću nit. U slučaju neuspeha vraća negativnu vrednost (kod greske)
 int thread_exit ();
 
@@ -76,5 +75,16 @@ jedinicama vremena (periodama tajmera). U slučaju uspeha
 vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške).
 */
 int time_sleep (time_t time);
+
+const int EOF = -1;
+/*Učitava jedan znak iz bafera znakova učitanih sa konzole. U
+slučaju da je bafer prazan, suspenduje pozivajuću nit dok se
+znak ne pojavi. Vraća učitani znak u slučaju uspeha, a
+konstantu EOF u slučaju greške.
+ */
+char getc ();
+
+// Ispisuje dati znak na konzolu.
+void putc (char);
 
 #endif //SYSCALL_C_H

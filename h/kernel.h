@@ -5,7 +5,6 @@
 
 class Kernel {
 public:
-
     // postavlja code u registar a0
     static size_t setCode(size_t code) {
         return code;
@@ -109,9 +108,9 @@ public:
 
     enum BitMaskSstatus
     {
-        SSTATUS_SIE = (1 << 1),
-        SSTATUS_SPIE = (1 << 5),
-        SSTATUS_SPP = (1 << 8),
+        SSTATUS_SIE = (1 << 1), // ako je 0 - maskiranje spoljasnjih prekida u sistemskom rezimu
+        SSTATUS_SPIE = (1 << 5), // prethodna vrednost sie
+        SSTATUS_SPP = (1 << 8), // u kom rezimu se desio prekid
     };
 
     // mask set register sstatus
@@ -137,6 +136,7 @@ public:
     }
 };
 
+void userMain();
 
 
 #endif //KERNEL_H

@@ -31,12 +31,13 @@ int mem_free (void* memSegment) {
     return (size_t)(callInterrupt(code));
 }
 
-// a0 - code a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace
+// a0 - code a1 - handle a2 - startRoutine a3 - arg a4 - stackSpace, a5 - deleteArgFlag
 int thread_create_only (thread_t* handle, void(*startRoutine)(void*), void* arg) {
     size_t code = Kernel::sysCallCodes::thread_create;
     asm volatile("mv a3, a2"); // a3 = arg
     asm volatile("mv a2, a1"); // a2 = startRoutine
-    asm volatile("mv a4, a0"); // a5 = handle privremeno cuvamo da bismo posle vratili u a1
+    asm volatile("mv a4, a0"); // a4 = handle privremeno cuvamo da bismo posle vratili u a1
+
 
     size_t* stack = (size_t*)mem_alloc(sizeof(size_t)*DEFAULT_STACK_SIZE); // pravimo stack procesa
     if(stack == nullptr) return -1;
@@ -134,5 +135,18 @@ int time_sleep (time_t time) {
 
     return 0;
 }
+
+char getc () {
+    size_t code = Kernel::sysCallCodes::getc;
+    return (char)(size_t)callInterrupt(code);
+}
+
+void putc(char c) {
+    size_t code = Kernel::sysCallCodes::putc;
+    asm volatile("mv a1, a0"); // a1 = c
+    callInterrupt(code);
+}
+
+
 
 
