@@ -136,7 +136,5 @@ public:
     }
 };
 
-void userMain();
-
 
 #endif //KERNEL_H

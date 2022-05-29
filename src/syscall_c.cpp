@@ -93,13 +93,7 @@ int sem_wait (sem_t volatile handle) {
     if(handle == nullptr) return -1;
     asm volatile("mv a1, a0");
 
-    if(callInterrupt(code)) {
-        thread_dispatch();
-    }
-
-    if(PCB::running->isSemaphoreDeleted()) return -2; // semafor je obrisan pre nego sto je proces odblokiran
-
-    return 0;
+    return (int)(size_t)callInterrupt(code);
 }
 
 int sem_signal (sem_t handle) {
@@ -107,10 +101,7 @@ int sem_signal (sem_t handle) {
     if(handle == nullptr) return -1;
     asm volatile("mv a1, a0");
 
-    PCB* process = (PCB*)callInterrupt(code);
-    if(process) {
-        thread_start(&process);
-    }
+    callInterrupt(code);
 
     return 0;
 }

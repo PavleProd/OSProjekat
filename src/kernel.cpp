@@ -89,14 +89,14 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
             {
                 SCB* sem = (SCB*) PCB::running->registers[11];
 
-                PCB::running->registers[10] = sem->wait(); // true kao proces treba da se blokira, false ako ne
+                PCB::running->registers[10] = sem->wait(); // 0 ako se ispravno probudila, -2 ako se probudila brisanjem semafora
                 break;
             }
             case Kernel::sysCallCodes::sem_signal: // a1 = sem
             {
                 SCB* sem = (SCB*) PCB::running->registers[11];
 
-                PCB::running->registers[10] = (size_t)sem->signal(); // vraca pokazivac na PCB ako ga treba staviti u Scheduler
+                sem->signal();
                 break;
             }
             case Kernel::sysCallCodes::sem_close: // a1 = sem
@@ -124,7 +124,7 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
             case Kernel::sysCallCodes::getc:
             {
                 while(CCB::inputBuffer.peekFront() == 0) {
-                    sem_wait(CCB::inputBufferEmpty);
+                    CCB::inputBufferEmpty->wait();
                     //PCB::dispatch();
                 }
 

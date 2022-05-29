@@ -9,6 +9,7 @@ class PCB {
 friend class Scheduler;
 friend void interruptHandler();
 friend class Kernel;
+friend class SCB;
 public:
     // vraca true ako se proces zavrsio, false ako nije
     bool isFinished() const {
@@ -42,8 +43,6 @@ public:
     void setSemDeleted(bool newState) {
         semDeleted = newState;
     }
-
-
 
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
 

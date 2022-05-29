@@ -10,11 +10,12 @@ public:
         return semValue;
     }
 
-    // smanjuje vrednost semValue i ako ona padne manje od 0, vraca true(tekuci proces treba da se blokira)
-    bool wait();
+    // smanjuje vrednost semValue i ako ona padne manje od 0, blokira tekuci proces ako on treba da se blokira
+    // vraca 0 ako se nit uspesno probudila, -2 ako se probudila kad je semafor obrisan
+    int wait();
 
-    // povecava vrednost semValue i ako je ona posle povecanja <= 0, vraca se proces koji treba da se odblokira
-    PCB* signal();
+    // povecava vrednost semValue i ako je ona posle povecanja <= 0, odblokira proces ako treba da se odblokira
+    void signal();
 
     void* operator new(size_t size);
     void operator delete(void* memSegment);

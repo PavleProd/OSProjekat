@@ -26,19 +26,25 @@ PCB* SCB::unblock() {
     return curr;
 }
 
-bool SCB::wait() {
+int SCB::wait() {
     if((int)(--semValue)<0) {
         block();
-        return true;
+        PCB::timeSliceCounter = 0;
+        PCB::dispatch();
     }
-    return false;
+
+    if(PCB::running->semDeleted) { // ako se vratio kontekst, a semafor je obrisan
+        return -2;
+    }
+
+    return 0;
+
 }
 
-PCB* SCB::signal() {
+void SCB::signal() {
     if((int)(++semValue)<=0) {
-        return unblock();
+        Scheduler::put(unblock());
     }
-    return nullptr;
 }
 
 void *SCB::operator new(size_t size) {
