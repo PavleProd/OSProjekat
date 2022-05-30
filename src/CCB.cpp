@@ -3,6 +3,7 @@
 #include "../h/SCB.h"
 #include "../h/MemoryAllocator.h"
 #include "../h/syscall_c.h"
+#include "../h/kernel.h"
 PCB* CCB::inputProcces = nullptr;
 PCB* CCB::outputProcess = nullptr;
 SCB* CCB::semInput = nullptr;
@@ -13,25 +14,26 @@ IOBuffer CCB::outputBuffer;
 
 void CCB::inputBody(void *) {
     while(true) {
-        while(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) {
+        if(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) {
             inputBuffer.pushBack(*(char*)CONSOLE_RX_DATA);
             sem_signal(CCB::inputBufferEmpty);
+            plic_complete(CONSOLE_IRQ);
+            sem_wait(semInput);
         }
-
-        plic_complete(CONSOLE_IRQ);
-        sem_wait(semInput);
+        thread_dispatch();
     }
 }
 
 void CCB::outputBody(void *) {
     while(true) {
-        while(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) {
-            if(outputBuffer.peekFront() == 0) break;
-
-            *((char*)CONSOLE_TX_DATA) = outputBuffer.popFront();
+        if(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) {
+            if(outputBuffer.peekFront() != 0) {
+                *((char*)CONSOLE_TX_DATA) = outputBuffer.popFront();
+                plic_complete(CONSOLE_IRQ);
+                sem_wait(semOutput);
+            }
         }
-        plic_complete(CONSOLE_IRQ);
-        sem_wait(semOutput);
+        thread_dispatch();
     }
 }
 

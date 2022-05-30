@@ -45,6 +45,7 @@ void SCB::signal() {
     if((int)(++semValue)<=0) {
         Scheduler::put(unblock());
     }
+
 }
 
 void SCB::prioritySignal() {

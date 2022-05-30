@@ -7,7 +7,7 @@
 
 #include "../h/syscall_c.h"
 
-#include "printing.hpp"
+#include "../h/print.h"
 
 bool finished[2];
 

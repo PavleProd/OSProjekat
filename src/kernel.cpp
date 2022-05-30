@@ -119,13 +119,14 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
             {
                 char character = PCB::running->registers[11];
                 CCB::outputBuffer.pushBack(character);
+                CCB::semOutput->signal();
                 break;
             }
             case Kernel::sysCallCodes::getc:
             {
+                CCB::semInput->signal();
                 while(CCB::inputBuffer.peekFront() == 0) {
                     CCB::inputBufferEmpty->wait();
-                    //PCB::dispatch();
                 }
 
                 PCB::running->registers[10] = CCB::inputBuffer.popFront();
@@ -156,17 +157,19 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
         Kernel::mc_sip(Kernel::SIP_SSIE); // postavljamo SSIE na 0 jer smo obradili softverski prekid od tajmera
     }
     else if(scause == (1UL << 63 | 9)) { // spoljasnji prekid od konzole
-        if(plic_claim() == CONSOLE_IRQ) {
+        size_t code = plic_claim();
+        if(code == CONSOLE_IRQ) {
             if(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) { // putc
-                CCB::semOutput->prioritySignal();
+                //if(CCB::semOutput->getSemValue() == 0) plic_complete(code);
             }
             if(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) { // getc
-                CCB::semInput->prioritySignal();
+                //if(CCB::semInput->getSemValue() == 0) plic_complete(code);
             }
         }
         else {
-            plic_complete(CONSOLE_IRQ);
+            plic_complete(code);
         }
+
     }
     else { // neka vrsta greske, neocekivan skok na prekidnu rutinu
         printError();

@@ -24,15 +24,19 @@ int main() {
     sem_open(&CCB::inputBufferEmpty, 0);
 
     Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
-    thread_create(&userProcess, userMainWrapper, nullptr);
+
     thread_create(&CCB::inputProcces, CCB::inputBody, nullptr); // getc nit (stavljamo je prvi put u Scheduler da bi se pokrenula jednom)
+    CCB::inputProcces->setTimeSlice(1);
     thread_create(&CCB::outputProcess, CCB::outputBody, nullptr); // putc nit ( stavljamo je prvi put u Scheduler da bi se pokrenula jednom)
+    CCB::outputProcess->setTimeSlice(1);
     thread_create_only(&Scheduler::idleProcess, idleProcess, nullptr); // idle nit
+    thread_create(&userProcess, userMainWrapper, nullptr);
     // ----
 
     while(!userProcess->isFinished()) {
         thread_dispatch();
     }
 
+   // while(CCB::semOutput->getSemValue() != 0) {}
     return 0;
 }
