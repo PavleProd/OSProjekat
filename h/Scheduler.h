@@ -13,12 +13,16 @@ public:
     static PCB* idleProcess;
 
     // stavlja process na kraj liste za cekanje u Scheduleru
-    static void put(PCB* proccess);
+    static void put(PCB* process);
+
+    // stavlja prioritetni proces na pocetak schedulera
+    static void putInFront(PCB* process);
 
     /* uzima proces sa pocetka liste za cekanje na Scheduleru, uvek ce postojati neka nit koja moze da se pozove
      Ako ne postoji nijedna druga, vraca se idle nit koja uposleno ceka na promenu konteksta
     */
     static PCB* get();
+
 };
 
 

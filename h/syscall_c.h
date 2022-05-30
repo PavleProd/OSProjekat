@@ -2,6 +2,7 @@
 #define SYSCALL_C_H
 
 #include "hw.h"
+#include "PCB.h"
 
 /*
     Alocira (najmanje) size bajtova memorije, zaokruženo i poravnato na blokove veličine MEM_BLOCK_SIZE.
@@ -21,7 +22,7 @@ extern void* mem_alloc(size_t size);
 */
 extern int mem_free (void* memSegment);
 
-class PCB;
+//class PCB;
 typedef PCB* thread_t;
 /*
 Pravi nit nad funkcijom start_routine, pozivajući je sa argumentom arg i stavlja je u scheduler

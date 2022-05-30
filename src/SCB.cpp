@@ -47,6 +47,12 @@ void SCB::signal() {
     }
 }
 
+void SCB::prioritySignal() {
+    if((int)(++semValue)<=0) {
+        Scheduler::putInFront(unblock());
+    }
+}
+
 void *SCB::operator new(size_t size) {
     return MemoryAllocator::mem_alloc(size);
 }

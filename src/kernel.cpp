@@ -131,6 +131,11 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 PCB::running->registers[10] = CCB::inputBuffer.popFront();
                 break;
             }
+            case Kernel::sysCallCodes::userMode:
+            {
+                sstatus = sstatus & ~Kernel::BitMaskSstatus::SSTATUS_SPP;
+                break;
+            }
             default:
                 printError();
                 break;
@@ -153,10 +158,10 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
     else if(scause == (1UL << 63 | 9)) { // spoljasnji prekid od konzole
         if(plic_claim() == CONSOLE_IRQ) {
             if(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) { // putc
-                CCB::semOutput->signal();
+                CCB::semOutput->prioritySignal();
             }
             if(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) { // getc
-                CCB::semInput->signal();
+                CCB::semInput->prioritySignal();
             }
         }
         else {

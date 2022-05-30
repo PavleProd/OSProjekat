@@ -19,7 +19,7 @@ void CCB::inputBody(void *) {
         }
 
         plic_complete(CONSOLE_IRQ);
-        sem_wait(CCB::semInput);
+        sem_wait(semInput);
     }
 }
 

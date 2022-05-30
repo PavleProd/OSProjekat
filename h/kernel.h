@@ -24,7 +24,8 @@ public:
         sem_signal = 0x24,
         time_sleep = 0x31,
         getc = 0x41,
-        putc = 0x42
+        putc = 0x42,
+        userMode = 0x43
     };
 
     // pop sstatus.spp and sstatus.spie bits (has to be a non inline function)

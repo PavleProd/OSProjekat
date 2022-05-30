@@ -1,12 +1,13 @@
-build/src/userMain.o: src/userMain.cpp src/../h/hw.h src/../h/print.h \
- src/../h/console.h src/../h/syscall_c.h src/../h/PCB.h
+build/src/userMain.o: src/userMain.cpp src/../test/Threads_C_API_test.hpp \
+ src/../test/../h/syscall_c.h src/../test/../h/hw.h \
+ src/../test/../h/PCB.h src/../test/../h/print.h
 
-src/../h/hw.h:
+src/../test/Threads_C_API_test.hpp:
 
-src/../h/print.h:
+src/../test/../h/syscall_c.h:
 
-src/../h/console.h:
+src/../test/../h/hw.h:
 
-src/../h/syscall_c.h:
+src/../test/../h/PCB.h:
 
-src/../h/PCB.h:
+src/../test/../h/print.h:

@@ -1,30 +1,20 @@
-#include "../h/hw.h"
-#include "../h/print.h"
-#include "../h/console.h"
-#include "../h/syscall_c.h"
-#include "../h/PCB.h"
+#include "../test/Threads_C_API_test.hpp" // zadatak 2, niti C API i sinhrona promena konteksta
+//#include "../test/Threads_CPP_API_test.hpp" // zadatak 2., niti CPP API i sinhrona promena konteksta
 
-/*void nitA(void* x) {
-    printString("nit A\n");
-    thread_dispatch();
-    for(int i = 0; i < 30000; i++) {
-        for(int j = 0; j < 10000; j++) {
-            // uposleno cekanje
-        }
-    }
+//#include "../test/ConsumerProducer_C_API_test.h" // zadatak 3., kompletan C API sa semaforima, sinhrona promena konteksta
+//#include "../test/ConsumerProducer_CPP_Sync_API_test.hpp" // zadatak 3., kompletan CPP API sa semaforima, sinhrona promena konteksta
 
-    printInt(*(int*)x);
-    printString("\nKraj niti A\n");
-}
-
-void nitB(void* c) {
-    printString("nit B\n");
-    __putc(*(char*)c);
-    __putc('\n');
-}*/
-
-
+//#include "../test/ThreadSleep_C_API_test.hpp" // thread_sleep test C API
+//#include "../test/ConsumerProducer_CPP_API_test.hpp" // zadatak 4. CPP API i asinhrona promena konteksta
 
 void userMain() {
-    return;
+    Threads_C_API_test(); // zadatak 2., niti C API i sinhrona promena konteksta
+    //Threads_CPP_API_test(); // zadatak 2., niti CPP API i sinhrona promena konteksta
+
+    //producerConsumer_C_API(); // zadatak 3., kompletan C API sa semaforima, sinhrona promena konteksta
+    //producerConsumer_CPP_Sync_API(); // zadatak 3., kompletan CPP API sa semaforima, sinhrona promena konteksta
+
+    //testSleeping(); // thread_sleep test C API
+    //ConsumerProducerCPP::testConsumerProducer(); // zadatak 4. CPP API i asinhrona promena konteksta, kompletan test svega
+
 }

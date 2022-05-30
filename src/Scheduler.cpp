@@ -28,5 +28,16 @@ PCB *Scheduler::get() {
     return curr;
 }
 
+void Scheduler::putInFront(PCB *process) {
+    if(!process) return;
+    process->nextInList = head;
+    if(!head) {
+        head = tail = process;
+    }
+    else {
+        head = process;
+    }
+}
+
 
 

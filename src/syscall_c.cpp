@@ -2,7 +2,6 @@
 #include "../h/MemoryAllocator.h"
 #include "../h/kernel.h"
 #include "../h/PCB.h"
-#include "../h/console.h"
 
 extern "C" void interrupt(); // u interrupt treba dodati i cuvanje konteksta
 // prelazak u sistemski rezim i prelazak na sistemsku funkciju zadatu u registru stvec(asemblerska funkcija interrupt)

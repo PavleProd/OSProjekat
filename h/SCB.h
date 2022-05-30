@@ -17,6 +17,8 @@ public:
     // povecava vrednost semValue i ako je ona posle povecanja <= 0, odblokira proces ako treba da se odblokira
     void signal();
 
+    void prioritySignal();
+
     void* operator new(size_t size);
     void operator delete(void* memSegment);
 
