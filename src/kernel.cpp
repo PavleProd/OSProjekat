@@ -2,7 +2,6 @@
 #include "../h/PCB.h"
 #include "../h/MemoryAllocator.h"
 #include "../h/console.h"
-#include "../h/print.h"
 #include "../h/Scheduler.h"
 #include "../h/SCB.h"
 #include "../h/SleepingProcesses.h"
@@ -138,7 +137,6 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 break;
             }
             default:
-                printError();
                 break;
         }
         Kernel::w_sepc(sepc);
@@ -172,7 +170,6 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
 
     }
     else { // neka vrsta greske, neocekivan skok na prekidnu rutinu
-        printError();
     }
 
 }
