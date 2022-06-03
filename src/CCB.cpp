@@ -14,7 +14,7 @@ IOBuffer CCB::outputBuffer;
 
 void CCB::inputBody(void *) {
     while(true) {
-        if(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) {
+        while(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) {
             inputBuffer.pushBack(*(char*)CONSOLE_RX_DATA);
             sem_signal(CCB::inputBufferEmpty);
             plic_complete(CONSOLE_IRQ);
@@ -26,11 +26,13 @@ void CCB::inputBody(void *) {
 
 void CCB::outputBody(void *) {
     while(true) {
-        if(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) {
+        while(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) {
             if(outputBuffer.peekFront() != 0) {
                 *((char*)CONSOLE_TX_DATA) = outputBuffer.popFront();
-                plic_complete(CONSOLE_IRQ);
                 sem_wait(semOutput);
+            }
+            else {
+                break;
             }
         }
         thread_dispatch();

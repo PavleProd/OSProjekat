@@ -3,6 +3,7 @@
 
 #include "hw.h"
 #include "PCB.h"
+#include "SCB.h"
 
 /*
     Alocira (najmanje) size bajtova memorije, zaokruženo i poravnato na blokove veličine MEM_BLOCK_SIZE.
@@ -48,7 +49,6 @@ void thread_start(thread_t* handle);
 // Potencijalno oduzima procesor tekućoj i daje nekoj drugoj (ili istoj) niti.
 void thread_dispatch ();
 
-class SCB;
 typedef SCB* sem_t;
 /*Kreira semafor sa inicijalnom vrednošću init. U slučaju uspeha, u *handle upisuje ručku novokreiranog semafora i
 vraća 0, a u slučaju neuspeha vraća negativnu vrednost (kôd greške). Rucka je pokazivac na SCB(Semaphore Control Block)

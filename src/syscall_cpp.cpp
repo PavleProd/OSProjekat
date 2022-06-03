@@ -1,4 +1,4 @@
-#include "../h/syscall_cpp.h"
+#include "../h/syscall_cpp.hpp"
 #include "../h/MemoryAllocator.h"
 #include "../h/PCB.h"
 #include "../h/SCB.h"

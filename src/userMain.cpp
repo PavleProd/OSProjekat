@@ -1,4 +1,0 @@
-
-void userMain() {
-    return;
-}

@@ -165,8 +165,10 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
             }
         }
         else {
-            plic_complete(code);
+
         }
+        plic_complete(code);
+
 
     }
     else { // neka vrsta greske, neocekivan skok na prekidnu rutinu

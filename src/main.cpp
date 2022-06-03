@@ -26,10 +26,10 @@ int main() {
     Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
 
     thread_create(&CCB::inputProcces, CCB::inputBody, nullptr); // getc nit (stavljamo je prvi put u Scheduler da bi se pokrenula jednom)
-    CCB::inputProcces->setTimeSlice(1);
     thread_create(&CCB::outputProcess, CCB::outputBody, nullptr); // putc nit ( stavljamo je prvi put u Scheduler da bi se pokrenula jednom)
-    CCB::outputProcess->setTimeSlice(1);
     thread_create_only(&Scheduler::idleProcess, idleProcess, nullptr); // idle nit
+    Scheduler::idleProcess->setFinished(true);
+    Scheduler::idleProcess->setTimeSlice(1);
     thread_create(&userProcess, userMainWrapper, nullptr);
     // ----
 
@@ -37,6 +37,8 @@ int main() {
         thread_dispatch();
     }
 
-   // while(CCB::semOutput->getSemValue() != 0) {}
+    while(CCB::semOutput->getSemValue() != 0) {
+        thread_dispatch();
+    }
     return 0;
 }

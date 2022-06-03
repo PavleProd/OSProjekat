@@ -48,6 +48,10 @@ public:
         timeSlice = timeSlice_;
     }
 
+    void setFinished(bool finished_) {
+        finished = finished_;
+    }
+
     using processMain = void(*)(); // pokazivac na void funkciju bez argumenata
 
     // Pravi novi proces koji izvrasva funkciju main
