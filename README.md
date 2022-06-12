@@ -3,3 +3,4 @@ RiscV kernel that supports multithreading, time sharing, mutual exclusion, etc. 
 Main function is void userMain()
 
 Text of the project is included in project.pdf file
+http://os.etf.rs/OS1/projekat.htm (more on project)
