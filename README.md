@@ -1,2 +1,2 @@
 # OSProjekat
- Multithread Kernel Operativnog Sistema na RISC V arhitekturi
+RiscV kernel that supports multithreading, time sharing, mutual exclusion, etc. (All system calls are in file syscall.h)
