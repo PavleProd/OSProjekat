@@ -32,6 +32,7 @@ private:
     static BuddyEntry* getFreeBlock(size_t size);
     static BuddyEntry* popFreeBlock(size_t size);
     static BuddyEntry* popFreeBlockAddr(size_t size, void* addr);
+    static void printBuddy();
 public:
     // alocira blok velicine 2^size. U slucaju da se ne moze alocirati blok, vraca nullptr, inace vraca pocetnu adresu bloka
     static void* buddyAlloc(size_t size);

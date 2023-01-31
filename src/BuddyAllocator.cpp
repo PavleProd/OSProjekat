@@ -1,5 +1,6 @@
 #include "../h/BuddyAllocator.h"
 #include "../h/MemoryAllocator.h"
+#include "../h/printing.hpp"
 
 void* BuddyAllocator::startAddr = nullptr;
 
@@ -41,10 +42,23 @@ int BuddyAllocator::buddyFree(void *addr, size_t size) {
     size--;
     if(size >= maxPowerSize || addr == nullptr) return -1;
 
-    /*while(size < maxPowerSize) {
-        size_t other = addr % (1<<size)
+    while(size < maxPowerSize) {
+        size_t module = (size_t)addr % 1<<(size+2); // jer imamo blok npr 0 i 0+2^(size+1)
+        void* other = addr;
+        size_t offset = 1<<(size+1);
+        other = (void*)((char*)other + (module == 0 ? offset : -offset));
+
+        BuddyEntry* otherEntry = popFreeBlockAddr(size+1, other);
+        if(otherEntry) { // postoji buddy blok
+            BuddyEntry::freeEntry(otherEntry); // oslobadjamo ga jer se stapa u veci entry
+        }
+        else { // nema buddy bloka sa kojim moze da se spoji
+            BuddyEntry* entry = BuddyEntry::createEntry(addr);
+            BuddyEntry::addEntry(size+1, entry);
+            break;
+        }
         size++;
-    }*/
+    }
 
     return 0;
 }
@@ -70,12 +84,27 @@ BuddyAllocator::BuddyEntry *BuddyAllocator::popFreeBlockAddr(size_t size, void* 
     size--;
     if(size >= maxPowerSize) return nullptr;
 
-    BuddyEntry *entry = nullptr, *prev = nullptr;
+    BuddyEntry *prev = nullptr;
     for(BuddyEntry* curr = buddy[size]; curr != nullptr; curr = curr->next) {
-
+        if(curr->addr == addr) {
+            if(prev) {
+                prev->next = curr->next;
+            }
+            else {
+                buddy[size] = buddy[size]->next;
+            }
+            return curr;
+        }
+        prev = curr;
     }
 
     return nullptr;
+}
+
+void BuddyAllocator::printBuddy() {
+    for(int i = 0; i < maxPowerSize; i++) {
+        printInt(i);
+    }
 }
 
 BuddyAllocator::BuddyEntry *BuddyAllocator::BuddyEntry::createEntry(void* addr) {

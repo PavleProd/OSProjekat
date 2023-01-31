@@ -3,7 +3,7 @@
 
 #include "../h/syscall_c.h"
 
-#include "printing.hpp"
+#include "../h/printing.hpp"
 
 bool finishedA = false;
 bool finishedB = false;
