@@ -1,6 +1,6 @@
 #include "../h/Scheduler.h"
 
-PCB* Scheduler::idleProcess = nullptr; // TODO: napraviti idleProcess koji uposleno ceka da se pokrene neki proces
+PCB* Scheduler::idleProcess = nullptr;
 PCB* Scheduler::head = nullptr;
 PCB* Scheduler::tail = nullptr;
 
