@@ -1,4 +1,4 @@
-GAS LISTING /tmp/ccmDD9Nm.s 			page 1
+GAS LISTING /tmp/ccGh9TeS.s 			page 1
 
 
    1              		.file	"userMain.cpp"
@@ -6,60 +6,317 @@ GAS LISTING /tmp/ccmDD9Nm.s 			page 1
    3              		.option norelax
    4              		.text
    5              	.Ltext0:
-   6              		.align	2
-   7              		.globl	_Z8userMainv
-   9              	_Z8userMainv:
-  10              	.LFB0:
-  11              		.file 1 "src/userMain.cpp"
-   1:src/userMain.cpp **** 
-   2:src/userMain.cpp **** void userMain() {
-  12              		.loc 1 2 17
-  13              		.cfi_startproc
-  14 0000 130101FF 		addi	sp,sp,-16
-  15              		.cfi_def_cfa_offset 16
-  16 0004 23348100 		sd	s0,8(sp)
-  17              		.cfi_offset 8, -8
-  18 0008 13040101 		addi	s0,sp,16
-  19              		.cfi_def_cfa 8, 0
-   3:src/userMain.cpp **** }...
-  20              		.loc 1 3 1 is_stmt 0
-  21 000c 03348100 		ld	s0,8(sp)
-  22              		.cfi_restore 8
-  23              		.cfi_def_cfa 2, 16
-  24 0010 13010101 		addi	sp,sp,16
-  25              		.cfi_def_cfa_offset 0
-  26 0014 67800000 		jr	ra
-  27              		.cfi_endproc
-  28              	.LFE0:
-  30              	.Letext0:
-GAS LISTING /tmp/ccmDD9Nm.s 			page 2
+   6              		.section	.rodata.str1.8,"aMS",@progbits,1
+   7              		.align	3
+   8              	.LC0:
+   9 0000 706F736C 		.string	"posle\n"
+   9      650A00
+  10              		.text
+  11              		.align	2
+  12              		.globl	_Z8userMainv
+  14              	_Z8userMainv:
+  15              	.LFB23:
+  16              		.file 1 "src/userMain.cpp"
+   1:src/userMain.cpp **** #include "../h/BuddyAllocator.h"
+   2:src/userMain.cpp **** #include "../h/printing.hpp"
+   3:src/userMain.cpp **** void userMain() {
+  17              		.loc 1 3 17
+  18              		.cfi_startproc
+  19 0000 130101FE 		addi	sp,sp,-32
+  20              		.cfi_def_cfa_offset 32
+  21 0004 233C1100 		sd	ra,24(sp)
+  22 0008 23388100 		sd	s0,16(sp)
+  23 000c 23349100 		sd	s1,8(sp)
+  24 0010 23302101 		sd	s2,0(sp)
+  25              		.cfi_offset 1, -8
+  26              		.cfi_offset 8, -16
+  27              		.cfi_offset 9, -24
+  28              		.cfi_offset 18, -32
+  29 0014 13040102 		addi	s0,sp,32
+  30              		.cfi_def_cfa 8, 0
+   4:src/userMain.cpp ****     BuddyAllocator::initBuddy();
+  31              		.loc 1 4 5
+  32              		.loc 1 4 30 is_stmt 0
+  33 0018 97000000 		call	_ZN14BuddyAllocator9initBuddyEv@plt
+  33      E7800000 
+  34              	.LVL0:
+   5:src/userMain.cpp **** 
+   6:src/userMain.cpp ****     int N = (1<<11) - 1;
+  35              		.loc 1 6 5 is_stmt 1
+   7:src/userMain.cpp ****     void* niz[N];
+  36              		.loc 1 7 5
+  37              		.loc 1 7 11 is_stmt 0
+  38 0020 B7C7FFFF 		li	a5,-16384
+  39 0024 3301F100 		add	sp,sp,a5
+  40 0028 13090100 		mv	s2,sp
+  41              	.LVL1:
+   8:src/userMain.cpp ****     for(int i  = 0; i < N; i++) {
+  42              		.loc 1 8 5 is_stmt 1
+  43              	.LBB2:
+  44              		.loc 1 8 13 is_stmt 0
+  45 002c 93040000 		li	s1,0
+  46              	.LVL2:
+  47              	.L3:
+  48              		.loc 1 8 23 is_stmt 1 discriminator 2
+GAS LISTING /tmp/ccGh9TeS.s 			page 2
+
+
+  49 0030 9307E07F 		li	a5,2046
+  50 0034 63C29702 		bgt	s1,a5,.L2
+   9:src/userMain.cpp ****         niz[i] = BuddyAllocator::buddyAlloc(1);
+  51              		.loc 1 9 9
+  52              		.loc 1 9 44 is_stmt 0
+  53 0038 13051000 		li	a0,1
+  54 003c 97000000 		call	_ZN14BuddyAllocator10buddyAllocEm@plt
+  54      E7800000 
+  55              	.LVL3:
+  56              		.loc 1 9 16
+  57 0044 93973400 		slli	a5,s1,3
+  58 0048 B307F900 		add	a5,s2,a5
+  59 004c 23B0A700 		sd	a0,0(a5)
+   8:src/userMain.cpp ****     for(int i  = 0; i < N; i++) {
+  60              		.loc 1 8 5 is_stmt 1
+  61 0050 9B841400 		addiw	s1,s1,1
+  62              	.LVL4:
+  63 0054 6FF0DFFD 		j	.L3
+  64              	.LVL5:
+  65              	.L2:
+  66              	.LBE2:
+  10:src/userMain.cpp ****     }
+  11:src/userMain.cpp ****     /*printString("alocirana adresa: ");
+  12:src/userMain.cpp ****     printInt((size_t)addr);
+  13:src/userMain.cpp ****     printString("\n");*/
+  14:src/userMain.cpp ****     BuddyAllocator::printBuddy();
+  67              		.loc 1 14 5
+  68              		.loc 1 14 31 is_stmt 0
+  69 0058 97000000 		call	_ZN14BuddyAllocator10printBuddyEv@plt
+  69      E7800000 
+  70              	.LVL6:
+  15:src/userMain.cpp ****     printString("posle\n");
+  71              		.loc 1 15 5 is_stmt 1
+  72              		.loc 1 15 16 is_stmt 0
+  73 0060 17050000 		lla	a0,.LC0
+  73      13050500 
+  74 0068 97000000 		call	_Z11printStringPKc@plt
+  74      E7800000 
+  75              	.LVL7:
+  76              	.LBB3:
+  16:src/userMain.cpp ****     for(int i = 0; i < N; i++) {
+  77              		.loc 1 16 13
+  78 0070 93040000 		li	s1,0
+  79              	.LVL8:
+  80              	.L5:
+  81              		.loc 1 16 22 is_stmt 1 discriminator 1
+  82 0074 9307E07F 		li	a5,2046
+  83 0078 63C29702 		bgt	s1,a5,.L4
+  17:src/userMain.cpp ****         BuddyAllocator::buddyFree(niz[i], 1);
+  84              		.loc 1 17 9
+  85              		.loc 1 17 34 is_stmt 0
+  86 007c 93973400 		slli	a5,s1,3
+  87 0080 B307F900 		add	a5,s2,a5
+  88 0084 93051000 		li	a1,1
+  89 0088 03B50700 		ld	a0,0(a5)
+  90 008c 97000000 		call	_ZN14BuddyAllocator9buddyFreeEPvm@plt
+  90      E7800000 
+GAS LISTING /tmp/ccGh9TeS.s 			page 3
+
+
+  91              	.LVL9:
+  16:src/userMain.cpp ****     for(int i = 0; i < N; i++) {
+  92              		.loc 1 16 5 is_stmt 1
+  93 0094 9B841400 		addiw	s1,s1,1
+  94              	.LVL10:
+  95 0098 6FF0DFFD 		j	.L5
+  96              	.LVL11:
+  97              	.L4:
+  98              	.LBE3:
+  18:src/userMain.cpp ****     }
+  19:src/userMain.cpp ****     BuddyAllocator::printBuddy();
+  99              		.loc 1 19 5
+ 100              		.loc 1 19 31 is_stmt 0
+ 101 009c 97000000 		call	_ZN14BuddyAllocator10printBuddyEv@plt
+ 101      E7800000 
+ 102              	.LVL12:
+  20:src/userMain.cpp **** }...
+ 103              		.loc 1 20 1
+ 104 00a4 130104FE 		addi	sp,s0,-32
+ 105              		.cfi_def_cfa 2, 32
+ 106              	.LVL13:
+ 107 00a8 83308101 		ld	ra,24(sp)
+ 108              		.cfi_restore 1
+ 109 00ac 03340101 		ld	s0,16(sp)
+ 110              		.cfi_restore 8
+ 111 00b0 83348100 		ld	s1,8(sp)
+ 112              		.cfi_restore 9
+ 113              	.LVL14:
+ 114 00b4 03390100 		ld	s2,0(sp)
+ 115              		.cfi_restore 18
+ 116              	.LVL15:
+ 117 00b8 13010102 		addi	sp,sp,32
+ 118              		.cfi_def_cfa_offset 0
+ 119              	.LVL16:
+ 120 00bc 67800000 		jr	ra
+ 121              		.cfi_endproc
+ 122              	.LFE23:
+ 124              	.Letext0:
+ 125              		.file 2 "src/../h/hw.h"
+ 126              		.file 3 "src/../h/BuddyAllocator.h"
+ 127              		.file 4 "src/../h/syscall_c.h"
+ 128              		.file 5 "src/../h/printing.hpp"
+GAS LISTING /tmp/ccGh9TeS.s 			page 4
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 userMain.cpp
-     /tmp/ccmDD9Nm.s:9      .text:0000000000000000 _Z8userMainv
-     /tmp/ccmDD9Nm.s:13     .text:0000000000000000 .L0 
-     /tmp/ccmDD9Nm.s:14     .text:0000000000000000 .L0 
-     /tmp/ccmDD9Nm.s:15     .text:0000000000000004 .L0 
-     /tmp/ccmDD9Nm.s:17     .text:0000000000000008 .L0 
-     /tmp/ccmDD9Nm.s:19     .text:000000000000000c .L0 
-     /tmp/ccmDD9Nm.s:21     .text:000000000000000c .L0 
-     /tmp/ccmDD9Nm.s:22     .text:0000000000000010 .L0 
-     /tmp/ccmDD9Nm.s:23     .text:0000000000000010 .L0 
-     /tmp/ccmDD9Nm.s:25     .text:0000000000000014 .L0 
-     /tmp/ccmDD9Nm.s:27     .text:0000000000000018 .L0 
-     /tmp/ccmDD9Nm.s:31     .text:0000000000000018 .L0 
-     /tmp/ccmDD9Nm.s:57     .debug_abbrev:0000000000000000 .Ldebug_abbrev0
-     /tmp/ccmDD9Nm.s:120    .debug_str:0000000000000025 .LASF0
-     /tmp/ccmDD9Nm.s:124    .debug_str:00000000000000f6 .LASF1
-     /tmp/ccmDD9Nm.s:118    .debug_str:0000000000000000 .LASF2
-     /tmp/ccmDD9Nm.s:5      .text:0000000000000000 .Ltext0
-     /tmp/ccmDD9Nm.s:30     .text:0000000000000018 .Letext0
-     /tmp/ccmDD9Nm.s:116    .debug_line:0000000000000000 .Ldebug_line0
-     /tmp/ccmDD9Nm.s:126    .debug_str:0000000000000107 .LASF3
-     /tmp/ccmDD9Nm.s:122    .debug_str:00000000000000e9 .LASF4
-     /tmp/ccmDD9Nm.s:10     .text:0000000000000000 .LFB0
-     /tmp/ccmDD9Nm.s:28     .text:0000000000000018 .LFE0
-     /tmp/ccmDD9Nm.s:32     .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccGh9TeS.s:14     .text:0000000000000000 _Z8userMainv
+     /tmp/ccGh9TeS.s:18     .text:0000000000000000 .L0 
+     /tmp/ccGh9TeS.s:19     .text:0000000000000000 .L0 
+     /tmp/ccGh9TeS.s:20     .text:0000000000000004 .L0 
+     /tmp/ccGh9TeS.s:25     .text:0000000000000014 .L0 
+     /tmp/ccGh9TeS.s:26     .text:0000000000000014 .L0 
+     /tmp/ccGh9TeS.s:27     .text:0000000000000014 .L0 
+     /tmp/ccGh9TeS.s:28     .text:0000000000000014 .L0 
+     /tmp/ccGh9TeS.s:30     .text:0000000000000018 .L0 
+     /tmp/ccGh9TeS.s:32     .text:0000000000000018 .L0 
+     /tmp/ccGh9TeS.s:33     .text:0000000000000018 .L0 
+     /tmp/ccGh9TeS.s:36     .text:0000000000000020 .L0 
+     /tmp/ccGh9TeS.s:37     .text:0000000000000020 .L0 
+     /tmp/ccGh9TeS.s:38     .text:0000000000000020 .L0 
+     /tmp/ccGh9TeS.s:44     .text:000000000000002c .L0 
+     /tmp/ccGh9TeS.s:45     .text:000000000000002c .L0 
+     /tmp/ccGh9TeS.s:49     .text:0000000000000030 .L0 
+     /tmp/ccGh9TeS.s:52     .text:0000000000000038 .L0 
+     /tmp/ccGh9TeS.s:53     .text:0000000000000038 .L0 
+     /tmp/ccGh9TeS.s:57     .text:0000000000000044 .L0 
+     /tmp/ccGh9TeS.s:61     .text:0000000000000050 .L0 
+     /tmp/ccGh9TeS.s:68     .text:0000000000000058 .L0 
+     /tmp/ccGh9TeS.s:69     .text:0000000000000058 .L0 
+     /tmp/ccGh9TeS.s:72     .text:0000000000000060 .L0 
+     /tmp/ccGh9TeS.s:73     .text:0000000000000060 .L0 
+     /tmp/ccGh9TeS.s:78     .text:0000000000000070 .L0 
+     /tmp/ccGh9TeS.s:82     .text:0000000000000074 .L0 
+     /tmp/ccGh9TeS.s:85     .text:000000000000007c .L0 
+     /tmp/ccGh9TeS.s:86     .text:000000000000007c .L0 
+     /tmp/ccGh9TeS.s:93     .text:0000000000000094 .L0 
+     /tmp/ccGh9TeS.s:100    .text:000000000000009c .L0 
+     /tmp/ccGh9TeS.s:101    .text:000000000000009c .L0 
+     /tmp/ccGh9TeS.s:104    .text:00000000000000a4 .L0 
+     /tmp/ccGh9TeS.s:105    .text:00000000000000a8 .L0 
+     /tmp/ccGh9TeS.s:108    .text:00000000000000ac .L0 
+     /tmp/ccGh9TeS.s:110    .text:00000000000000b0 .L0 
+     /tmp/ccGh9TeS.s:112    .text:00000000000000b4 .L0 
+     /tmp/ccGh9TeS.s:115    .text:00000000000000b8 .L0 
+     /tmp/ccGh9TeS.s:118    .text:00000000000000bc .L0 
+     /tmp/ccGh9TeS.s:121    .text:00000000000000c0 .L0 
+     /tmp/ccGh9TeS.s:129    .text:00000000000000c0 .L0 
+     /tmp/ccGh9TeS.s:8      .rodata.str1.8:0000000000000000 .LC0
+     /tmp/ccGh9TeS.s:73     .text:0000000000000060 .L0 
+     /tmp/ccGh9TeS.s:65     .text:0000000000000058 .L2
+     /tmp/ccGh9TeS.s:47     .text:0000000000000030 .L3
+     /tmp/ccGh9TeS.s:97     .text:000000000000009c .L4
+     /tmp/ccGh9TeS.s:80     .text:0000000000000074 .L5
+     /tmp/ccGh9TeS.s:633    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccGh9TeS.s:1453   .debug_str:00000000000003e5 .LASF52
+     /tmp/ccGh9TeS.s:1401   .debug_str:00000000000001e6 .LASF53
+     /tmp/ccGh9TeS.s:1395   .debug_str:00000000000001bd .LASF54
+     /tmp/ccGh9TeS.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccGh9TeS.s:124    .text:00000000000000c0 .Letext0
+     /tmp/ccGh9TeS.s:1349   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccGh9TeS.s:1413   .debug_str:0000000000000276 .LASF0
+GAS LISTING /tmp/ccGh9TeS.s 			page 5
 
-NO UNDEFINED SYMBOLS
+
+     /tmp/ccGh9TeS.s:1421   .debug_str:00000000000002ab .LASF1
+     /tmp/ccGh9TeS.s:1405   .debug_str:000000000000021b .LASF2
+     /tmp/ccGh9TeS.s:1397   .debug_str:00000000000001d3 .LASF4
+     /tmp/ccGh9TeS.s:1443   .debug_str:0000000000000381 .LASF3
+     /tmp/ccGh9TeS.s:1361   .debug_str:0000000000000071 .LASF5
+     /tmp/ccGh9TeS.s:1423   .debug_str:00000000000002be .LASF6
+     /tmp/ccGh9TeS.s:1411   .debug_str:0000000000000263 .LASF7
+     /tmp/ccGh9TeS.s:1461   .debug_str:00000000000004de .LASF8
+     /tmp/ccGh9TeS.s:1387   .debug_str:0000000000000166 .LASF9
+     /tmp/ccGh9TeS.s:1427   .debug_str:00000000000002dd .LASF10
+     /tmp/ccGh9TeS.s:1455   .debug_str:00000000000004a9 .LASF11
+     /tmp/ccGh9TeS.s:1363   .debug_str:0000000000000078 .LASF12
+     /tmp/ccGh9TeS.s:1353   .debug_str:0000000000000022 .LASF13
+     /tmp/ccGh9TeS.s:1369   .debug_str:00000000000000b6 .LASF14
+     /tmp/ccGh9TeS.s:1439   .debug_str:000000000000034b .LASF15
+     /tmp/ccGh9TeS.s:1375   .debug_str:00000000000000ef .LASF16
+     /tmp/ccGh9TeS.s:1393   .debug_str:00000000000001ae .LASF17
+     /tmp/ccGh9TeS.s:1465   .debug_str:00000000000004f9 .LASF18
+     /tmp/ccGh9TeS.s:1365   .debug_str:0000000000000088 .LASF22
+     /tmp/ccGh9TeS.s:1471   .debug_str:0000000000000521 .LASF19
+     /tmp/ccGh9TeS.s:1429   .debug_str:00000000000002ec .LASF20
+     /tmp/ccGh9TeS.s:1447   .debug_str:00000000000003b5 .LASF40
+     /tmp/ccGh9TeS.s:1407   .debug_str:0000000000000229 .LASF42
+     /tmp/ccGh9TeS.s:1449   .debug_str:00000000000003c1 .LASF21
+     /tmp/ccGh9TeS.s:1435   .debug_str:0000000000000316 .LASF23
+     /tmp/ccGh9TeS.s:1367   .debug_str:00000000000000ac .LASF24
+     /tmp/ccGh9TeS.s:1419   .debug_str:00000000000002a1 .LASF25
+     /tmp/ccGh9TeS.s:1355   .debug_str:0000000000000032 .LASF26
+     /tmp/ccGh9TeS.s:1433   .debug_str:00000000000002fe .LASF27
+     /tmp/ccGh9TeS.s:1437   .debug_str:0000000000000345 .LASF28
+     /tmp/ccGh9TeS.s:1359   .debug_str:0000000000000067 .LASF29
+     /tmp/ccGh9TeS.s:1417   .debug_str:0000000000000294 .LASF30
+     /tmp/ccGh9TeS.s:1403   .debug_str:00000000000001f7 .LASF31
+     /tmp/ccGh9TeS.s:1385   .debug_str:0000000000000159 .LASF32
+     /tmp/ccGh9TeS.s:1377   .debug_str:0000000000000105 .LASF33
+     /tmp/ccGh9TeS.s:1415   .debug_str:0000000000000283 .LASF34
+     /tmp/ccGh9TeS.s:1389   .debug_str:0000000000000174 .LASF35
+     /tmp/ccGh9TeS.s:1425   .debug_str:00000000000002d1 .LASF36
+     /tmp/ccGh9TeS.s:1373   .debug_str:00000000000000cc .LASF37
+     /tmp/ccGh9TeS.s:1391   .debug_str:000000000000019e .LASF38
+     /tmp/ccGh9TeS.s:1357   .debug_str:000000000000003f .LASF39
+     /tmp/ccGh9TeS.s:1457   .debug_str:00000000000004b8 .LASF55
+     /tmp/ccGh9TeS.s:1379   .debug_str:0000000000000129 .LASF56
+     /tmp/ccGh9TeS.s:1463   .debug_str:00000000000004ee .LASF41
+     /tmp/ccGh9TeS.s:1351   .debug_str:0000000000000000 .LASF43
+     /tmp/ccGh9TeS.s:1371   .debug_str:00000000000000c2 .LASF44
+     /tmp/ccGh9TeS.s:1445   .debug_str:0000000000000393 .LASF45
+     /tmp/ccGh9TeS.s:1469   .debug_str:0000000000000517 .LASF57
+     /tmp/ccGh9TeS.s:1441   .debug_str:0000000000000361 .LASF58
+     /tmp/ccGh9TeS.s:1451   .debug_str:00000000000003ca .LASF50
+     /tmp/ccGh9TeS.s:1409   .debug_str:0000000000000259 .LASF46
+     /tmp/ccGh9TeS.s:1459   .debug_str:00000000000004c3 .LASF47
+     /tmp/ccGh9TeS.s:1383   .debug_str:0000000000000154 .LASF48
+     /tmp/ccGh9TeS.s:1381   .debug_str:000000000000014b .LASF49
+     /tmp/ccGh9TeS.s:1431   .debug_str:00000000000002f1 .LASF51
+     /tmp/ccGh9TeS.s:15     .text:0000000000000000 .LFB23
+     /tmp/ccGh9TeS.s:122    .text:00000000000000c0 .LFE23
+GAS LISTING /tmp/ccGh9TeS.s 			page 6
+
+
+     /tmp/ccGh9TeS.s:1286   .debug_loc:0000000000000000 .LLST0
+     /tmp/ccGh9TeS.s:43     .text:000000000000002c .LBB2
+     /tmp/ccGh9TeS.s:66     .text:0000000000000058 .LBE2
+     /tmp/ccGh9TeS.s:1309   .debug_loc:0000000000000064 .LLST1
+     /tmp/ccGh9TeS.s:55     .text:0000000000000044 .LVL3
+     /tmp/ccGh9TeS.s:76     .text:0000000000000070 .LBB3
+     /tmp/ccGh9TeS.s:98     .text:000000000000009c .LBE3
+     /tmp/ccGh9TeS.s:1325   .debug_loc:00000000000000ae .LLST2
+     /tmp/ccGh9TeS.s:91     .text:0000000000000094 .LVL9
+     /tmp/ccGh9TeS.s:34     .text:0000000000000020 .LVL0
+     /tmp/ccGh9TeS.s:70     .text:0000000000000060 .LVL6
+     /tmp/ccGh9TeS.s:75     .text:0000000000000070 .LVL7
+     /tmp/ccGh9TeS.s:102    .text:00000000000000a4 .LVL12
+     /tmp/ccGh9TeS.s:1467   .debug_str:0000000000000504 .LASF59
+     /tmp/ccGh9TeS.s:1399   .debug_str:00000000000001da .LASF60
+     /tmp/ccGh9TeS.s:41     .text:000000000000002c .LVL1
+     /tmp/ccGh9TeS.s:106    .text:00000000000000a8 .LVL13
+     /tmp/ccGh9TeS.s:116    .text:00000000000000b8 .LVL15
+     /tmp/ccGh9TeS.s:119    .text:00000000000000bc .LVL16
+     /tmp/ccGh9TeS.s:46     .text:0000000000000030 .LVL2
+     /tmp/ccGh9TeS.s:62     .text:0000000000000054 .LVL4
+     /tmp/ccGh9TeS.s:64     .text:0000000000000058 .LVL5
+     /tmp/ccGh9TeS.s:79     .text:0000000000000074 .LVL8
+     /tmp/ccGh9TeS.s:94     .text:0000000000000098 .LVL10
+     /tmp/ccGh9TeS.s:96     .text:000000000000009c .LVL11
+     /tmp/ccGh9TeS.s:113    .text:00000000000000b4 .LVL14
+     /tmp/ccGh9TeS.s:130    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+_ZN14BuddyAllocator9initBuddyEv
+_ZN14BuddyAllocator10buddyAllocEm
+_ZN14BuddyAllocator10printBuddyEv
+_Z11printStringPKc
+_ZN14BuddyAllocator9buddyFreeEPvm
