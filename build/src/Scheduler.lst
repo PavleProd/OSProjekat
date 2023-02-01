@@ -1,0 +1,473 @@
+GAS LISTING /tmp/ccbyyfOZ.s 			page 1
+
+
+   1              		.file	"Scheduler.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZN9Scheduler3putEP3PCB
+   9              	_ZN9Scheduler3putEP3PCB:
+  10              	.LFB10:
+  11              		.file 1 "src/Scheduler.cpp"
+   1:src/Scheduler.cpp **** #include "../h/Scheduler.h"
+   2:src/Scheduler.cpp **** 
+   3:src/Scheduler.cpp **** PCB* Scheduler::idleProcess = nullptr;
+   4:src/Scheduler.cpp **** PCB* Scheduler::head = nullptr;
+   5:src/Scheduler.cpp **** PCB* Scheduler::tail = nullptr;
+   6:src/Scheduler.cpp **** 
+   7:src/Scheduler.cpp **** void Scheduler::put(PCB *process) {
+  12              		.loc 1 7 35
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+   8:src/Scheduler.cpp ****     if(!process) return;
+  21              		.loc 1 8 5
+  22 000c 63060502 		beqz	a0,.L1
+   9:src/Scheduler.cpp ****     process->nextInList = nullptr;
+  23              		.loc 1 9 5
+  24              		.loc 1 9 25 is_stmt 0
+  25 0010 23300500 		sd	zero,0(a0)
+  10:src/Scheduler.cpp ****     if(tail == nullptr) { // ako ne postoji kraj liste nece postojati ni pocetak
+  26              		.loc 1 10 5 is_stmt 1
+  27              		.loc 1 10 13 is_stmt 0
+  28 0014 97070000 		ld	a5,.LANCHOR0
+  28      83B70700 
+  29              		.loc 1 10 5
+  30 001c 63840702 		beqz	a5,.L5
+  11:src/Scheduler.cpp ****         head = tail = process;
+  12:src/Scheduler.cpp ****     }
+  13:src/Scheduler.cpp ****     else {
+  14:src/Scheduler.cpp ****         tail->nextInList = process;
+  31              		.loc 1 14 9 is_stmt 1
+  32              		.loc 1 14 26 is_stmt 0
+  33 0020 23B0A700 		sd	a0,0(a5)
+  15:src/Scheduler.cpp ****         tail = tail->nextInList;
+  34              		.loc 1 15 9 is_stmt 1
+  35              		.loc 1 15 22 is_stmt 0
+  36 0024 97070000 		lla	a5,.LANCHOR0
+  36      93870700 
+  37 002c 03B70700 		ld	a4,0(a5)
+  38 0030 03370700 		ld	a4,0(a4)
+  39              		.loc 1 15 14
+  40 0034 23B0E700 		sd	a4,0(a5)
+  41              	.L1:
+GAS LISTING /tmp/ccbyyfOZ.s 			page 2
+
+
+  16:src/Scheduler.cpp ****     }
+  17:src/Scheduler.cpp **** }
+  42              		.loc 1 17 1
+  43 0038 03348100 		ld	s0,8(sp)
+  44              		.cfi_remember_state
+  45              		.cfi_restore 8
+  46              		.cfi_def_cfa 2, 16
+  47 003c 13010101 		addi	sp,sp,16
+  48              		.cfi_def_cfa_offset 0
+  49 0040 67800000 		jr	ra
+  50              	.L5:
+  51              		.cfi_restore_state
+  11:src/Scheduler.cpp ****     }
+  52              		.loc 1 11 9 is_stmt 1
+  11:src/Scheduler.cpp ****     }
+  53              		.loc 1 11 21 is_stmt 0
+  54 0044 97070000 		lla	a5,.LANCHOR0
+  54      93870700 
+  55 004c 23B0A700 		sd	a0,0(a5)
+  11:src/Scheduler.cpp ****     }
+  56              		.loc 1 11 14
+  57 0050 23B4A700 		sd	a0,8(a5)
+  58 0054 6FF05FFE 		j	.L1
+  59              		.cfi_endproc
+  60              	.LFE10:
+  62              		.align	2
+  63              		.globl	_ZN9Scheduler3getEv
+  65              	_ZN9Scheduler3getEv:
+  66              	.LFB11:
+  18:src/Scheduler.cpp **** 
+  19:src/Scheduler.cpp **** PCB *Scheduler::get() {
+  67              		.loc 1 19 23 is_stmt 1
+  68              		.cfi_startproc
+  69 0058 130101FF 		addi	sp,sp,-16
+  70              		.cfi_def_cfa_offset 16
+  71 005c 23348100 		sd	s0,8(sp)
+  72              		.cfi_offset 8, -8
+  73 0060 13040101 		addi	s0,sp,16
+  74              		.cfi_def_cfa 8, 0
+  20:src/Scheduler.cpp ****     if(head == nullptr) {
+  75              		.loc 1 20 5
+  76              		.loc 1 20 13 is_stmt 0
+  77 0064 17050000 		ld	a0,.LANCHOR0+8
+  77      03350500 
+  78              		.loc 1 20 5
+  79 006c 63040502 		beqz	a0,.L10
+  21:src/Scheduler.cpp ****         return idleProcess;
+  22:src/Scheduler.cpp ****     }
+  23:src/Scheduler.cpp ****     PCB* curr = head;
+  80              		.loc 1 23 5 is_stmt 1
+  81              	.LVL1:
+  24:src/Scheduler.cpp ****     head = head->nextInList;
+  82              		.loc 1 24 5
+  83              		.loc 1 24 18 is_stmt 0
+  84 0070 03370500 		ld	a4,0(a0)
+  85              		.loc 1 24 10
+  86 0074 97070000 		lla	a5,.LANCHOR0
+GAS LISTING /tmp/ccbyyfOZ.s 			page 3
+
+
+  86      93870700 
+  87 007c 23B4E700 		sd	a4,8(a5)
+  25:src/Scheduler.cpp ****     if(tail == curr) {
+  88              		.loc 1 25 5 is_stmt 1
+  89              		.loc 1 25 13 is_stmt 0
+  90 0080 83B70700 		ld	a5,0(a5)
+  91              		.loc 1 25 5
+  92 0084 630EF500 		beq	a0,a5,.L11
+  93              	.LVL2:
+  94              	.L6:
+  26:src/Scheduler.cpp ****         tail = head;
+  27:src/Scheduler.cpp ****     }
+  28:src/Scheduler.cpp ****     return curr;
+  29:src/Scheduler.cpp **** }
+  95              		.loc 1 29 1
+  96 0088 03348100 		ld	s0,8(sp)
+  97              		.cfi_remember_state
+  98              		.cfi_restore 8
+  99              		.cfi_def_cfa 2, 16
+ 100 008c 13010101 		addi	sp,sp,16
+ 101              		.cfi_def_cfa_offset 0
+ 102 0090 67800000 		jr	ra
+ 103              	.L10:
+ 104              		.cfi_restore_state
+  21:src/Scheduler.cpp ****     }
+ 105              		.loc 1 21 9 is_stmt 1
+  21:src/Scheduler.cpp ****     }
+ 106              		.loc 1 21 16 is_stmt 0
+ 107 0094 17050000 		ld	a0,.LANCHOR0+16
+ 107      03350500 
+ 108 009c 6FF0DFFE 		j	.L6
+ 109              	.LVL3:
+ 110              	.L11:
+  26:src/Scheduler.cpp ****         tail = head;
+ 111              		.loc 1 26 9 is_stmt 1
+  26:src/Scheduler.cpp ****         tail = head;
+ 112              		.loc 1 26 14 is_stmt 0
+ 113 00a0 97070000 		sd	a4,.LANCHOR0,a5
+ 113      23B0E700 
+ 114 00a8 6FF01FFE 		j	.L6
+ 115              		.cfi_endproc
+ 116              	.LFE11:
+ 118              		.align	2
+ 119              		.globl	_ZN9Scheduler10putInFrontEP3PCB
+ 121              	_ZN9Scheduler10putInFrontEP3PCB:
+ 122              	.LFB12:
+  30:src/Scheduler.cpp **** 
+  31:src/Scheduler.cpp **** void Scheduler::putInFront(PCB *process) {
+ 123              		.loc 1 31 42 is_stmt 1
+ 124              		.cfi_startproc
+ 125              	.LVL4:
+ 126 00ac 130101FF 		addi	sp,sp,-16
+ 127              		.cfi_def_cfa_offset 16
+ 128 00b0 23348100 		sd	s0,8(sp)
+ 129              		.cfi_offset 8, -8
+ 130 00b4 13040101 		addi	s0,sp,16
+ 131              		.cfi_def_cfa 8, 0
+GAS LISTING /tmp/ccbyyfOZ.s 			page 4
+
+
+  32:src/Scheduler.cpp ****     if(!process) return;
+ 132              		.loc 1 32 5
+ 133 00b8 630E0500 		beqz	a0,.L12
+  33:src/Scheduler.cpp ****     process->nextInList = head;
+ 134              		.loc 1 33 5
+ 135              		.loc 1 33 25 is_stmt 0
+ 136 00bc 97070000 		ld	a5,.LANCHOR0+8
+ 136      83B70700 
+ 137 00c4 2330F500 		sd	a5,0(a0)
+  34:src/Scheduler.cpp ****     if(!head) {
+ 138              		.loc 1 34 5 is_stmt 1
+ 139 00c8 638C0700 		beqz	a5,.L16
+  35:src/Scheduler.cpp ****         head = tail = process;
+  36:src/Scheduler.cpp ****     }
+  37:src/Scheduler.cpp ****     else {
+  38:src/Scheduler.cpp ****         head = process;
+ 140              		.loc 1 38 9
+ 141              		.loc 1 38 14 is_stmt 0
+ 142 00cc 97070000 		sd	a0,.LANCHOR0+8,a5
+ 142      23B0A700 
+ 143              	.L12:
+  39:src/Scheduler.cpp ****     }
+  40:src/Scheduler.cpp **** }
+ 144              		.loc 1 40 1
+ 145 00d4 03348100 		ld	s0,8(sp)
+ 146              		.cfi_remember_state
+ 147              		.cfi_restore 8
+ 148              		.cfi_def_cfa 2, 16
+ 149 00d8 13010101 		addi	sp,sp,16
+ 150              		.cfi_def_cfa_offset 0
+ 151 00dc 67800000 		jr	ra
+ 152              	.L16:
+ 153              		.cfi_restore_state
+  35:src/Scheduler.cpp ****         head = tail = process;
+ 154              		.loc 1 35 9 is_stmt 1
+  35:src/Scheduler.cpp ****         head = tail = process;
+ 155              		.loc 1 35 21 is_stmt 0
+ 156 00e0 97070000 		lla	a5,.LANCHOR0
+ 156      93870700 
+ 157 00e8 23B0A700 		sd	a0,0(a5)
+  35:src/Scheduler.cpp ****         head = tail = process;
+ 158              		.loc 1 35 14
+ 159 00ec 23B4A700 		sd	a0,8(a5)
+ 160 00f0 6FF05FFE 		j	.L12
+ 161              		.cfi_endproc
+ 162              	.LFE12:
+ 164              		.globl	_ZN9Scheduler4tailE
+ 165              		.globl	_ZN9Scheduler4headE
+ 166              		.globl	_ZN9Scheduler11idleProcessE
+ 167              		.bss
+ 168              		.align	3
+ 169              		.set	.LANCHOR0,. + 0
+ 172              	_ZN9Scheduler4tailE:
+ 173 0000 00000000 		.zero	8
+ 173      00000000 
+ 176              	_ZN9Scheduler4headE:
+ 177 0008 00000000 		.zero	8
+GAS LISTING /tmp/ccbyyfOZ.s 			page 5
+
+
+ 177      00000000 
+ 180              	_ZN9Scheduler11idleProcessE:
+ 181 0010 00000000 		.zero	8
+ 181      00000000 
+ 182              		.text
+ 183              	.Letext0:
+ 184              		.file 2 "src/../h/hw.h"
+ 185              		.file 3 "src/../h/PCB.h"
+ 186              		.file 4 "src/../h/Scheduler.h"
+GAS LISTING /tmp/ccbyyfOZ.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 Scheduler.cpp
+     /tmp/ccbyyfOZ.s:9      .text:0000000000000000 _ZN9Scheduler3putEP3PCB
+     /tmp/ccbyyfOZ.s:13     .text:0000000000000000 .L0 
+     /tmp/ccbyyfOZ.s:15     .text:0000000000000000 .L0 
+     /tmp/ccbyyfOZ.s:16     .text:0000000000000004 .L0 
+     /tmp/ccbyyfOZ.s:18     .text:0000000000000008 .L0 
+     /tmp/ccbyyfOZ.s:20     .text:000000000000000c .L0 
+     /tmp/ccbyyfOZ.s:22     .text:000000000000000c .L0 
+     /tmp/ccbyyfOZ.s:24     .text:0000000000000010 .L0 
+     /tmp/ccbyyfOZ.s:25     .text:0000000000000010 .L0 
+     /tmp/ccbyyfOZ.s:27     .text:0000000000000014 .L0 
+     /tmp/ccbyyfOZ.s:28     .text:0000000000000014 .L0 
+     /tmp/ccbyyfOZ.s:30     .text:000000000000001c .L0 
+     /tmp/ccbyyfOZ.s:32     .text:0000000000000020 .L0 
+     /tmp/ccbyyfOZ.s:33     .text:0000000000000020 .L0 
+     /tmp/ccbyyfOZ.s:35     .text:0000000000000024 .L0 
+     /tmp/ccbyyfOZ.s:36     .text:0000000000000024 .L0 
+     /tmp/ccbyyfOZ.s:40     .text:0000000000000034 .L0 
+     /tmp/ccbyyfOZ.s:43     .text:0000000000000038 .L0 
+     /tmp/ccbyyfOZ.s:44     .text:000000000000003c .L0 
+     /tmp/ccbyyfOZ.s:45     .text:000000000000003c .L0 
+     /tmp/ccbyyfOZ.s:46     .text:000000000000003c .L0 
+     /tmp/ccbyyfOZ.s:48     .text:0000000000000040 .L0 
+     /tmp/ccbyyfOZ.s:51     .text:0000000000000044 .L0 
+     /tmp/ccbyyfOZ.s:53     .text:0000000000000044 .L0 
+     /tmp/ccbyyfOZ.s:54     .text:0000000000000044 .L0 
+     /tmp/ccbyyfOZ.s:57     .text:0000000000000050 .L0 
+     /tmp/ccbyyfOZ.s:59     .text:0000000000000058 .L0 
+     /tmp/ccbyyfOZ.s:65     .text:0000000000000058 _ZN9Scheduler3getEv
+     /tmp/ccbyyfOZ.s:68     .text:0000000000000058 .L0 
+     /tmp/ccbyyfOZ.s:69     .text:0000000000000058 .L0 
+     /tmp/ccbyyfOZ.s:70     .text:000000000000005c .L0 
+     /tmp/ccbyyfOZ.s:72     .text:0000000000000060 .L0 
+     /tmp/ccbyyfOZ.s:74     .text:0000000000000064 .L0 
+     /tmp/ccbyyfOZ.s:76     .text:0000000000000064 .L0 
+     /tmp/ccbyyfOZ.s:77     .text:0000000000000064 .L0 
+     /tmp/ccbyyfOZ.s:79     .text:000000000000006c .L0 
+     /tmp/ccbyyfOZ.s:82     .text:0000000000000070 .L0 
+     /tmp/ccbyyfOZ.s:83     .text:0000000000000070 .L0 
+     /tmp/ccbyyfOZ.s:84     .text:0000000000000070 .L0 
+     /tmp/ccbyyfOZ.s:86     .text:0000000000000074 .L0 
+     /tmp/ccbyyfOZ.s:89     .text:0000000000000080 .L0 
+     /tmp/ccbyyfOZ.s:90     .text:0000000000000080 .L0 
+     /tmp/ccbyyfOZ.s:92     .text:0000000000000084 .L0 
+     /tmp/ccbyyfOZ.s:96     .text:0000000000000088 .L0 
+     /tmp/ccbyyfOZ.s:97     .text:000000000000008c .L0 
+     /tmp/ccbyyfOZ.s:98     .text:000000000000008c .L0 
+     /tmp/ccbyyfOZ.s:99     .text:000000000000008c .L0 
+     /tmp/ccbyyfOZ.s:101    .text:0000000000000090 .L0 
+     /tmp/ccbyyfOZ.s:104    .text:0000000000000094 .L0 
+     /tmp/ccbyyfOZ.s:106    .text:0000000000000094 .L0 
+     /tmp/ccbyyfOZ.s:107    .text:0000000000000094 .L0 
+     /tmp/ccbyyfOZ.s:112    .text:00000000000000a0 .L0 
+     /tmp/ccbyyfOZ.s:113    .text:00000000000000a0 .L0 
+     /tmp/ccbyyfOZ.s:115    .text:00000000000000ac .L0 
+     /tmp/ccbyyfOZ.s:121    .text:00000000000000ac _ZN9Scheduler10putInFrontEP3PCB
+GAS LISTING /tmp/ccbyyfOZ.s 			page 7
+
+
+     /tmp/ccbyyfOZ.s:124    .text:00000000000000ac .L0 
+     /tmp/ccbyyfOZ.s:126    .text:00000000000000ac .L0 
+     /tmp/ccbyyfOZ.s:127    .text:00000000000000b0 .L0 
+     /tmp/ccbyyfOZ.s:129    .text:00000000000000b4 .L0 
+     /tmp/ccbyyfOZ.s:131    .text:00000000000000b8 .L0 
+     /tmp/ccbyyfOZ.s:133    .text:00000000000000b8 .L0 
+     /tmp/ccbyyfOZ.s:135    .text:00000000000000bc .L0 
+     /tmp/ccbyyfOZ.s:136    .text:00000000000000bc .L0 
+     /tmp/ccbyyfOZ.s:139    .text:00000000000000c8 .L0 
+     /tmp/ccbyyfOZ.s:141    .text:00000000000000cc .L0 
+     /tmp/ccbyyfOZ.s:142    .text:00000000000000cc .L0 
+     /tmp/ccbyyfOZ.s:145    .text:00000000000000d4 .L0 
+     /tmp/ccbyyfOZ.s:146    .text:00000000000000d8 .L0 
+     /tmp/ccbyyfOZ.s:147    .text:00000000000000d8 .L0 
+     /tmp/ccbyyfOZ.s:148    .text:00000000000000d8 .L0 
+     /tmp/ccbyyfOZ.s:150    .text:00000000000000dc .L0 
+     /tmp/ccbyyfOZ.s:153    .text:00000000000000e0 .L0 
+     /tmp/ccbyyfOZ.s:155    .text:00000000000000e0 .L0 
+     /tmp/ccbyyfOZ.s:156    .text:00000000000000e0 .L0 
+     /tmp/ccbyyfOZ.s:159    .text:00000000000000ec .L0 
+     /tmp/ccbyyfOZ.s:161    .text:00000000000000f4 .L0 
+     /tmp/ccbyyfOZ.s:172    .bss:0000000000000000 _ZN9Scheduler4tailE
+     /tmp/ccbyyfOZ.s:176    .bss:0000000000000008 _ZN9Scheduler4headE
+     /tmp/ccbyyfOZ.s:180    .bss:0000000000000010 _ZN9Scheduler11idleProcessE
+     /tmp/ccbyyfOZ.s:169    .bss:0000000000000000 .LANCHOR0
+     /tmp/ccbyyfOZ.s:187    .text:00000000000000f4 .L0 
+     /tmp/ccbyyfOZ.s:28     .text:0000000000000014 .L0 
+     /tmp/ccbyyfOZ.s:36     .text:0000000000000024 .L0 
+     /tmp/ccbyyfOZ.s:54     .text:0000000000000044 .L0 
+     /tmp/ccbyyfOZ.s:77     .text:0000000000000064 .L0 
+     /tmp/ccbyyfOZ.s:86     .text:0000000000000074 .L0 
+     /tmp/ccbyyfOZ.s:107    .text:0000000000000094 .L0 
+     /tmp/ccbyyfOZ.s:113    .text:00000000000000a0 .L0 
+     /tmp/ccbyyfOZ.s:136    .text:00000000000000bc .L0 
+     /tmp/ccbyyfOZ.s:142    .text:00000000000000cc .L0 
+     /tmp/ccbyyfOZ.s:156    .text:00000000000000e0 .L0 
+     /tmp/ccbyyfOZ.s:41     .text:0000000000000038 .L1
+     /tmp/ccbyyfOZ.s:50     .text:0000000000000044 .L5
+     /tmp/ccbyyfOZ.s:103    .text:0000000000000094 .L10
+     /tmp/ccbyyfOZ.s:110    .text:00000000000000a0 .L11
+     /tmp/ccbyyfOZ.s:94     .text:0000000000000088 .L6
+     /tmp/ccbyyfOZ.s:143    .text:00000000000000d4 .L12
+     /tmp/ccbyyfOZ.s:152    .text:00000000000000e0 .L16
+     /tmp/ccbyyfOZ.s:863    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccbyyfOZ.s:1688   .debug_str:00000000000004de .LASF84
+     /tmp/ccbyyfOZ.s:1700   .debug_str:00000000000005e7 .LASF85
+     /tmp/ccbyyfOZ.s:1538   .debug_str:0000000000000023 .LASF86
+     /tmp/ccbyyfOZ.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccbyyfOZ.s:183    .text:00000000000000f4 .Letext0
+     /tmp/ccbyyfOZ.s:1530   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccbyyfOZ.s:1632   .debug_str:0000000000000337 .LASF0
+     /tmp/ccbyyfOZ.s:1644   .debug_str:000000000000037e .LASF1
+     /tmp/ccbyyfOZ.s:1614   .debug_str:00000000000002a3 .LASF2
+     /tmp/ccbyyfOZ.s:1598   .debug_str:0000000000000225 .LASF4
+     /tmp/ccbyyfOZ.s:1674   .debug_str:0000000000000462 .LASF3
+     /tmp/ccbyyfOZ.s:1546   .debug_str:0000000000000085 .LASF5
+     /tmp/ccbyyfOZ.s:1570   .debug_str:000000000000012a .LASF6
+GAS LISTING /tmp/ccbyyfOZ.s 			page 8
+
+
+     /tmp/ccbyyfOZ.s:1646   .debug_str:0000000000000391 .LASF7
+     /tmp/ccbyyfOZ.s:1630   .debug_str:0000000000000324 .LASF8
+     /tmp/ccbyyfOZ.s:1696   .debug_str:00000000000005c7 .LASF9
+     /tmp/ccbyyfOZ.s:1590   .debug_str:00000000000001d4 .LASF10
+     /tmp/ccbyyfOZ.s:1658   .debug_str:00000000000003e1 .LASF11
+     /tmp/ccbyyfOZ.s:1690   .debug_str:00000000000005a2 .LASF12
+     /tmp/ccbyyfOZ.s:1548   .debug_str:000000000000008c .LASF13
+     /tmp/ccbyyfOZ.s:1534   .debug_str:0000000000000008 .LASF14
+     /tmp/ccbyyfOZ.s:1554   .debug_str:00000000000000b6 .LASF15
+     /tmp/ccbyyfOZ.s:1670   .debug_str:0000000000000431 .LASF16
+     /tmp/ccbyyfOZ.s:1564   .debug_str:0000000000000104 .LASF17
+     /tmp/ccbyyfOZ.s:1648   .debug_str:00000000000003a4 .LASF18
+     /tmp/ccbyyfOZ.s:1650   .debug_str:00000000000003af .LASF20
+     /tmp/ccbyyfOZ.s:1666   .debug_str:0000000000000419 .LASF19
+     /tmp/ccbyyfOZ.s:1578   .debug_str:000000000000016f .LASF21
+     /tmp/ccbyyfOZ.s:1702   .debug_str:00000000000005f9 .LASF22
+     /tmp/ccbyyfOZ.s:1592   .debug_str:00000000000001e2 .LASF23
+     /tmp/ccbyyfOZ.s:1612   .debug_str:0000000000000293 .LASF26
+     /tmp/ccbyyfOZ.s:1672   .debug_str:0000000000000447 .LASF28
+     /tmp/ccbyyfOZ.s:1684   .debug_str:00000000000004b4 .LASF24
+     /tmp/ccbyyfOZ.s:1576   .debug_str:0000000000000155 .LASF25
+     /tmp/ccbyyfOZ.s:1714   .debug_str:0000000000000661 .LASF27
+     /tmp/ccbyyfOZ.s:1542   .debug_str:000000000000005b .LASF29
+     /tmp/ccbyyfOZ.s:1536   .debug_str:0000000000000018 .LASF30
+     /tmp/ccbyyfOZ.s:1662   .debug_str:00000000000003f5 .LASF31
+     /tmp/ccbyyfOZ.s:1664   .debug_str:000000000000040b .LASF32
+     /tmp/ccbyyfOZ.s:1588   .debug_str:00000000000001bb .LASF33
+     /tmp/ccbyyfOZ.s:1694   .debug_str:00000000000005ba .LASF34
+     /tmp/ccbyyfOZ.s:1604   .debug_str:0000000000000241 .LASF35
+     /tmp/ccbyyfOZ.s:1616   .debug_str:00000000000002b1 .LASF36
+     /tmp/ccbyyfOZ.s:1610   .debug_str:000000000000027c .LASF37
+     /tmp/ccbyyfOZ.s:1560   .debug_str:00000000000000ea .LASF38
+     /tmp/ccbyyfOZ.s:1708   .debug_str:0000000000000622 .LASF39
+     /tmp/ccbyyfOZ.s:1656   .debug_str:00000000000003d5 .LASF87
+     /tmp/ccbyyfOZ.s:1618   .debug_str:00000000000002bd .LASF88
+     /tmp/ccbyyfOZ.s:1698   .debug_str:00000000000005d7 .LASF89
+     /tmp/ccbyyfOZ.s:1580   .debug_str:000000000000018e .LASF71
+     /tmp/ccbyyfOZ.s:1668   .debug_str:000000000000042c .LASF40
+     /tmp/ccbyyfOZ.s:1626   .debug_str:0000000000000308 .LASF41
+     /tmp/ccbyyfOZ.s:1704   .debug_str:0000000000000609 .LASF42
+     /tmp/ccbyyfOZ.s:1600   .debug_str:000000000000022c .LASF43
+     /tmp/ccbyyfOZ.s:1680   .debug_str:0000000000000497 .LASF44
+     /tmp/ccbyyfOZ.s:1682   .debug_str:00000000000004a7 .LASF76
+     /tmp/ccbyyfOZ.s:1552   .debug_str:00000000000000ab .LASF78
+     /tmp/ccbyyfOZ.s:1572   .debug_str:0000000000000131 .LASF90
+     /tmp/ccbyyfOZ.s:1540   .debug_str:0000000000000048 .LASF73
+     /tmp/ccbyyfOZ.s:1710   .debug_str:0000000000000642 .LASF45
+     /tmp/ccbyyfOZ.s:1636   .debug_str:000000000000034d .LASF46
+     /tmp/ccbyyfOZ.s:1692   .debug_str:00000000000005b1 .LASF47
+     /tmp/ccbyyfOZ.s:1556   .debug_str:00000000000000c2 .LASF48
+     /tmp/ccbyyfOZ.s:1652   .debug_str:00000000000003c6 .LASF49
+     /tmp/ccbyyfOZ.s:1602   .debug_str:0000000000000238 .LASF50
+     /tmp/ccbyyfOZ.s:1532   .debug_str:0000000000000000 .LASF51
+     /tmp/ccbyyfOZ.s:1562   .debug_str:00000000000000f9 .LASF52
+     /tmp/ccbyyfOZ.s:1640   .debug_str:000000000000035d .LASF53
+     /tmp/ccbyyfOZ.s:1574   .debug_str:0000000000000147 .LASF54
+     /tmp/ccbyyfOZ.s:1638   .debug_str:0000000000000353 .LASF55
+GAS LISTING /tmp/ccbyyfOZ.s 			page 9
+
+
+     /tmp/ccbyyfOZ.s:1676   .debug_str:0000000000000474 .LASF67
+     /tmp/ccbyyfOZ.s:1634   .debug_str:0000000000000344 .LASF61
+     /tmp/ccbyyfOZ.s:1594   .debug_str:00000000000001fe .LASF63
+     /tmp/ccbyyfOZ.s:1544   .debug_str:0000000000000076 .LASF56
+     /tmp/ccbyyfOZ.s:1558   .debug_str:00000000000000cc .LASF58
+     /tmp/ccbyyfOZ.s:1550   .debug_str:000000000000009c .LASF57
+     /tmp/ccbyyfOZ.s:1606   .debug_str:0000000000000259 .LASF59
+     /tmp/ccbyyfOZ.s:1620   .debug_str:00000000000002c3 .LASF60
+     /tmp/ccbyyfOZ.s:1628   .debug_str:0000000000000314 .LASF62
+     /tmp/ccbyyfOZ.s:1624   .debug_str:00000000000002ed .LASF64
+     /tmp/ccbyyfOZ.s:1584   .debug_str:00000000000001ae .LASF65
+     /tmp/ccbyyfOZ.s:1654   .debug_str:00000000000003cb .LASF66
+     /tmp/ccbyyfOZ.s:1568   .debug_str:0000000000000125 .LASF68
+     /tmp/ccbyyfOZ.s:1608   .debug_str:0000000000000277 .LASF69
+     /tmp/ccbyyfOZ.s:1678   .debug_str:0000000000000485 .LASF70
+     /tmp/ccbyyfOZ.s:1706   .debug_str:0000000000000616 .LASF72
+     /tmp/ccbyyfOZ.s:1582   .debug_str:0000000000000196 .LASF74
+     /tmp/ccbyyfOZ.s:1566   .debug_str:000000000000011a .LASF75
+     /tmp/ccbyyfOZ.s:1622   .debug_str:00000000000002cd .LASF77
+     /tmp/ccbyyfOZ.s:1596   .debug_str:0000000000000211 .LASF91
+     /tmp/ccbyyfOZ.s:1686   .debug_str:00000000000004c2 .LASF79
+     /tmp/ccbyyfOZ.s:1642   .debug_str:000000000000036a .LASF80
+     /tmp/ccbyyfOZ.s:1712   .debug_str:000000000000064d .LASF81
+     /tmp/ccbyyfOZ.s:122    .text:00000000000000ac .LFB12
+     /tmp/ccbyyfOZ.s:162    .text:00000000000000f4 .LFE12
+     /tmp/ccbyyfOZ.s:1586   .debug_str:00000000000001b3 .LASF83
+     /tmp/ccbyyfOZ.s:66     .text:0000000000000058 .LFB11
+     /tmp/ccbyyfOZ.s:116    .text:00000000000000ac .LFE11
+     /tmp/ccbyyfOZ.s:1660   .debug_str:00000000000003f0 .LASF82
+     /tmp/ccbyyfOZ.s:1506   .debug_loc:0000000000000000 .LLST0
+     /tmp/ccbyyfOZ.s:10     .text:0000000000000000 .LFB10
+     /tmp/ccbyyfOZ.s:60     .text:0000000000000058 .LFE10
+     /tmp/ccbyyfOZ.s:81     .text:0000000000000070 .LVL1
+     /tmp/ccbyyfOZ.s:93     .text:0000000000000088 .LVL2
+     /tmp/ccbyyfOZ.s:109    .text:00000000000000a0 .LVL3
+     /tmp/ccbyyfOZ.s:188    .debug_info:0000000000000000 .Ldebug_info0
+
+NO UNDEFINED SYMBOLS

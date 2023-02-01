@@ -12,7 +12,7 @@ void userMode() {
 }
 void userMain();
 void userMainWrapper(void*) {
-    userMode();
+    //userMode(); // prelazak u user mod
     userMain();
 }
 

@@ -36,6 +36,7 @@ public:
     static inline size_t blocksInSize(size_t numOfBlocks) {
         return numOfBlocks * MEM_BLOCK_SIZE;
     }
+
 private:
     MemoryAllocator() {} // da bi se zabranilo pravljenje objekata
 
@@ -69,12 +70,20 @@ private:
 
     // vraca relativnu adresu u odnosu na pocetak HEAP-a
     static inline size_t relativeAddress(void* address) {
-        return (size_t)address - (size_t)HEAP_START_ADDR;
+        return (size_t)address - (size_t)userHeapStartAddr();
     }
 
     // vraca true ako je adresa pocetak bloka(relativno u odnosu na pocetak heap-a)
     static inline bool isStartOfBlock(void* address) {
         return relativeAddress(address) % MEM_BLOCK_SIZE == 0;
+    }
+
+    static inline void* userHeapStartAddr() {
+        return (void*)((char*)HEAP_START_ADDR + (1<<24));
+    }
+
+    static inline void* userHeapEndAddr() {
+        return (void*)HEAP_END_ADDR;
     }
 };
 

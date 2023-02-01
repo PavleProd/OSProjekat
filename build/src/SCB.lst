@@ -1,0 +1,1235 @@
+GAS LISTING /tmp/ccAM3cTM.s 			page 1
+
+
+   1              		.file	"SCB.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZN3SCB5blockEv
+   9              	_ZN3SCB5blockEv:
+  10              	.LFB41:
+  11              		.file 1 "src/SCB.cpp"
+   1:src/SCB.cpp   **** #include "../h/SCB.h"
+   2:src/SCB.cpp   **** #include "../h/kernel.h"
+   3:src/SCB.cpp   **** #include "../h/MemoryAllocator.h"
+   4:src/SCB.cpp   **** 
+   5:src/SCB.cpp   **** void SCB::block() {
+  12              		.loc 1 5 19
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+   6:src/SCB.cpp   ****     PCB::running->setNextInList(nullptr);
+  21              		.loc 1 6 5
+  22              		.loc 1 6 32 is_stmt 0
+  23 000c 97070000 		la	a5,_ZN3PCB7runningE
+  23      83B70700 
+  24 0014 83B70700 		ld	a5,0(a5)
+  25              	.LVL1:
+  26              	.LBB23:
+  27              	.LBB24:
+  28              		.file 2 "src/../h/PCB.h"
+   1:src/../h/PCB.h **** #ifndef PCB_H
+   2:src/../h/PCB.h **** #define PCB_H
+   3:src/../h/PCB.h **** 
+   4:src/../h/PCB.h **** #include "hw.h"
+   5:src/../h/PCB.h **** 
+   6:src/../h/PCB.h **** extern "C" void interruptHandler();
+   7:src/../h/PCB.h **** 
+   8:src/../h/PCB.h **** class PCB {
+   9:src/../h/PCB.h **** friend class Scheduler;
+  10:src/../h/PCB.h **** friend void interruptHandler();
+  11:src/../h/PCB.h **** friend class Kernel;
+  12:src/../h/PCB.h **** friend class SCB;
+  13:src/../h/PCB.h **** public:
+  14:src/../h/PCB.h ****     // vraca true ako se proces zavrsio, false ako nije
+  15:src/../h/PCB.h ****     bool isFinished() const {
+  16:src/../h/PCB.h ****         return finished;
+  17:src/../h/PCB.h ****     }
+  18:src/../h/PCB.h ****     // vraca true ako je semafor obrisan pre nego sto je proces odblokiran
+  19:src/../h/PCB.h ****     bool isSemaphoreDeleted() const {
+  20:src/../h/PCB.h ****         return semDeleted;
+  21:src/../h/PCB.h ****     }
+  22:src/../h/PCB.h **** 
+  23:src/../h/PCB.h ****     size_t getTimeSleeping() const {
+GAS LISTING /tmp/ccAM3cTM.s 			page 2
+
+
+  24:src/../h/PCB.h ****         return timeSleeping;
+  25:src/../h/PCB.h ****     }
+  26:src/../h/PCB.h **** 
+  27:src/../h/PCB.h ****     void setTimeSleeping(size_t newTime) {
+  28:src/../h/PCB.h ****         timeSleeping = newTime;
+  29:src/../h/PCB.h ****     }
+  30:src/../h/PCB.h **** 
+  31:src/../h/PCB.h ****     PCB* getNextInList() const {
+  32:src/../h/PCB.h ****         return nextInList;
+  33:src/../h/PCB.h ****     }
+  34:src/../h/PCB.h **** 
+  35:src/../h/PCB.h ****     void setNextInList(PCB* next) {
+  36:src/../h/PCB.h ****         nextInList = next;
+  29              		.loc 2 36 9 is_stmt 1
+  30              		.loc 2 36 20 is_stmt 0
+  31 0018 23B00700 		sd	zero,0(a5)
+  32              	.LVL2:
+  33              	.LBE24:
+  34              	.LBE23:
+   7:src/SCB.cpp   ****     if(tail == nullptr) { // ako ne postoji kraj liste nece postojati ni pocetak
+  35              		.loc 1 7 5 is_stmt 1
+  36              		.loc 1 7 8 is_stmt 0
+  37 001c 83378500 		ld	a5,8(a0)
+  38              		.loc 1 7 5
+  39 0020 63800704 		beqz	a5,.L5
+   8:src/SCB.cpp   ****         head = tail = PCB::running;
+   9:src/SCB.cpp   ****     }
+  10:src/SCB.cpp   ****     else {
+  11:src/SCB.cpp   ****         tail->setNextInList(PCB::running);
+  40              		.loc 1 11 9 is_stmt 1
+  41              		.loc 1 11 28 is_stmt 0
+  42 0024 17070000 		la	a4,_ZN3PCB7runningE
+  42      03370700 
+  43 002c 03370700 		ld	a4,0(a4)
+  44              	.LVL3:
+  45              	.LBB25:
+  46              	.LBB26:
+  47              		.loc 2 36 9 is_stmt 1
+  48              		.loc 2 36 20 is_stmt 0
+  49 0030 23B0E700 		sd	a4,0(a5)
+  50              	.LVL4:
+  51              	.LBE26:
+  52              	.LBE25:
+  12:src/SCB.cpp   ****         tail = tail->getNextInList();
+  53              		.loc 1 12 9 is_stmt 1
+  54              		.loc 1 12 16 is_stmt 0
+  55 0034 83378500 		ld	a5,8(a0)
+  56              	.LVL5:
+  57              	.LBB27:
+  58              	.LBB28:
+  32:src/../h/PCB.h ****     }
+  59              		.loc 2 32 9 is_stmt 1
+  32:src/../h/PCB.h ****     }
+  60              		.loc 2 32 16 is_stmt 0
+  61 0038 83B70700 		ld	a5,0(a5)
+  62              	.LVL6:
+  63              	.LBE28:
+GAS LISTING /tmp/ccAM3cTM.s 			page 3
+
+
+  64              	.LBE27:
+  65              		.loc 1 12 14
+  66 003c 2334F500 		sd	a5,8(a0)
+  67              	.L3:
+  13:src/SCB.cpp   ****     }
+  14:src/SCB.cpp   ****     PCB::running->setBlocked(true);
+  68              		.loc 1 14 5 is_stmt 1
+  69              		.loc 1 14 29 is_stmt 0
+  70 0040 97070000 		la	a5,_ZN3PCB7runningE
+  70      83B70700 
+  71 0048 83B70700 		ld	a5,0(a5)
+  72              	.LVL7:
+  73              	.LBB29:
+  74              	.LBB30:
+  37:src/../h/PCB.h ****     }
+  38:src/../h/PCB.h **** 
+  39:src/../h/PCB.h ****     void setBlocked(bool newState) {
+  40:src/../h/PCB.h ****         blocked = newState;
+  75              		.loc 2 40 9 is_stmt 1
+  76              		.loc 2 40 17 is_stmt 0
+  77 004c 13071000 		li	a4,1
+  78 0050 A384E702 		sb	a4,41(a5)
+  79              	.LVL8:
+  80              	.LBE30:
+  81              	.LBE29:
+  15:src/SCB.cpp   **** }
+  82              		.loc 1 15 1
+  83 0054 03348100 		ld	s0,8(sp)
+  84              		.cfi_remember_state
+  85              		.cfi_restore 8
+  86              		.cfi_def_cfa 2, 16
+  87 0058 13010101 		addi	sp,sp,16
+  88              		.cfi_def_cfa_offset 0
+  89 005c 67800000 		jr	ra
+  90              	.L5:
+  91              		.cfi_restore_state
+   8:src/SCB.cpp   ****     }
+  92              		.loc 1 8 9 is_stmt 1
+   8:src/SCB.cpp   ****     }
+  93              		.loc 1 8 21 is_stmt 0
+  94 0060 97070000 		la	a5,_ZN3PCB7runningE
+  94      83B70700 
+  95 0068 83B70700 		ld	a5,0(a5)
+  96 006c 2334F500 		sd	a5,8(a0)
+   8:src/SCB.cpp   ****     }
+  97              		.loc 1 8 14
+  98 0070 2330F500 		sd	a5,0(a0)
+  99 0074 6FF0DFFC 		j	.L3
+ 100              		.cfi_endproc
+ 101              	.LFE41:
+ 103              		.align	2
+ 104              		.globl	_ZN3SCB7unblockEv
+ 106              	_ZN3SCB7unblockEv:
+ 107              	.LFB42:
+  16:src/SCB.cpp   **** 
+  17:src/SCB.cpp   **** PCB* SCB::unblock() {
+ 108              		.loc 1 17 21 is_stmt 1
+GAS LISTING /tmp/ccAM3cTM.s 			page 4
+
+
+ 109              		.cfi_startproc
+ 110              	.LVL9:
+ 111 0078 130101FF 		addi	sp,sp,-16
+ 112              		.cfi_def_cfa_offset 16
+ 113 007c 23348100 		sd	s0,8(sp)
+ 114              		.cfi_offset 8, -8
+ 115 0080 13040101 		addi	s0,sp,16
+ 116              		.cfi_def_cfa 8, 0
+ 117 0084 93070500 		mv	a5,a0
+  18:src/SCB.cpp   ****     if(head == nullptr) return nullptr;
+ 118              		.loc 1 18 5
+ 119              		.loc 1 18 8 is_stmt 0
+ 120 0088 03350500 		ld	a0,0(a0)
+ 121              	.LVL10:
+ 122              		.loc 1 18 5
+ 123 008c 630E0500 		beqz	a0,.L6
+  19:src/SCB.cpp   ****     PCB* curr = head;
+ 124              		.loc 1 19 5 is_stmt 1
+ 125              	.LVL11:
+  20:src/SCB.cpp   ****     head = head->getNextInList();
+ 126              		.loc 1 20 5
+ 127              	.LBB31:
+ 128              	.LBB32:
+  32:src/../h/PCB.h ****     }
+ 129              		.loc 2 32 9
+  32:src/../h/PCB.h ****     }
+ 130              		.loc 2 32 16 is_stmt 0
+ 131 0090 03370500 		ld	a4,0(a0)
+ 132              	.LVL12:
+ 133              	.LBE32:
+ 134              	.LBE31:
+ 135              		.loc 1 20 10
+ 136 0094 23B0E700 		sd	a4,0(a5)
+  21:src/SCB.cpp   ****     if(tail == curr) {
+ 137              		.loc 1 21 5 is_stmt 1
+ 138              		.loc 1 21 8 is_stmt 0
+ 139 0098 83B68700 		ld	a3,8(a5)
+ 140              		.loc 1 21 5
+ 141 009c 630CD500 		beq	a0,a3,.L10
+ 142              	.L8:
+  22:src/SCB.cpp   ****         tail = head;
+  23:src/SCB.cpp   ****     }
+  24:src/SCB.cpp   ****     curr->setBlocked(false);
+ 143              		.loc 1 24 5 is_stmt 1
+ 144              	.LVL13:
+ 145              	.LBB33:
+ 146              	.LBB34:
+ 147              		.loc 2 40 9
+ 148              		.loc 2 40 17 is_stmt 0
+ 149 00a0 A3040502 		sb	zero,41(a0)
+ 150              	.LVL14:
+ 151              	.LBE34:
+ 152              	.LBE33:
+  25:src/SCB.cpp   ****     curr->setNextInList(nullptr);
+ 153              		.loc 1 25 5 is_stmt 1
+ 154              	.LBB35:
+ 155              	.LBB36:
+GAS LISTING /tmp/ccAM3cTM.s 			page 5
+
+
+  36:src/../h/PCB.h ****     }
+ 156              		.loc 2 36 9
+  36:src/../h/PCB.h ****     }
+ 157              		.loc 2 36 20 is_stmt 0
+ 158 00a4 23300500 		sd	zero,0(a0)
+ 159              	.LVL15:
+ 160              	.LBE36:
+ 161              	.LBE35:
+  26:src/SCB.cpp   ****     return curr;
+ 162              		.loc 1 26 5 is_stmt 1
+ 163              	.L6:
+  27:src/SCB.cpp   **** }
+ 164              		.loc 1 27 1 is_stmt 0
+ 165 00a8 03348100 		ld	s0,8(sp)
+ 166              		.cfi_remember_state
+ 167              		.cfi_restore 8
+ 168              		.cfi_def_cfa 2, 16
+ 169 00ac 13010101 		addi	sp,sp,16
+ 170              		.cfi_def_cfa_offset 0
+ 171 00b0 67800000 		jr	ra
+ 172              	.LVL16:
+ 173              	.L10:
+ 174              		.cfi_restore_state
+  22:src/SCB.cpp   ****     }
+ 175              		.loc 1 22 9 is_stmt 1
+  22:src/SCB.cpp   ****     }
+ 176              		.loc 1 22 14 is_stmt 0
+ 177 00b4 23B4E700 		sd	a4,8(a5)
+ 178 00b8 6FF09FFE 		j	.L8
+ 179              		.cfi_endproc
+ 180              	.LFE42:
+ 182              		.align	2
+ 183              		.globl	_ZN3SCB4waitEv
+ 185              	_ZN3SCB4waitEv:
+ 186              	.LFB43:
+  28:src/SCB.cpp   **** 
+  29:src/SCB.cpp   **** int SCB::wait() {
+ 187              		.loc 1 29 17 is_stmt 1
+ 188              		.cfi_startproc
+ 189              	.LVL17:
+  30:src/SCB.cpp   ****     if((int)(--semValue)<0) {
+ 190              		.loc 1 30 5
+ 191              		.loc 1 30 16 is_stmt 0
+ 192 00bc 83270501 		lw	a5,16(a0)
+ 193              		.loc 1 30 14
+ 194 00c0 9B87F7FF 		addiw	a5,a5,-1
+ 195              		.loc 1 30 25
+ 196 00c4 2328F500 		sw	a5,16(a0)
+ 197              		.loc 1 30 5
+ 198 00c8 13970702 		slli	a4,a5,32
+ 199 00cc 63400702 		bltz	a4,.L22
+  31:src/SCB.cpp   ****         block();
+  32:src/SCB.cpp   ****         PCB::timeSliceCounter = 0;
+  33:src/SCB.cpp   ****         PCB::dispatch();
+  34:src/SCB.cpp   ****     }
+  35:src/SCB.cpp   **** 
+  36:src/SCB.cpp   ****     if(PCB::running->semDeleted) { // ako se vratio kontekst, a semafor je obrisan
+GAS LISTING /tmp/ccAM3cTM.s 			page 6
+
+
+ 200              		.loc 1 36 5 is_stmt 1
+ 201              		.loc 1 36 22 is_stmt 0
+ 202 00d0 97070000 		la	a5,_ZN3PCB7runningE
+ 202      83B70700 
+ 203 00d8 83B70700 		ld	a5,0(a5)
+ 204 00dc 83C7A702 		lbu	a5,42(a5)
+ 205              		.loc 1 36 5
+ 206 00e0 63940706 		bnez	a5,.L17
+  37:src/SCB.cpp   ****         return -2;
+  38:src/SCB.cpp   ****     }
+  39:src/SCB.cpp   **** 
+  40:src/SCB.cpp   ****     return 0;
+ 207              		.loc 1 40 12
+ 208 00e4 13050000 		li	a0,0
+ 209              	.LVL18:
+ 210 00e8 67800000 		ret
+ 211              	.LVL19:
+ 212              	.L22:
+  29:src/SCB.cpp   ****     if((int)(--semValue)<0) {
+ 213              		.loc 1 29 17
+ 214 00ec 130101FF 		addi	sp,sp,-16
+ 215              		.cfi_def_cfa_offset 16
+ 216 00f0 23341100 		sd	ra,8(sp)
+ 217 00f4 23308100 		sd	s0,0(sp)
+ 218              		.cfi_offset 1, -8
+ 219              		.cfi_offset 8, -16
+ 220 00f8 13040101 		addi	s0,sp,16
+ 221              		.cfi_def_cfa 8, 0
+  31:src/SCB.cpp   ****         block();
+ 222              		.loc 1 31 9 is_stmt 1
+  31:src/SCB.cpp   ****         block();
+ 223              		.loc 1 31 14 is_stmt 0
+ 224 00fc 97000000 		call	_ZN3SCB5blockEv
+ 224      E7800000 
+ 225              	.LVL20:
+  32:src/SCB.cpp   ****         PCB::dispatch();
+ 226              		.loc 1 32 9 is_stmt 1
+  32:src/SCB.cpp   ****         PCB::dispatch();
+ 227              		.loc 1 32 31 is_stmt 0
+ 228 0104 97070000 		la	a5,_ZN3PCB16timeSliceCounterE
+ 228      83B70700 
+ 229 010c 23B00700 		sd	zero,0(a5)
+  33:src/SCB.cpp   ****     }
+ 230              		.loc 1 33 9 is_stmt 1
+  33:src/SCB.cpp   ****     }
+ 231              		.loc 1 33 22 is_stmt 0
+ 232 0110 97000000 		call	_ZN3PCB8dispatchEv@plt
+ 232      E7800000 
+ 233              	.LVL21:
+  36:src/SCB.cpp   ****         return -2;
+ 234              		.loc 1 36 5 is_stmt 1
+  36:src/SCB.cpp   ****         return -2;
+ 235              		.loc 1 36 22 is_stmt 0
+ 236 0118 97070000 		la	a5,_ZN3PCB7runningE
+ 236      83B70700 
+ 237 0120 83B70700 		ld	a5,0(a5)
+ 238 0124 83C7A702 		lbu	a5,42(a5)
+GAS LISTING /tmp/ccAM3cTM.s 			page 7
+
+
+  36:src/SCB.cpp   ****         return -2;
+ 239              		.loc 1 36 5
+ 240 0128 639C0700 		bnez	a5,.L14
+ 241              		.loc 1 40 12
+ 242 012c 13050000 		li	a0,0
+ 243              	.L13:
+  41:src/SCB.cpp   **** 
+  42:src/SCB.cpp   **** }
+ 244              		.loc 1 42 1
+ 245 0130 83308100 		ld	ra,8(sp)
+ 246              		.cfi_remember_state
+ 247              		.cfi_restore 1
+ 248 0134 03340100 		ld	s0,0(sp)
+ 249              		.cfi_restore 8
+ 250              		.cfi_def_cfa 2, 16
+ 251 0138 13010101 		addi	sp,sp,16
+ 252              		.cfi_def_cfa_offset 0
+ 253 013c 67800000 		jr	ra
+ 254              	.L14:
+ 255              		.cfi_restore_state
+  37:src/SCB.cpp   ****     }
+ 256              		.loc 1 37 17
+ 257 0140 1305E0FF 		li	a0,-2
+ 258 0144 6FF0DFFE 		j	.L13
+ 259              	.LVL22:
+ 260              	.L17:
+ 261              		.cfi_def_cfa_register 2
+ 262              		.cfi_restore 1
+ 263              		.cfi_restore 8
+ 264 0148 1305E0FF 		li	a0,-2
+ 265              	.LVL23:
+ 266              		.loc 1 42 1
+ 267 014c 67800000 		ret
+ 268              		.cfi_endproc
+ 269              	.LFE43:
+ 271              		.align	2
+ 272              		.globl	_ZN3SCB6signalEv
+ 274              	_ZN3SCB6signalEv:
+ 275              	.LFB44:
+  43:src/SCB.cpp   **** 
+  44:src/SCB.cpp   **** void SCB::signal() {
+ 276              		.loc 1 44 20 is_stmt 1
+ 277              		.cfi_startproc
+ 278              	.LVL24:
+  45:src/SCB.cpp   ****     if((int)(++semValue)<=0) {
+ 279              		.loc 1 45 5
+ 280              		.loc 1 45 16 is_stmt 0
+ 281 0150 83270501 		lw	a5,16(a0)
+ 282              		.loc 1 45 14
+ 283 0154 9B871700 		addiw	a5,a5,1
+ 284 0158 1B870700 		sext.w	a4,a5
+ 285              		.loc 1 45 25
+ 286 015c 2328F500 		sw	a5,16(a0)
+ 287              		.loc 1 45 5
+ 288 0160 6354E000 		blez	a4,.L29
+ 289 0164 67800000 		ret
+ 290              	.L29:
+GAS LISTING /tmp/ccAM3cTM.s 			page 8
+
+
+  44:src/SCB.cpp   ****     if((int)(++semValue)<=0) {
+ 291              		.loc 1 44 20
+ 292 0168 130101FF 		addi	sp,sp,-16
+ 293              		.cfi_def_cfa_offset 16
+ 294 016c 23341100 		sd	ra,8(sp)
+ 295 0170 23308100 		sd	s0,0(sp)
+ 296              		.cfi_offset 1, -8
+ 297              		.cfi_offset 8, -16
+ 298 0174 13040101 		addi	s0,sp,16
+ 299              		.cfi_def_cfa 8, 0
+  46:src/SCB.cpp   ****         Scheduler::put(unblock());
+ 300              		.loc 1 46 9 is_stmt 1
+ 301              		.loc 1 46 23 is_stmt 0
+ 302 0178 97000000 		call	_ZN3SCB7unblockEv
+ 302      E7800000 
+ 303              	.LVL25:
+ 304 0180 97000000 		call	_ZN9Scheduler3putEP3PCB@plt
+ 304      E7800000 
+ 305              	.LVL26:
+  47:src/SCB.cpp   ****     }
+  48:src/SCB.cpp   **** 
+  49:src/SCB.cpp   **** }
+ 306              		.loc 1 49 1
+ 307 0188 83308100 		ld	ra,8(sp)
+ 308              		.cfi_restore 1
+ 309 018c 03340100 		ld	s0,0(sp)
+ 310              		.cfi_restore 8
+ 311              		.cfi_def_cfa 2, 16
+ 312 0190 13010101 		addi	sp,sp,16
+ 313              		.cfi_def_cfa_offset 0
+ 314 0194 67800000 		jr	ra
+ 315              		.cfi_endproc
+ 316              	.LFE44:
+ 318              		.align	2
+ 319              		.globl	_ZN3SCB14prioritySignalEv
+ 321              	_ZN3SCB14prioritySignalEv:
+ 322              	.LFB45:
+  50:src/SCB.cpp   **** 
+  51:src/SCB.cpp   **** void SCB::prioritySignal() {
+ 323              		.loc 1 51 28 is_stmt 1
+ 324              		.cfi_startproc
+ 325              	.LVL27:
+  52:src/SCB.cpp   ****     if((int)(++semValue)<=0) {
+ 326              		.loc 1 52 5
+ 327              		.loc 1 52 16 is_stmt 0
+ 328 0198 83270501 		lw	a5,16(a0)
+ 329              		.loc 1 52 14
+ 330 019c 9B871700 		addiw	a5,a5,1
+ 331 01a0 1B870700 		sext.w	a4,a5
+ 332              		.loc 1 52 25
+ 333 01a4 2328F500 		sw	a5,16(a0)
+ 334              		.loc 1 52 5
+ 335 01a8 6354E000 		blez	a4,.L36
+ 336 01ac 67800000 		ret
+ 337              	.L36:
+  51:src/SCB.cpp   ****     if((int)(++semValue)<=0) {
+ 338              		.loc 1 51 28
+GAS LISTING /tmp/ccAM3cTM.s 			page 9
+
+
+ 339 01b0 130101FF 		addi	sp,sp,-16
+ 340              		.cfi_def_cfa_offset 16
+ 341 01b4 23341100 		sd	ra,8(sp)
+ 342 01b8 23308100 		sd	s0,0(sp)
+ 343              		.cfi_offset 1, -8
+ 344              		.cfi_offset 8, -16
+ 345 01bc 13040101 		addi	s0,sp,16
+ 346              		.cfi_def_cfa 8, 0
+  53:src/SCB.cpp   ****         Scheduler::putInFront(unblock());
+ 347              		.loc 1 53 9 is_stmt 1
+ 348              		.loc 1 53 30 is_stmt 0
+ 349 01c0 97000000 		call	_ZN3SCB7unblockEv
+ 349      E7800000 
+ 350              	.LVL28:
+ 351 01c8 97000000 		call	_ZN9Scheduler10putInFrontEP3PCB@plt
+ 351      E7800000 
+ 352              	.LVL29:
+  54:src/SCB.cpp   ****     }
+  55:src/SCB.cpp   **** }
+ 353              		.loc 1 55 1
+ 354 01d0 83308100 		ld	ra,8(sp)
+ 355              		.cfi_restore 1
+ 356 01d4 03340100 		ld	s0,0(sp)
+ 357              		.cfi_restore 8
+ 358              		.cfi_def_cfa 2, 16
+ 359 01d8 13010101 		addi	sp,sp,16
+ 360              		.cfi_def_cfa_offset 0
+ 361 01dc 67800000 		jr	ra
+ 362              		.cfi_endproc
+ 363              	.LFE45:
+ 365              		.align	2
+ 366              		.globl	_ZN3SCBnwEm
+ 368              	_ZN3SCBnwEm:
+ 369              	.LFB46:
+  56:src/SCB.cpp   **** 
+  57:src/SCB.cpp   **** void *SCB::operator new(size_t size) {
+ 370              		.loc 1 57 38 is_stmt 1
+ 371              		.cfi_startproc
+ 372              	.LVL30:
+ 373 01e0 130101FF 		addi	sp,sp,-16
+ 374              		.cfi_def_cfa_offset 16
+ 375 01e4 23341100 		sd	ra,8(sp)
+ 376 01e8 23308100 		sd	s0,0(sp)
+ 377              		.cfi_offset 1, -8
+ 378              		.cfi_offset 8, -16
+ 379 01ec 13040101 		addi	s0,sp,16
+ 380              		.cfi_def_cfa 8, 0
+  58:src/SCB.cpp   ****     return MemoryAllocator::mem_alloc(size);
+ 381              		.loc 1 58 5
+ 382              		.loc 1 58 38 is_stmt 0
+ 383 01f0 97000000 		call	_ZN15MemoryAllocator9mem_allocEm@plt
+ 383      E7800000 
+ 384              	.LVL31:
+  59:src/SCB.cpp   **** }
+ 385              		.loc 1 59 1
+ 386 01f8 83308100 		ld	ra,8(sp)
+ 387              		.cfi_restore 1
+GAS LISTING /tmp/ccAM3cTM.s 			page 10
+
+
+ 388 01fc 03340100 		ld	s0,0(sp)
+ 389              		.cfi_restore 8
+ 390              		.cfi_def_cfa 2, 16
+ 391 0200 13010101 		addi	sp,sp,16
+ 392              		.cfi_def_cfa_offset 0
+ 393 0204 67800000 		jr	ra
+ 394              		.cfi_endproc
+ 395              	.LFE46:
+ 397              		.align	2
+ 398              		.globl	_ZN3SCBdlEPv
+ 400              	_ZN3SCBdlEPv:
+ 401              	.LFB47:
+  60:src/SCB.cpp   **** 
+  61:src/SCB.cpp   **** void SCB::operator delete(void *memSegment) {
+ 402              		.loc 1 61 45 is_stmt 1
+ 403              		.cfi_startproc
+ 404              	.LVL32:
+ 405 0208 130101FF 		addi	sp,sp,-16
+ 406              		.cfi_def_cfa_offset 16
+ 407 020c 23341100 		sd	ra,8(sp)
+ 408 0210 23308100 		sd	s0,0(sp)
+ 409              		.cfi_offset 1, -8
+ 410              		.cfi_offset 8, -16
+ 411 0214 13040101 		addi	s0,sp,16
+ 412              		.cfi_def_cfa 8, 0
+  62:src/SCB.cpp   ****     MemoryAllocator::mem_free(memSegment);
+ 413              		.loc 1 62 5
+ 414              		.loc 1 62 30 is_stmt 0
+ 415 0218 97000000 		call	_ZN15MemoryAllocator8mem_freeEPv@plt
+ 415      E7800000 
+ 416              	.LVL33:
+  63:src/SCB.cpp   **** }
+ 417              		.loc 1 63 1
+ 418 0220 83308100 		ld	ra,8(sp)
+ 419              		.cfi_restore 1
+ 420 0224 03340100 		ld	s0,0(sp)
+ 421              		.cfi_restore 8
+ 422              		.cfi_def_cfa 2, 16
+ 423 0228 13010101 		addi	sp,sp,16
+ 424              		.cfi_def_cfa_offset 0
+ 425 022c 67800000 		jr	ra
+ 426              		.cfi_endproc
+ 427              	.LFE47:
+ 429              		.align	2
+ 430              		.globl	_ZN3SCB13signalClosingEv
+ 432              	_ZN3SCB13signalClosingEv:
+ 433              	.LFB48:
+  64:src/SCB.cpp   **** 
+  65:src/SCB.cpp   **** void SCB::signalClosing() {
+ 434              		.loc 1 65 27 is_stmt 1
+ 435              		.cfi_startproc
+ 436              	.LVL34:
+ 437 0230 130101FE 		addi	sp,sp,-32
+ 438              		.cfi_def_cfa_offset 32
+ 439 0234 233C1100 		sd	ra,24(sp)
+ 440 0238 23388100 		sd	s0,16(sp)
+ 441 023c 23349100 		sd	s1,8(sp)
+GAS LISTING /tmp/ccAM3cTM.s 			page 11
+
+
+ 442 0240 23302101 		sd	s2,0(sp)
+ 443              		.cfi_offset 1, -8
+ 444              		.cfi_offset 8, -16
+ 445              		.cfi_offset 9, -24
+ 446              		.cfi_offset 18, -32
+ 447 0244 13040102 		addi	s0,sp,32
+ 448              		.cfi_def_cfa 8, 0
+ 449 0248 13090500 		mv	s2,a0
+  66:src/SCB.cpp   ****     PCB* curr = head;
+ 450              		.loc 1 66 5
+ 451              		.loc 1 66 10 is_stmt 0
+ 452 024c 03350500 		ld	a0,0(a0)
+ 453              	.LVL35:
+ 454              	.L43:
+  67:src/SCB.cpp   ****     while(curr) {
+ 455              		.loc 1 67 5 is_stmt 1
+ 456              		.loc 1 67 11
+ 457 0250 63020502 		beqz	a0,.L42
+ 458              	.LBB37:
+  68:src/SCB.cpp   ****         PCB* last = curr;
+ 459              		.loc 1 68 9
+ 460              	.LVL36:
+  69:src/SCB.cpp   ****         curr->setSemDeleted(true);
+ 461              		.loc 1 69 9
+ 462              	.LBB38:
+ 463              	.LBB39:
+  41:src/../h/PCB.h ****     }
+  42:src/../h/PCB.h **** 
+  43:src/../h/PCB.h ****     void setSemDeleted(bool newState) {
+  44:src/../h/PCB.h ****         semDeleted = newState;
+ 464              		.loc 2 44 9
+ 465              		.loc 2 44 20 is_stmt 0
+ 466 0254 93071000 		li	a5,1
+ 467 0258 2305F502 		sb	a5,42(a0)
+ 468              	.LVL37:
+ 469              	.LBE39:
+ 470              	.LBE38:
+  70:src/SCB.cpp   ****         curr->setBlocked(false);
+ 471              		.loc 1 70 9 is_stmt 1
+ 472              	.LBB40:
+ 473              	.LBB41:
+  40:src/../h/PCB.h ****     }
+ 474              		.loc 2 40 9
+  40:src/../h/PCB.h ****     }
+ 475              		.loc 2 40 17 is_stmt 0
+ 476 025c A3040502 		sb	zero,41(a0)
+ 477              	.LVL38:
+ 478              	.LBE41:
+ 479              	.LBE40:
+  71:src/SCB.cpp   ****         curr = curr->getNextInList();
+ 480              		.loc 1 71 9 is_stmt 1
+ 481              	.LBB42:
+ 482              	.LBB43:
+  32:src/../h/PCB.h ****     }
+ 483              		.loc 2 32 9
+  32:src/../h/PCB.h ****     }
+ 484              		.loc 2 32 16 is_stmt 0
+GAS LISTING /tmp/ccAM3cTM.s 			page 12
+
+
+ 485 0260 83340500 		ld	s1,0(a0)
+ 486              	.LVL39:
+ 487              	.LBE43:
+ 488              	.LBE42:
+  72:src/SCB.cpp   ****         Scheduler::put(last);
+ 489              		.loc 1 72 9 is_stmt 1
+ 490              		.loc 1 72 23 is_stmt 0
+ 491 0264 97000000 		call	_ZN9Scheduler3putEP3PCB@plt
+ 491      E7800000 
+ 492              	.LVL40:
+  71:src/SCB.cpp   ****         curr = curr->getNextInList();
+ 493              		.loc 1 71 35
+ 494 026c 13850400 		mv	a0,s1
+ 495              	.LBE37:
+  67:src/SCB.cpp   ****         PCB* last = curr;
+ 496              		.loc 1 67 5
+ 497 0270 6FF01FFE 		j	.L43
+ 498              	.LVL41:
+ 499              	.L42:
+  73:src/SCB.cpp   ****     }
+  74:src/SCB.cpp   ****     head = tail = nullptr;
+ 500              		.loc 1 74 5 is_stmt 1
+ 501              		.loc 1 74 17 is_stmt 0
+ 502 0274 23340900 		sd	zero,8(s2)
+ 503              		.loc 1 74 10
+ 504 0278 23300900 		sd	zero,0(s2)
+  75:src/SCB.cpp   **** }
+ 505              		.loc 1 75 1
+ 506 027c 83308101 		ld	ra,24(sp)
+ 507              		.cfi_restore 1
+ 508 0280 03340101 		ld	s0,16(sp)
+ 509              		.cfi_restore 8
+ 510              		.cfi_def_cfa 2, 32
+ 511 0284 83348100 		ld	s1,8(sp)
+ 512              		.cfi_restore 9
+ 513 0288 03390100 		ld	s2,0(sp)
+ 514              		.cfi_restore 18
+ 515              	.LVL42:
+ 516 028c 13010102 		addi	sp,sp,32
+ 517              		.cfi_def_cfa_offset 0
+ 518 0290 67800000 		jr	ra
+ 519              		.cfi_endproc
+ 520              	.LFE48:
+ 522              	.Letext0:
+ 523              		.file 3 "src/../h/hw.h"
+ 524              		.file 4 "src/../h/Scheduler.h"
+ 525              		.file 5 "src/../h/SCB.h"
+ 526              		.file 6 "src/../h/MemoryAllocator.h"
+GAS LISTING /tmp/ccAM3cTM.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 SCB.cpp
+     /tmp/ccAM3cTM.s:9      .text:0000000000000000 _ZN3SCB5blockEv
+     /tmp/ccAM3cTM.s:13     .text:0000000000000000 .L0 
+     /tmp/ccAM3cTM.s:15     .text:0000000000000000 .L0 
+     /tmp/ccAM3cTM.s:16     .text:0000000000000004 .L0 
+     /tmp/ccAM3cTM.s:18     .text:0000000000000008 .L0 
+     /tmp/ccAM3cTM.s:20     .text:000000000000000c .L0 
+     /tmp/ccAM3cTM.s:22     .text:000000000000000c .L0 
+     /tmp/ccAM3cTM.s:23     .text:000000000000000c .L0 
+     /tmp/ccAM3cTM.s:30     .text:0000000000000018 .L0 
+     /tmp/ccAM3cTM.s:31     .text:0000000000000018 .L0 
+     /tmp/ccAM3cTM.s:36     .text:000000000000001c .L0 
+     /tmp/ccAM3cTM.s:37     .text:000000000000001c .L0 
+     /tmp/ccAM3cTM.s:39     .text:0000000000000020 .L0 
+     /tmp/ccAM3cTM.s:41     .text:0000000000000024 .L0 
+     /tmp/ccAM3cTM.s:42     .text:0000000000000024 .L0 
+     /tmp/ccAM3cTM.s:48     .text:0000000000000030 .L0 
+     /tmp/ccAM3cTM.s:49     .text:0000000000000030 .L0 
+     /tmp/ccAM3cTM.s:54     .text:0000000000000034 .L0 
+     /tmp/ccAM3cTM.s:55     .text:0000000000000034 .L0 
+     /tmp/ccAM3cTM.s:60     .text:0000000000000038 .L0 
+     /tmp/ccAM3cTM.s:61     .text:0000000000000038 .L0 
+     /tmp/ccAM3cTM.s:66     .text:000000000000003c .L0 
+     /tmp/ccAM3cTM.s:69     .text:0000000000000040 .L0 
+     /tmp/ccAM3cTM.s:70     .text:0000000000000040 .L0 
+     /tmp/ccAM3cTM.s:76     .text:000000000000004c .L0 
+     /tmp/ccAM3cTM.s:77     .text:000000000000004c .L0 
+     /tmp/ccAM3cTM.s:83     .text:0000000000000054 .L0 
+     /tmp/ccAM3cTM.s:84     .text:0000000000000058 .L0 
+     /tmp/ccAM3cTM.s:85     .text:0000000000000058 .L0 
+     /tmp/ccAM3cTM.s:86     .text:0000000000000058 .L0 
+     /tmp/ccAM3cTM.s:88     .text:000000000000005c .L0 
+     /tmp/ccAM3cTM.s:91     .text:0000000000000060 .L0 
+     /tmp/ccAM3cTM.s:93     .text:0000000000000060 .L0 
+     /tmp/ccAM3cTM.s:94     .text:0000000000000060 .L0 
+     /tmp/ccAM3cTM.s:98     .text:0000000000000070 .L0 
+     /tmp/ccAM3cTM.s:100    .text:0000000000000078 .L0 
+     /tmp/ccAM3cTM.s:106    .text:0000000000000078 _ZN3SCB7unblockEv
+     /tmp/ccAM3cTM.s:109    .text:0000000000000078 .L0 
+     /tmp/ccAM3cTM.s:111    .text:0000000000000078 .L0 
+     /tmp/ccAM3cTM.s:112    .text:000000000000007c .L0 
+     /tmp/ccAM3cTM.s:114    .text:0000000000000080 .L0 
+     /tmp/ccAM3cTM.s:116    .text:0000000000000084 .L0 
+     /tmp/ccAM3cTM.s:119    .text:0000000000000088 .L0 
+     /tmp/ccAM3cTM.s:120    .text:0000000000000088 .L0 
+     /tmp/ccAM3cTM.s:123    .text:000000000000008c .L0 
+     /tmp/ccAM3cTM.s:126    .text:0000000000000090 .L0 
+     /tmp/ccAM3cTM.s:129    .text:0000000000000090 .L0 
+     /tmp/ccAM3cTM.s:130    .text:0000000000000090 .L0 
+     /tmp/ccAM3cTM.s:131    .text:0000000000000090 .L0 
+     /tmp/ccAM3cTM.s:136    .text:0000000000000094 .L0 
+     /tmp/ccAM3cTM.s:138    .text:0000000000000098 .L0 
+     /tmp/ccAM3cTM.s:139    .text:0000000000000098 .L0 
+     /tmp/ccAM3cTM.s:141    .text:000000000000009c .L0 
+     /tmp/ccAM3cTM.s:147    .text:00000000000000a0 .L0 
+     /tmp/ccAM3cTM.s:148    .text:00000000000000a0 .L0 
+GAS LISTING /tmp/ccAM3cTM.s 			page 14
+
+
+     /tmp/ccAM3cTM.s:149    .text:00000000000000a0 .L0 
+     /tmp/ccAM3cTM.s:156    .text:00000000000000a4 .L0 
+     /tmp/ccAM3cTM.s:157    .text:00000000000000a4 .L0 
+     /tmp/ccAM3cTM.s:158    .text:00000000000000a4 .L0 
+     /tmp/ccAM3cTM.s:164    .text:00000000000000a8 .L0 
+     /tmp/ccAM3cTM.s:165    .text:00000000000000a8 .L0 
+     /tmp/ccAM3cTM.s:166    .text:00000000000000ac .L0 
+     /tmp/ccAM3cTM.s:167    .text:00000000000000ac .L0 
+     /tmp/ccAM3cTM.s:168    .text:00000000000000ac .L0 
+     /tmp/ccAM3cTM.s:170    .text:00000000000000b0 .L0 
+     /tmp/ccAM3cTM.s:174    .text:00000000000000b4 .L0 
+     /tmp/ccAM3cTM.s:176    .text:00000000000000b4 .L0 
+     /tmp/ccAM3cTM.s:177    .text:00000000000000b4 .L0 
+     /tmp/ccAM3cTM.s:179    .text:00000000000000bc .L0 
+     /tmp/ccAM3cTM.s:185    .text:00000000000000bc _ZN3SCB4waitEv
+     /tmp/ccAM3cTM.s:188    .text:00000000000000bc .L0 
+     /tmp/ccAM3cTM.s:190    .text:00000000000000bc .L0 
+     /tmp/ccAM3cTM.s:191    .text:00000000000000bc .L0 
+     /tmp/ccAM3cTM.s:192    .text:00000000000000bc .L0 
+     /tmp/ccAM3cTM.s:194    .text:00000000000000c0 .L0 
+     /tmp/ccAM3cTM.s:196    .text:00000000000000c4 .L0 
+     /tmp/ccAM3cTM.s:198    .text:00000000000000c8 .L0 
+     /tmp/ccAM3cTM.s:201    .text:00000000000000d0 .L0 
+     /tmp/ccAM3cTM.s:202    .text:00000000000000d0 .L0 
+     /tmp/ccAM3cTM.s:206    .text:00000000000000e0 .L0 
+     /tmp/ccAM3cTM.s:208    .text:00000000000000e4 .L0 
+     /tmp/ccAM3cTM.s:214    .text:00000000000000ec .L0 
+     /tmp/ccAM3cTM.s:215    .text:00000000000000f0 .L0 
+     /tmp/ccAM3cTM.s:218    .text:00000000000000f8 .L0 
+     /tmp/ccAM3cTM.s:219    .text:00000000000000f8 .L0 
+     /tmp/ccAM3cTM.s:221    .text:00000000000000fc .L0 
+     /tmp/ccAM3cTM.s:223    .text:00000000000000fc .L0 
+     /tmp/ccAM3cTM.s:224    .text:00000000000000fc .L0 
+     /tmp/ccAM3cTM.s:227    .text:0000000000000104 .L0 
+     /tmp/ccAM3cTM.s:228    .text:0000000000000104 .L0 
+     /tmp/ccAM3cTM.s:231    .text:0000000000000110 .L0 
+     /tmp/ccAM3cTM.s:232    .text:0000000000000110 .L0 
+     /tmp/ccAM3cTM.s:235    .text:0000000000000118 .L0 
+     /tmp/ccAM3cTM.s:236    .text:0000000000000118 .L0 
+     /tmp/ccAM3cTM.s:240    .text:0000000000000128 .L0 
+     /tmp/ccAM3cTM.s:242    .text:000000000000012c .L0 
+     /tmp/ccAM3cTM.s:245    .text:0000000000000130 .L0 
+     /tmp/ccAM3cTM.s:246    .text:0000000000000134 .L0 
+     /tmp/ccAM3cTM.s:247    .text:0000000000000134 .L0 
+     /tmp/ccAM3cTM.s:249    .text:0000000000000138 .L0 
+     /tmp/ccAM3cTM.s:250    .text:0000000000000138 .L0 
+     /tmp/ccAM3cTM.s:252    .text:000000000000013c .L0 
+     /tmp/ccAM3cTM.s:255    .text:0000000000000140 .L0 
+     /tmp/ccAM3cTM.s:257    .text:0000000000000140 .L0 
+     /tmp/ccAM3cTM.s:261    .text:0000000000000148 .L0 
+     /tmp/ccAM3cTM.s:262    .text:0000000000000148 .L0 
+     /tmp/ccAM3cTM.s:263    .text:0000000000000148 .L0 
+     /tmp/ccAM3cTM.s:267    .text:000000000000014c .L0 
+     /tmp/ccAM3cTM.s:268    .text:0000000000000150 .L0 
+     /tmp/ccAM3cTM.s:274    .text:0000000000000150 _ZN3SCB6signalEv
+     /tmp/ccAM3cTM.s:277    .text:0000000000000150 .L0 
+     /tmp/ccAM3cTM.s:279    .text:0000000000000150 .L0 
+GAS LISTING /tmp/ccAM3cTM.s 			page 15
+
+
+     /tmp/ccAM3cTM.s:280    .text:0000000000000150 .L0 
+     /tmp/ccAM3cTM.s:281    .text:0000000000000150 .L0 
+     /tmp/ccAM3cTM.s:283    .text:0000000000000154 .L0 
+     /tmp/ccAM3cTM.s:286    .text:000000000000015c .L0 
+     /tmp/ccAM3cTM.s:288    .text:0000000000000160 .L0 
+     /tmp/ccAM3cTM.s:292    .text:0000000000000168 .L0 
+     /tmp/ccAM3cTM.s:293    .text:000000000000016c .L0 
+     /tmp/ccAM3cTM.s:296    .text:0000000000000174 .L0 
+     /tmp/ccAM3cTM.s:297    .text:0000000000000174 .L0 
+     /tmp/ccAM3cTM.s:299    .text:0000000000000178 .L0 
+     /tmp/ccAM3cTM.s:301    .text:0000000000000178 .L0 
+     /tmp/ccAM3cTM.s:302    .text:0000000000000178 .L0 
+     /tmp/ccAM3cTM.s:307    .text:0000000000000188 .L0 
+     /tmp/ccAM3cTM.s:308    .text:000000000000018c .L0 
+     /tmp/ccAM3cTM.s:310    .text:0000000000000190 .L0 
+     /tmp/ccAM3cTM.s:311    .text:0000000000000190 .L0 
+     /tmp/ccAM3cTM.s:313    .text:0000000000000194 .L0 
+     /tmp/ccAM3cTM.s:315    .text:0000000000000198 .L0 
+     /tmp/ccAM3cTM.s:321    .text:0000000000000198 _ZN3SCB14prioritySignalEv
+     /tmp/ccAM3cTM.s:324    .text:0000000000000198 .L0 
+     /tmp/ccAM3cTM.s:326    .text:0000000000000198 .L0 
+     /tmp/ccAM3cTM.s:327    .text:0000000000000198 .L0 
+     /tmp/ccAM3cTM.s:328    .text:0000000000000198 .L0 
+     /tmp/ccAM3cTM.s:330    .text:000000000000019c .L0 
+     /tmp/ccAM3cTM.s:333    .text:00000000000001a4 .L0 
+     /tmp/ccAM3cTM.s:335    .text:00000000000001a8 .L0 
+     /tmp/ccAM3cTM.s:339    .text:00000000000001b0 .L0 
+     /tmp/ccAM3cTM.s:340    .text:00000000000001b4 .L0 
+     /tmp/ccAM3cTM.s:343    .text:00000000000001bc .L0 
+     /tmp/ccAM3cTM.s:344    .text:00000000000001bc .L0 
+     /tmp/ccAM3cTM.s:346    .text:00000000000001c0 .L0 
+     /tmp/ccAM3cTM.s:348    .text:00000000000001c0 .L0 
+     /tmp/ccAM3cTM.s:349    .text:00000000000001c0 .L0 
+     /tmp/ccAM3cTM.s:354    .text:00000000000001d0 .L0 
+     /tmp/ccAM3cTM.s:355    .text:00000000000001d4 .L0 
+     /tmp/ccAM3cTM.s:357    .text:00000000000001d8 .L0 
+     /tmp/ccAM3cTM.s:358    .text:00000000000001d8 .L0 
+     /tmp/ccAM3cTM.s:360    .text:00000000000001dc .L0 
+     /tmp/ccAM3cTM.s:362    .text:00000000000001e0 .L0 
+     /tmp/ccAM3cTM.s:368    .text:00000000000001e0 _ZN3SCBnwEm
+     /tmp/ccAM3cTM.s:371    .text:00000000000001e0 .L0 
+     /tmp/ccAM3cTM.s:373    .text:00000000000001e0 .L0 
+     /tmp/ccAM3cTM.s:374    .text:00000000000001e4 .L0 
+     /tmp/ccAM3cTM.s:377    .text:00000000000001ec .L0 
+     /tmp/ccAM3cTM.s:378    .text:00000000000001ec .L0 
+     /tmp/ccAM3cTM.s:380    .text:00000000000001f0 .L0 
+     /tmp/ccAM3cTM.s:382    .text:00000000000001f0 .L0 
+     /tmp/ccAM3cTM.s:383    .text:00000000000001f0 .L0 
+     /tmp/ccAM3cTM.s:386    .text:00000000000001f8 .L0 
+     /tmp/ccAM3cTM.s:387    .text:00000000000001fc .L0 
+     /tmp/ccAM3cTM.s:389    .text:0000000000000200 .L0 
+     /tmp/ccAM3cTM.s:390    .text:0000000000000200 .L0 
+     /tmp/ccAM3cTM.s:392    .text:0000000000000204 .L0 
+     /tmp/ccAM3cTM.s:394    .text:0000000000000208 .L0 
+     /tmp/ccAM3cTM.s:400    .text:0000000000000208 _ZN3SCBdlEPv
+     /tmp/ccAM3cTM.s:403    .text:0000000000000208 .L0 
+     /tmp/ccAM3cTM.s:405    .text:0000000000000208 .L0 
+GAS LISTING /tmp/ccAM3cTM.s 			page 16
+
+
+     /tmp/ccAM3cTM.s:406    .text:000000000000020c .L0 
+     /tmp/ccAM3cTM.s:409    .text:0000000000000214 .L0 
+     /tmp/ccAM3cTM.s:410    .text:0000000000000214 .L0 
+     /tmp/ccAM3cTM.s:412    .text:0000000000000218 .L0 
+     /tmp/ccAM3cTM.s:414    .text:0000000000000218 .L0 
+     /tmp/ccAM3cTM.s:415    .text:0000000000000218 .L0 
+     /tmp/ccAM3cTM.s:418    .text:0000000000000220 .L0 
+     /tmp/ccAM3cTM.s:419    .text:0000000000000224 .L0 
+     /tmp/ccAM3cTM.s:421    .text:0000000000000228 .L0 
+     /tmp/ccAM3cTM.s:422    .text:0000000000000228 .L0 
+     /tmp/ccAM3cTM.s:424    .text:000000000000022c .L0 
+     /tmp/ccAM3cTM.s:426    .text:0000000000000230 .L0 
+     /tmp/ccAM3cTM.s:432    .text:0000000000000230 _ZN3SCB13signalClosingEv
+     /tmp/ccAM3cTM.s:435    .text:0000000000000230 .L0 
+     /tmp/ccAM3cTM.s:437    .text:0000000000000230 .L0 
+     /tmp/ccAM3cTM.s:438    .text:0000000000000234 .L0 
+     /tmp/ccAM3cTM.s:443    .text:0000000000000244 .L0 
+     /tmp/ccAM3cTM.s:444    .text:0000000000000244 .L0 
+     /tmp/ccAM3cTM.s:445    .text:0000000000000244 .L0 
+     /tmp/ccAM3cTM.s:446    .text:0000000000000244 .L0 
+     /tmp/ccAM3cTM.s:448    .text:0000000000000248 .L0 
+     /tmp/ccAM3cTM.s:451    .text:000000000000024c .L0 
+     /tmp/ccAM3cTM.s:452    .text:000000000000024c .L0 
+     /tmp/ccAM3cTM.s:456    .text:0000000000000250 .L0 
+     /tmp/ccAM3cTM.s:457    .text:0000000000000250 .L0 
+     /tmp/ccAM3cTM.s:461    .text:0000000000000254 .L0 
+     /tmp/ccAM3cTM.s:464    .text:0000000000000254 .L0 
+     /tmp/ccAM3cTM.s:465    .text:0000000000000254 .L0 
+     /tmp/ccAM3cTM.s:466    .text:0000000000000254 .L0 
+     /tmp/ccAM3cTM.s:474    .text:000000000000025c .L0 
+     /tmp/ccAM3cTM.s:475    .text:000000000000025c .L0 
+     /tmp/ccAM3cTM.s:476    .text:000000000000025c .L0 
+     /tmp/ccAM3cTM.s:483    .text:0000000000000260 .L0 
+     /tmp/ccAM3cTM.s:484    .text:0000000000000260 .L0 
+     /tmp/ccAM3cTM.s:485    .text:0000000000000260 .L0 
+     /tmp/ccAM3cTM.s:490    .text:0000000000000264 .L0 
+     /tmp/ccAM3cTM.s:491    .text:0000000000000264 .L0 
+     /tmp/ccAM3cTM.s:494    .text:000000000000026c .L0 
+     /tmp/ccAM3cTM.s:497    .text:0000000000000270 .L0 
+     /tmp/ccAM3cTM.s:501    .text:0000000000000274 .L0 
+     /tmp/ccAM3cTM.s:502    .text:0000000000000274 .L0 
+     /tmp/ccAM3cTM.s:504    .text:0000000000000278 .L0 
+     /tmp/ccAM3cTM.s:506    .text:000000000000027c .L0 
+     /tmp/ccAM3cTM.s:507    .text:0000000000000280 .L0 
+     /tmp/ccAM3cTM.s:509    .text:0000000000000284 .L0 
+     /tmp/ccAM3cTM.s:510    .text:0000000000000284 .L0 
+     /tmp/ccAM3cTM.s:512    .text:0000000000000288 .L0 
+     /tmp/ccAM3cTM.s:514    .text:000000000000028c .L0 
+     /tmp/ccAM3cTM.s:517    .text:0000000000000290 .L0 
+     /tmp/ccAM3cTM.s:519    .text:0000000000000294 .L0 
+     /tmp/ccAM3cTM.s:527    .text:0000000000000294 .L0 
+     /tmp/ccAM3cTM.s:23     .text:000000000000000c .L0 
+     /tmp/ccAM3cTM.s:42     .text:0000000000000024 .L0 
+     /tmp/ccAM3cTM.s:70     .text:0000000000000040 .L0 
+     /tmp/ccAM3cTM.s:94     .text:0000000000000060 .L0 
+     /tmp/ccAM3cTM.s:202    .text:00000000000000d0 .L0 
+     /tmp/ccAM3cTM.s:228    .text:0000000000000104 .L0 
+GAS LISTING /tmp/ccAM3cTM.s 			page 17
+
+
+     /tmp/ccAM3cTM.s:236    .text:0000000000000118 .L0 
+     /tmp/ccAM3cTM.s:90     .text:0000000000000060 .L5
+     /tmp/ccAM3cTM.s:67     .text:0000000000000040 .L3
+     /tmp/ccAM3cTM.s:163    .text:00000000000000a8 .L6
+     /tmp/ccAM3cTM.s:173    .text:00000000000000b4 .L10
+     /tmp/ccAM3cTM.s:142    .text:00000000000000a0 .L8
+     /tmp/ccAM3cTM.s:212    .text:00000000000000ec .L22
+     /tmp/ccAM3cTM.s:260    .text:0000000000000148 .L17
+     /tmp/ccAM3cTM.s:254    .text:0000000000000140 .L14
+     /tmp/ccAM3cTM.s:243    .text:0000000000000130 .L13
+     /tmp/ccAM3cTM.s:290    .text:0000000000000168 .L29
+     /tmp/ccAM3cTM.s:337    .text:00000000000001b0 .L36
+     /tmp/ccAM3cTM.s:499    .text:0000000000000274 .L42
+     /tmp/ccAM3cTM.s:454    .text:0000000000000250 .L43
+     /tmp/ccAM3cTM.s:1848   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccAM3cTM.s:3309   .debug_str:0000000000000662 .LASF124
+     /tmp/ccAM3cTM.s:3279   .debug_str:00000000000005b6 .LASF125
+     /tmp/ccAM3cTM.s:3177   .debug_str:0000000000000238 .LASF126
+     /tmp/ccAM3cTM.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccAM3cTM.s:522    .text:0000000000000294 .Letext0
+     /tmp/ccAM3cTM.s:3101   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccAM3cTM.s:3183   .debug_str:000000000000026c .LASF0
+     /tmp/ccAM3cTM.s:3207   .debug_str:000000000000033e .LASF1
+     /tmp/ccAM3cTM.s:3263   .debug_str:000000000000051f .LASF2
+     /tmp/ccAM3cTM.s:3271   .debug_str:0000000000000558 .LASF4
+     /tmp/ccAM3cTM.s:3193   .debug_str:00000000000002af .LASF3
+     /tmp/ccAM3cTM.s:3113   .debug_str:0000000000000039 .LASF5
+     /tmp/ccAM3cTM.s:3247   .debug_str:0000000000000497 .LASF6
+     /tmp/ccAM3cTM.s:3245   .debug_str:0000000000000484 .LASF7
+     /tmp/ccAM3cTM.s:3201   .debug_str:000000000000031c .LASF8
+     /tmp/ccAM3cTM.s:3165   .debug_str:00000000000001d2 .LASF9
+     /tmp/ccAM3cTM.s:3169   .debug_str:00000000000001fa .LASF10
+     /tmp/ccAM3cTM.s:3133   .debug_str:00000000000000ee .LASF11
+     /tmp/ccAM3cTM.s:3159   .debug_str:00000000000001b4 .LASF12
+     /tmp/ccAM3cTM.s:3137   .debug_str:0000000000000102 .LASF13
+     /tmp/ccAM3cTM.s:3131   .debug_str:00000000000000de .LASF14
+     /tmp/ccAM3cTM.s:3291   .debug_str:00000000000005f8 .LASF15
+     /tmp/ccAM3cTM.s:3153   .debug_str:0000000000000182 .LASF16
+     /tmp/ccAM3cTM.s:3287   .debug_str:00000000000005dd .LASF17
+     /tmp/ccAM3cTM.s:3299   .debug_str:0000000000000628 .LASF18
+     /tmp/ccAM3cTM.s:3339   .debug_str:0000000000000828 .LASF20
+     /tmp/ccAM3cTM.s:3149   .debug_str:0000000000000156 .LASF19
+     /tmp/ccAM3cTM.s:3319   .debug_str:0000000000000758 .LASF21
+     /tmp/ccAM3cTM.s:3297   .debug_str:0000000000000618 .LASF22
+     /tmp/ccAM3cTM.s:3195   .debug_str:00000000000002c1 .LASF23
+     /tmp/ccAM3cTM.s:3157   .debug_str:00000000000001a4 .LASF26
+     /tmp/ccAM3cTM.s:3369   .debug_str:000000000000092b .LASF28
+     /tmp/ccAM3cTM.s:3171   .debug_str:0000000000000208 .LASF24
+     /tmp/ccAM3cTM.s:3211   .debug_str:0000000000000357 .LASF25
+     /tmp/ccAM3cTM.s:3227   .debug_str:00000000000003d4 .LASF27
+     /tmp/ccAM3cTM.s:3367   .debug_str:0000000000000910 .LASF29
+     /tmp/ccAM3cTM.s:3301   .debug_str:0000000000000633 .LASF30
+     /tmp/ccAM3cTM.s:3353   .debug_str:00000000000008a7 .LASF31
+     /tmp/ccAM3cTM.s:3323   .debug_str:0000000000000798 .LASF32
+     /tmp/ccAM3cTM.s:3311   .debug_str:0000000000000726 .LASF33
+     /tmp/ccAM3cTM.s:3143   .debug_str:0000000000000132 .LASF34
+     /tmp/ccAM3cTM.s:3267   .debug_str:0000000000000532 .LASF35
+GAS LISTING /tmp/ccAM3cTM.s 			page 18
+
+
+     /tmp/ccAM3cTM.s:3127   .debug_str:00000000000000c6 .LASF36
+     /tmp/ccAM3cTM.s:3173   .debug_str:0000000000000216 .LASF37
+     /tmp/ccAM3cTM.s:3363   .debug_str:00000000000008ef .LASF38
+     /tmp/ccAM3cTM.s:3115   .debug_str:0000000000000040 .LASF39
+     /tmp/ccAM3cTM.s:3283   .debug_str:00000000000005c8 .LASF127
+     /tmp/ccAM3cTM.s:3209   .debug_str:0000000000000351 .LASF128
+     /tmp/ccAM3cTM.s:3213   .debug_str:0000000000000371 .LASF129
+     /tmp/ccAM3cTM.s:3307   .debug_str:000000000000065a .LASF71
+     /tmp/ccAM3cTM.s:3205   .debug_str:0000000000000339 .LASF40
+     /tmp/ccAM3cTM.s:3357   .debug_str:00000000000008d1 .LASF41
+     /tmp/ccAM3cTM.s:3361   .debug_str:00000000000008e2 .LASF42
+     /tmp/ccAM3cTM.s:3155   .debug_str:0000000000000198 .LASF43
+     /tmp/ccAM3cTM.s:3105   .debug_str:0000000000000007 .LASF44
+     /tmp/ccAM3cTM.s:3189   .debug_str:0000000000000297 .LASF76
+     /tmp/ccAM3cTM.s:3175   .debug_str:000000000000022d .LASF78
+     /tmp/ccAM3cTM.s:3123   .debug_str:00000000000000a4 .LASF130
+     /tmp/ccAM3cTM.s:3139   .debug_str:0000000000000112 .LASF73
+     /tmp/ccAM3cTM.s:3109   .debug_str:000000000000001f .LASF45
+     /tmp/ccAM3cTM.s:3281   .debug_str:00000000000005c2 .LASF46
+     /tmp/ccAM3cTM.s:3335   .debug_str:0000000000000810 .LASF47
+     /tmp/ccAM3cTM.s:3203   .debug_str:000000000000032f .LASF48
+     /tmp/ccAM3cTM.s:3359   .debug_str:00000000000008dd .LASF49
+     /tmp/ccAM3cTM.s:3285   .debug_str:00000000000005d4 .LASF50
+     /tmp/ccAM3cTM.s:3237   .debug_str:0000000000000456 .LASF51
+     /tmp/ccAM3cTM.s:3219   .debug_str:0000000000000390 .LASF52
+     /tmp/ccAM3cTM.s:3343   .debug_str:000000000000084d .LASF53
+     /tmp/ccAM3cTM.s:3147   .debug_str:0000000000000148 .LASF54
+     /tmp/ccAM3cTM.s:3315   .debug_str:0000000000000744 .LASF55
+     /tmp/ccAM3cTM.s:3277   .debug_str:00000000000005a5 .LASF67
+     /tmp/ccAM3cTM.s:3145   .debug_str:000000000000013f .LASF61
+     /tmp/ccAM3cTM.s:3119   .debug_str:0000000000000078 .LASF63
+     /tmp/ccAM3cTM.s:3185   .debug_str:0000000000000279 .LASF56
+     /tmp/ccAM3cTM.s:3329   .debug_str:00000000000007cf .LASF58
+     /tmp/ccAM3cTM.s:3187   .debug_str:0000000000000288 .LASF57
+     /tmp/ccAM3cTM.s:3273   .debug_str:000000000000055f .LASF59
+     /tmp/ccAM3cTM.s:3215   .debug_str:0000000000000381 .LASF60
+     /tmp/ccAM3cTM.s:3255   .debug_str:00000000000004c6 .LASF62
+     /tmp/ccAM3cTM.s:3345   .debug_str:000000000000085a .LASF64
+     /tmp/ccAM3cTM.s:3223   .debug_str:00000000000003c0 .LASF65
+     /tmp/ccAM3cTM.s:3163   .debug_str:00000000000001c8 .LASF66
+     /tmp/ccAM3cTM.s:3289   .debug_str:00000000000005f3 .LASF68
+     /tmp/ccAM3cTM.s:3235   .debug_str:0000000000000451 .LASF69
+     /tmp/ccAM3cTM.s:3351   .debug_str:0000000000000895 .LASF70
+     /tmp/ccAM3cTM.s:3251   .debug_str:00000000000004ae .LASF72
+     /tmp/ccAM3cTM.s:3117   .debug_str:0000000000000060 .LASF74
+     /tmp/ccAM3cTM.s:3191   .debug_str:00000000000002a4 .LASF75
+     /tmp/ccAM3cTM.s:3325   .debug_str:00000000000007a6 .LASF77
+     /tmp/ccAM3cTM.s:3355   .debug_str:00000000000008bd .LASF131
+     /tmp/ccAM3cTM.s:3129   .debug_str:00000000000000d2 .LASF79
+     /tmp/ccAM3cTM.s:3167   .debug_str:00000000000001e2 .LASF80
+     /tmp/ccAM3cTM.s:3313   .debug_str:000000000000073f .LASF81
+     /tmp/ccAM3cTM.s:3337   .debug_str:0000000000000819 .LASF82
+     /tmp/ccAM3cTM.s:3295   .debug_str:0000000000000611 .LASF83
+     /tmp/ccAM3cTM.s:3199   .debug_str:000000000000030b .LASF84
+     /tmp/ccAM3cTM.s:3111   .debug_str:000000000000002a .LASF85
+     /tmp/ccAM3cTM.s:3331   .debug_str:00000000000007ed .LASF86
+     /tmp/ccAM3cTM.s:3303   .debug_str:000000000000063e .LASF87
+GAS LISTING /tmp/ccAM3cTM.s 			page 19
+
+
+     /tmp/ccAM3cTM.s:3293   .debug_str:0000000000000604 .LASF88
+     /tmp/ccAM3cTM.s:3261   .debug_str:000000000000050f .LASF89
+     /tmp/ccAM3cTM.s:3349   .debug_str:000000000000087a .LASF90
+     /tmp/ccAM3cTM.s:3269   .debug_str:000000000000054a .LASF91
+     /tmp/ccAM3cTM.s:3151   .debug_str:0000000000000169 .LASF92
+     /tmp/ccAM3cTM.s:3253   .debug_str:00000000000004ba .LASF93
+     /tmp/ccAM3cTM.s:3181   .debug_str:0000000000000266 .LASF94
+     /tmp/ccAM3cTM.s:3249   .debug_str:000000000000049e .LASF95
+     /tmp/ccAM3cTM.s:3107   .debug_str:0000000000000017 .LASF96
+     /tmp/ccAM3cTM.s:3365   .debug_str:00000000000008fe .LASF97
+     /tmp/ccAM3cTM.s:3179   .debug_str:000000000000025d .LASF98
+     /tmp/ccAM3cTM.s:3243   .debug_str:0000000000000474 .LASF99
+     /tmp/ccAM3cTM.s:3125   .debug_str:00000000000000ba .LASF132
+     /tmp/ccAM3cTM.s:3333   .debug_str:0000000000000807 .LASF100
+     /tmp/ccAM3cTM.s:3347   .debug_str:0000000000000875 .LASF101
+     /tmp/ccAM3cTM.s:3135   .debug_str:00000000000000fd .LASF102
+     /tmp/ccAM3cTM.s:3103   .debug_str:0000000000000000 .LASF103
+     /tmp/ccAM3cTM.s:3259   .debug_str:00000000000004e1 .LASF104
+     /tmp/ccAM3cTM.s:3197   .debug_str:00000000000002dd .LASF133
+     /tmp/ccAM3cTM.s:3317   .debug_str:000000000000074e .LASF105
+     /tmp/ccAM3cTM.s:3321   .debug_str:0000000000000777 .LASF106
+     /tmp/ccAM3cTM.s:3327   .debug_str:00000000000007c6 .LASF107
+     /tmp/ccAM3cTM.s:3229   .debug_str:00000000000003e2 .LASF108
+     /tmp/ccAM3cTM.s:3141   .debug_str:0000000000000125 .LASF109
+     /tmp/ccAM3cTM.s:3233   .debug_str:000000000000042c .LASF110
+     /tmp/ccAM3cTM.s:3241   .debug_str:0000000000000467 .LASF111
+     /tmp/ccAM3cTM.s:3221   .debug_str:000000000000039b .LASF112
+     /tmp/ccAM3cTM.s:3121   .debug_str:000000000000008b .LASF113
+     /tmp/ccAM3cTM.s:3341   .debug_str:000000000000083f .LASF114
+     /tmp/ccAM3cTM.s:3305   .debug_str:000000000000064a .LASF115
+     /tmp/ccAM3cTM.s:3231   .debug_str:0000000000000403 .LASF116
+     /tmp/ccAM3cTM.s:3225   .debug_str:00000000000003c5 .LASF117
+     /tmp/ccAM3cTM.s:3275   .debug_str:000000000000057d .LASF118
+     /tmp/ccAM3cTM.s:433    .text:0000000000000230 .LFB48
+     /tmp/ccAM3cTM.s:520    .text:0000000000000294 .LFE48
+     /tmp/ccAM3cTM.s:3161   .debug_str:00000000000001c3 .LASF122
+     /tmp/ccAM3cTM.s:2809   .debug_loc:0000000000000000 .LLST19
+     /tmp/ccAM3cTM.s:3265   .debug_str:000000000000052d .LASF119
+     /tmp/ccAM3cTM.s:2827   .debug_loc:000000000000004c .LLST20
+     /tmp/ccAM3cTM.s:458    .text:0000000000000254 .LBB37
+     /tmp/ccAM3cTM.s:495    .text:0000000000000270 .LBE37
+     /tmp/ccAM3cTM.s:3217   .debug_str:000000000000038b .LASF120
+     /tmp/ccAM3cTM.s:2842   .debug_loc:0000000000000095 .LLST21
+     /tmp/ccAM3cTM.s:462    .text:0000000000000254 .LBB38
+     /tmp/ccAM3cTM.s:470    .text:000000000000025c .LBE38
+     /tmp/ccAM3cTM.s:2849   .debug_loc:00000000000000b8 .LLST22
+     /tmp/ccAM3cTM.s:2857   .debug_loc:00000000000000dc .LLST23
+     /tmp/ccAM3cTM.s:472    .text:000000000000025c .LBB40
+     /tmp/ccAM3cTM.s:479    .text:0000000000000260 .LBE40
+     /tmp/ccAM3cTM.s:2864   .debug_loc:00000000000000ff .LLST24
+     /tmp/ccAM3cTM.s:2872   .debug_loc:0000000000000123 .LLST25
+     /tmp/ccAM3cTM.s:481    .text:0000000000000260 .LBB42
+     /tmp/ccAM3cTM.s:488    .text:0000000000000264 .LBE42
+     /tmp/ccAM3cTM.s:2879   .debug_loc:0000000000000146 .LLST26
+     /tmp/ccAM3cTM.s:492    .text:000000000000026c .LVL40
+     /tmp/ccAM3cTM.s:401    .text:0000000000000208 .LFB47
+     /tmp/ccAM3cTM.s:427    .text:0000000000000230 .LFE47
+GAS LISTING /tmp/ccAM3cTM.s 			page 20
+
+
+     /tmp/ccAM3cTM.s:3257   .debug_str:00000000000004d6 .LASF121
+     /tmp/ccAM3cTM.s:2886   .debug_loc:0000000000000169 .LLST18
+     /tmp/ccAM3cTM.s:416    .text:0000000000000220 .LVL33
+     /tmp/ccAM3cTM.s:369    .text:00000000000001e0 .LFB46
+     /tmp/ccAM3cTM.s:395    .text:0000000000000208 .LFE46
+     /tmp/ccAM3cTM.s:2900   .debug_loc:00000000000001a2 .LLST17
+     /tmp/ccAM3cTM.s:384    .text:00000000000001f8 .LVL31
+     /tmp/ccAM3cTM.s:322    .text:0000000000000198 .LFB45
+     /tmp/ccAM3cTM.s:363    .text:00000000000001e0 .LFE45
+     /tmp/ccAM3cTM.s:2914   .debug_loc:00000000000001db .LLST16
+     /tmp/ccAM3cTM.s:350    .text:00000000000001c8 .LVL28
+     /tmp/ccAM3cTM.s:352    .text:00000000000001d0 .LVL29
+     /tmp/ccAM3cTM.s:275    .text:0000000000000150 .LFB44
+     /tmp/ccAM3cTM.s:316    .text:0000000000000198 .LFE44
+     /tmp/ccAM3cTM.s:2928   .debug_loc:0000000000000214 .LLST15
+     /tmp/ccAM3cTM.s:303    .text:0000000000000180 .LVL25
+     /tmp/ccAM3cTM.s:305    .text:0000000000000188 .LVL26
+     /tmp/ccAM3cTM.s:186    .text:00000000000000bc .LFB43
+     /tmp/ccAM3cTM.s:269    .text:0000000000000150 .LFE43
+     /tmp/ccAM3cTM.s:2942   .debug_loc:000000000000024d .LLST14
+     /tmp/ccAM3cTM.s:225    .text:0000000000000104 .LVL20
+     /tmp/ccAM3cTM.s:233    .text:0000000000000118 .LVL21
+     /tmp/ccAM3cTM.s:107    .text:0000000000000078 .LFB42
+     /tmp/ccAM3cTM.s:180    .text:00000000000000bc .LFE42
+     /tmp/ccAM3cTM.s:2978   .debug_loc:00000000000002d8 .LLST7
+     /tmp/ccAM3cTM.s:2989   .debug_loc:000000000000030e .LLST8
+     /tmp/ccAM3cTM.s:127    .text:0000000000000090 .LBB31
+     /tmp/ccAM3cTM.s:134    .text:0000000000000094 .LBE31
+     /tmp/ccAM3cTM.s:3000   .debug_loc:0000000000000344 .LLST9
+     /tmp/ccAM3cTM.s:145    .text:00000000000000a0 .LBB33
+     /tmp/ccAM3cTM.s:152    .text:00000000000000a4 .LBE33
+     /tmp/ccAM3cTM.s:3007   .debug_loc:0000000000000367 .LLST10
+     /tmp/ccAM3cTM.s:3015   .debug_loc:000000000000038b .LLST11
+     /tmp/ccAM3cTM.s:154    .text:00000000000000a4 .LBB35
+     /tmp/ccAM3cTM.s:161    .text:00000000000000a8 .LBE35
+     /tmp/ccAM3cTM.s:3022   .debug_loc:00000000000003ae .LLST12
+     /tmp/ccAM3cTM.s:3030   .debug_loc:00000000000003d2 .LLST13
+     /tmp/ccAM3cTM.s:10     .text:0000000000000000 .LFB41
+     /tmp/ccAM3cTM.s:101    .text:0000000000000078 .LFE41
+     /tmp/ccAM3cTM.s:26     .text:0000000000000018 .LBB23
+     /tmp/ccAM3cTM.s:34     .text:000000000000001c .LBE23
+     /tmp/ccAM3cTM.s:3037   .debug_loc:00000000000003f5 .LLST0
+     /tmp/ccAM3cTM.s:3045   .debug_loc:0000000000000419 .LLST1
+     /tmp/ccAM3cTM.s:45     .text:0000000000000030 .LBB25
+     /tmp/ccAM3cTM.s:52     .text:0000000000000034 .LBE25
+     /tmp/ccAM3cTM.s:3052   .debug_loc:000000000000043c .LLST2
+     /tmp/ccAM3cTM.s:3059   .debug_loc:000000000000045f .LLST3
+     /tmp/ccAM3cTM.s:57     .text:0000000000000038 .LBB27
+     /tmp/ccAM3cTM.s:64     .text:000000000000003c .LBE27
+     /tmp/ccAM3cTM.s:3066   .debug_loc:0000000000000482 .LLST4
+     /tmp/ccAM3cTM.s:73     .text:000000000000004c .LBB29
+     /tmp/ccAM3cTM.s:81     .text:0000000000000054 .LBE29
+     /tmp/ccAM3cTM.s:3073   .debug_loc:00000000000004a5 .LLST5
+     /tmp/ccAM3cTM.s:3081   .debug_loc:00000000000004c9 .LLST6
+     /tmp/ccAM3cTM.s:3239   .debug_str:000000000000045e .LASF123
+     /tmp/ccAM3cTM.s:436    .text:0000000000000230 .LVL34
+     /tmp/ccAM3cTM.s:453    .text:0000000000000250 .LVL35
+GAS LISTING /tmp/ccAM3cTM.s 			page 21
+
+
+     /tmp/ccAM3cTM.s:515    .text:000000000000028c .LVL42
+     /tmp/ccAM3cTM.s:486    .text:0000000000000264 .LVL39
+     /tmp/ccAM3cTM.s:498    .text:0000000000000274 .LVL41
+     /tmp/ccAM3cTM.s:460    .text:0000000000000254 .LVL36
+     /tmp/ccAM3cTM.s:468    .text:000000000000025c .LVL37
+     /tmp/ccAM3cTM.s:477    .text:0000000000000260 .LVL38
+     /tmp/ccAM3cTM.s:404    .text:0000000000000208 .LVL32
+     /tmp/ccAM3cTM.s:372    .text:00000000000001e0 .LVL30
+     /tmp/ccAM3cTM.s:325    .text:0000000000000198 .LVL27
+     /tmp/ccAM3cTM.s:278    .text:0000000000000150 .LVL24
+     /tmp/ccAM3cTM.s:189    .text:00000000000000bc .LVL17
+     /tmp/ccAM3cTM.s:209    .text:00000000000000e8 .LVL18
+     /tmp/ccAM3cTM.s:211    .text:00000000000000ec .LVL19
+     /tmp/ccAM3cTM.s:259    .text:0000000000000148 .LVL22
+     /tmp/ccAM3cTM.s:265    .text:000000000000014c .LVL23
+     /tmp/ccAM3cTM.s:110    .text:0000000000000078 .LVL9
+     /tmp/ccAM3cTM.s:121    .text:000000000000008c .LVL10
+     /tmp/ccAM3cTM.s:125    .text:0000000000000090 .LVL11
+     /tmp/ccAM3cTM.s:159    .text:00000000000000a8 .LVL15
+     /tmp/ccAM3cTM.s:172    .text:00000000000000b4 .LVL16
+     /tmp/ccAM3cTM.s:132    .text:0000000000000094 .LVL12
+     /tmp/ccAM3cTM.s:144    .text:00000000000000a0 .LVL13
+     /tmp/ccAM3cTM.s:150    .text:00000000000000a4 .LVL14
+     /tmp/ccAM3cTM.s:25     .text:0000000000000018 .LVL1
+     /tmp/ccAM3cTM.s:32     .text:000000000000001c .LVL2
+     /tmp/ccAM3cTM.s:44     .text:0000000000000030 .LVL3
+     /tmp/ccAM3cTM.s:50     .text:0000000000000034 .LVL4
+     /tmp/ccAM3cTM.s:56     .text:0000000000000038 .LVL5
+     /tmp/ccAM3cTM.s:62     .text:000000000000003c .LVL6
+     /tmp/ccAM3cTM.s:72     .text:000000000000004c .LVL7
+     /tmp/ccAM3cTM.s:79     .text:0000000000000054 .LVL8
+     /tmp/ccAM3cTM.s:528    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+_ZN3PCB7runningE
+_ZN3PCB16timeSliceCounterE
+_ZN3PCB8dispatchEv
+_ZN9Scheduler3putEP3PCB
+_ZN9Scheduler10putInFrontEP3PCB
+_ZN15MemoryAllocator9mem_allocEm
+_ZN15MemoryAllocator8mem_freeEPv
