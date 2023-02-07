@@ -1,0 +1,2962 @@
+GAS LISTING /tmp/ccoLfnqJ.s 			page 1
+
+
+   1              		.file	"Cache.cpp"
+   2              		.option pic
+   3              		.option norelax
+   4              		.text
+   5              	.Ltext0:
+   6              		.align	2
+   7              		.globl	_ZN5Cache11getNumSlotsEm
+   9              	_ZN5Cache11getNumSlotsEm:
+  10              	.LFB24:
+  11              		.file 1 "src/Cache.cpp"
+   1:src/Cache.cpp **** #include "../h/Cache.h"
+   2:src/Cache.cpp **** #include "../h/BuddyAllocator.h"
+   3:src/Cache.cpp **** #include "../h/printing.hpp"
+   4:src/Cache.cpp **** void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *)) {
+   5:src/Cache.cpp ****     for(int i = 0;; i++) {
+   6:src/Cache.cpp ****         cacheName[i] = name[i];
+   7:src/Cache.cpp ****         if(name[i] == '\0') break;
+   8:src/Cache.cpp ****     }
+   9:src/Cache.cpp ****     for(int i = 0; i < 3; i++) {
+  10:src/Cache.cpp ****         slabList[i] = nullptr;
+  11:src/Cache.cpp ****     }
+  12:src/Cache.cpp ****     objectSize = size;
+  13:src/Cache.cpp ****     constructor = ctor;
+  14:src/Cache.cpp ****     destructor = dtor;
+  15:src/Cache.cpp ****     slotSize = objectSize + sizeof(Slot);
+  16:src/Cache.cpp **** 
+  17:src/Cache.cpp ****     optimalSlots = getNumSlots(slotSize);
+  18:src/Cache.cpp **** }
+  19:src/Cache.cpp **** 
+  20:src/Cache.cpp **** int Cache::getNumSlots(size_t objSize) {
+  12              		.loc 1 20 40
+  13              		.cfi_startproc
+  14              	.LVL0:
+  15 0000 130101FF 		addi	sp,sp,-16
+  16              		.cfi_def_cfa_offset 16
+  17 0004 23348100 		sd	s0,8(sp)
+  18              		.cfi_offset 8, -8
+  19 0008 13040101 		addi	s0,sp,16
+  20              		.cfi_def_cfa 8, 0
+  21:src/Cache.cpp ****     return (BLKSIZE - sizeof(Slab)) / objSize;
+  21              		.loc 1 21 5
+  22              		.loc 1 21 37 is_stmt 0
+  23 000c B7170000 		li	a5,4096
+  24 0010 938787FD 		addi	a5,a5,-40
+  25 0014 33D5A702 		divu	a0,a5,a0
+  26              	.LVL1:
+  22:src/Cache.cpp **** }
+  27              		.loc 1 22 1
+  28 0018 1B050500 		sext.w	a0,a0
+  29 001c 03348100 		ld	s0,8(sp)
+  30              		.cfi_restore 8
+  31              		.cfi_def_cfa 2, 16
+  32 0020 13010101 		addi	sp,sp,16
+  33              		.cfi_def_cfa_offset 0
+  34 0024 67800000 		jr	ra
+  35              		.cfi_endproc
+  36              	.LFE24:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 2
+
+
+  38              		.align	2
+  39              		.globl	_ZN5Cache9initCacheEPKcmPFvPvES4_
+  41              	_ZN5Cache9initCacheEPKcmPFvPvES4_:
+  42              	.LFB23:
+   4:src/Cache.cpp ****     for(int i = 0;; i++) {
+  43              		.loc 1 4 98 is_stmt 1
+  44              		.cfi_startproc
+  45              	.LVL2:
+  46 0028 130101FE 		addi	sp,sp,-32
+  47              		.cfi_def_cfa_offset 32
+  48 002c 233C1100 		sd	ra,24(sp)
+  49 0030 23388100 		sd	s0,16(sp)
+  50 0034 23349100 		sd	s1,8(sp)
+  51              		.cfi_offset 1, -8
+  52              		.cfi_offset 8, -16
+  53              		.cfi_offset 9, -24
+  54 0038 13040102 		addi	s0,sp,32
+  55              		.cfi_def_cfa 8, 0
+  56 003c 93040500 		mv	s1,a0
+   5:src/Cache.cpp ****         cacheName[i] = name[i];
+  57              		.loc 1 5 5
+  58              	.LVL3:
+  59              	.LBB2:
+   5:src/Cache.cpp ****         cacheName[i] = name[i];
+  60              		.loc 1 5 13 is_stmt 0
+  61 0040 93070000 		li	a5,0
+  62              	.LVL4:
+  63              	.L5:
+   6:src/Cache.cpp ****         if(name[i] == '\0') break;
+  64              		.loc 1 6 9 is_stmt 1
+   6:src/Cache.cpp ****         if(name[i] == '\0') break;
+  65              		.loc 1 6 30 is_stmt 0
+  66 0044 3388F500 		add	a6,a1,a5
+  67 0048 03430800 		lbu	t1,0(a6)
+   6:src/Cache.cpp ****         if(name[i] == '\0') break;
+  68              		.loc 1 6 22
+  69 004c B388F400 		add	a7,s1,a5
+  70 0050 23806802 		sb	t1,32(a7)
+   7:src/Cache.cpp ****     }
+  71              		.loc 1 7 9 is_stmt 1
+   7:src/Cache.cpp ****     }
+  72              		.loc 1 7 18 is_stmt 0
+  73 0054 03480800 		lbu	a6,0(a6)
+   7:src/Cache.cpp ****     }
+  74              		.loc 1 7 9
+  75 0058 63060800 		beqz	a6,.L7
+   5:src/Cache.cpp ****         cacheName[i] = name[i];
+  76              		.loc 1 5 5 is_stmt 1
+  77 005c 9B871700 		addiw	a5,a5,1
+  78              	.LVL5:
+   5:src/Cache.cpp ****         cacheName[i] = name[i];
+  79              		.loc 1 5 5
+   6:src/Cache.cpp ****         if(name[i] == '\0') break;
+  80              		.loc 1 6 22 is_stmt 0
+  81 0060 6FF05FFE 		j	.L5
+  82              	.LVL6:
+  83              	.L7:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 3
+
+
+  84              	.LBE2:
+  85              	.LBB3:
+   9:src/Cache.cpp ****         slabList[i] = nullptr;
+  86              		.loc 1 9 13
+  87 0064 93070000 		li	a5,0
+  88              	.LVL7:
+  89              	.L4:
+   9:src/Cache.cpp ****         slabList[i] = nullptr;
+  90              		.loc 1 9 22 is_stmt 1 discriminator 3
+  91 0068 93052000 		li	a1,2
+  92 006c 63CCF500 		bgt	a5,a1,.L6
+  10:src/Cache.cpp ****     }
+  93              		.loc 1 10 9 discriminator 2
+  10:src/Cache.cpp ****     }
+  94              		.loc 1 10 21 is_stmt 0 discriminator 2
+  95 0070 93953700 		slli	a1,a5,3
+  96 0074 B385B400 		add	a1,s1,a1
+  97 0078 23B40500 		sd	zero,8(a1)
+   9:src/Cache.cpp ****         slabList[i] = nullptr;
+  98              		.loc 1 9 5 is_stmt 1 discriminator 2
+  99 007c 9B871700 		addiw	a5,a5,1
+ 100              	.LVL8:
+ 101 0080 6FF09FFE 		j	.L4
+ 102              	.LVL9:
+ 103              	.L6:
+ 104              	.LBE3:
+  12:src/Cache.cpp ****     constructor = ctor;
+ 105              		.loc 1 12 5
+  12:src/Cache.cpp ****     constructor = ctor;
+ 106              		.loc 1 12 16 is_stmt 0
+ 107 0084 23B8C402 		sd	a2,48(s1)
+  13:src/Cache.cpp ****     destructor = dtor;
+ 108              		.loc 1 13 5 is_stmt 1
+  13:src/Cache.cpp ****     destructor = dtor;
+ 109              		.loc 1 13 17 is_stmt 0
+ 110 0088 23B4D404 		sd	a3,72(s1)
+  14:src/Cache.cpp ****     slotSize = objectSize + sizeof(Slot);
+ 111              		.loc 1 14 5 is_stmt 1
+  14:src/Cache.cpp ****     slotSize = objectSize + sizeof(Slot);
+ 112              		.loc 1 14 16 is_stmt 0
+ 113 008c 23B8E404 		sd	a4,80(s1)
+  15:src/Cache.cpp **** 
+ 114              		.loc 1 15 5 is_stmt 1
+  15:src/Cache.cpp **** 
+ 115              		.loc 1 15 27 is_stmt 0
+ 116 0090 13058601 		addi	a0,a2,24
+  15:src/Cache.cpp **** 
+ 117              		.loc 1 15 14
+ 118 0094 23B0A404 		sd	a0,64(s1)
+  17:src/Cache.cpp **** }
+ 119              		.loc 1 17 5 is_stmt 1
+  17:src/Cache.cpp **** }
+ 120              		.loc 1 17 31 is_stmt 0
+ 121 0098 97000000 		call	_ZN5Cache11getNumSlotsEm
+ 121      E7800000 
+ 122              	.LVL10:
+  17:src/Cache.cpp **** }
+GAS LISTING /tmp/ccoLfnqJ.s 			page 4
+
+
+ 123              		.loc 1 17 18
+ 124 00a0 23BCA402 		sd	a0,56(s1)
+  18:src/Cache.cpp **** 
+ 125              		.loc 1 18 1
+ 126 00a4 83308101 		ld	ra,24(sp)
+ 127              		.cfi_restore 1
+ 128 00a8 03340101 		ld	s0,16(sp)
+ 129              		.cfi_restore 8
+ 130              		.cfi_def_cfa 2, 32
+ 131 00ac 83348100 		ld	s1,8(sp)
+ 132              		.cfi_restore 9
+ 133              	.LVL11:
+ 134 00b0 13010102 		addi	sp,sp,32
+ 135              		.cfi_def_cfa_offset 0
+ 136 00b4 67800000 		jr	ra
+ 137              		.cfi_endproc
+ 138              	.LFE23:
+ 140              		.align	2
+ 141              		.globl	_ZN5Cache12allocateSlabEv
+ 143              	_ZN5Cache12allocateSlabEv:
+ 144              	.LFB26:
+  23:src/Cache.cpp **** 
+  24:src/Cache.cpp **** void *Cache::allocateSlot() {
+  25:src/Cache.cpp ****     if(slabList[PARTIAL]) {
+  26:src/Cache.cpp ****         Slab* slab = slabList[PARTIAL];
+  27:src/Cache.cpp ****         slabList[PARTIAL] = slabList[PARTIAL]->next;
+  28:src/Cache.cpp ****         return slab->getFreeSlot();
+  29:src/Cache.cpp ****     }
+  30:src/Cache.cpp ****     else if(slabList[EMPTY]) {
+  31:src/Cache.cpp ****         Slab* slab = slabList[EMPTY];
+  32:src/Cache.cpp ****         slabList[EMPTY] = slabList[EMPTY]->next;
+  33:src/Cache.cpp ****         Slot* slot = slab->getFreeSlot();
+  34:src/Cache.cpp **** 
+  35:src/Cache.cpp ****         return slot;
+  36:src/Cache.cpp ****     }
+  37:src/Cache.cpp ****     else {
+  38:src/Cache.cpp ****         Slab* slab = allocateSlab();
+  39:src/Cache.cpp ****         return slab->getFreeSlot();
+  40:src/Cache.cpp ****     }
+  41:src/Cache.cpp **** 
+  42:src/Cache.cpp ****     return nullptr;
+  43:src/Cache.cpp **** }
+  44:src/Cache.cpp **** 
+  45:src/Cache.cpp **** Cache::Slab *Cache::allocateSlab() {
+ 145              		.loc 1 45 36 is_stmt 1
+ 146              		.cfi_startproc
+ 147              	.LVL12:
+ 148 00b8 130101FC 		addi	sp,sp,-64
+ 149              		.cfi_def_cfa_offset 64
+ 150 00bc 233C1102 		sd	ra,56(sp)
+ 151 00c0 23388102 		sd	s0,48(sp)
+ 152 00c4 23349102 		sd	s1,40(sp)
+ 153 00c8 23302103 		sd	s2,32(sp)
+ 154 00cc 233C3101 		sd	s3,24(sp)
+ 155 00d0 23384101 		sd	s4,16(sp)
+ 156 00d4 23345101 		sd	s5,8(sp)
+ 157              		.cfi_offset 1, -8
+GAS LISTING /tmp/ccoLfnqJ.s 			page 5
+
+
+ 158              		.cfi_offset 8, -16
+ 159              		.cfi_offset 9, -24
+ 160              		.cfi_offset 18, -32
+ 161              		.cfi_offset 19, -40
+ 162              		.cfi_offset 20, -48
+ 163              		.cfi_offset 21, -56
+ 164 00d8 13040104 		addi	s0,sp,64
+ 165              		.cfi_def_cfa 8, 0
+ 166 00dc 13090500 		mv	s2,a0
+  46:src/Cache.cpp ****     Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(1);
+ 167              		.loc 1 46 5
+ 168              		.loc 1 46 51 is_stmt 0
+ 169 00e0 13051000 		li	a0,1
+ 170              	.LVL13:
+ 171 00e4 97000000 		call	_ZN14BuddyAllocator10buddyAllocEm@plt
+ 171      E7800000 
+ 172              	.LVL14:
+ 173 00ec 130A0500 		mv	s4,a0
+ 174              	.LVL15:
+  47:src/Cache.cpp ****     slab->parentCache = this;
+ 175              		.loc 1 47 5 is_stmt 1
+ 176              		.loc 1 47 23 is_stmt 0
+ 177 00f0 233C2501 		sd	s2,24(a0)
+  48:src/Cache.cpp ****     slab->next = nullptr;
+ 178              		.loc 1 48 5 is_stmt 1
+ 179              		.loc 1 48 16 is_stmt 0
+ 180 00f4 23340500 		sd	zero,8(a0)
+  49:src/Cache.cpp ****     slab->state = CREATED;
+ 181              		.loc 1 49 5 is_stmt 1
+ 182              		.loc 1 49 17 is_stmt 0
+ 183 00f8 93073000 		li	a5,3
+ 184 00fc 2328F500 		sw	a5,16(a0)
+  50:src/Cache.cpp ****     slab->allocatedSlots = 0;
+ 185              		.loc 1 50 5 is_stmt 1
+ 186              		.loc 1 50 26 is_stmt 0
+ 187 0100 23300500 		sd	zero,0(a0)
+  51:src/Cache.cpp ****     void* startAddr = (void*)((char*)slab + sizeof(Slab));
+ 188              		.loc 1 51 5 is_stmt 1
+ 189              		.loc 1 51 11 is_stmt 0
+ 190 0104 930A8502 		addi	s5,a0,40
+ 191              	.LVL16:
+  52:src/Cache.cpp ****     Slot* prev = nullptr;
+ 192              		.loc 1 52 5 is_stmt 1
+  53:src/Cache.cpp ****     for(size_t i = 0; i < this->optimalSlots; i++) {
+ 193              		.loc 1 53 5
+ 194              	.LBB4:
+ 195              		.loc 1 53 16 is_stmt 0
+ 196 0108 93040000 		li	s1,0
+ 197              	.LBE4:
+  52:src/Cache.cpp ****     Slot* prev = nullptr;
+ 198              		.loc 1 52 11
+ 199 010c 93090000 		li	s3,0
+ 200 0110 6F004001 		j	.L13
+ 201              	.LVL17:
+ 202              	.L11:
+ 203              	.LBB8:
+ 204              	.LBB5:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 6
+
+
+  54:src/Cache.cpp ****         constructor((void*)((char*)startAddr + i*slotSize));
+  55:src/Cache.cpp ****         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+  56:src/Cache.cpp ****         curr->parentSlab = slab;
+  57:src/Cache.cpp ****         curr->allocated = false;
+  58:src/Cache.cpp ****         if(prev) {
+  59:src/Cache.cpp ****             prev->next= curr;
+  60:src/Cache.cpp ****         }
+  61:src/Cache.cpp ****         else {
+  62:src/Cache.cpp ****             slab->slotHead = curr;
+ 205              		.loc 1 62 13 is_stmt 1
+ 206              		.loc 1 62 28 is_stmt 0
+ 207 0114 2330FA02 		sd	a5,32(s4)
+ 208              	.L12:
+  63:src/Cache.cpp ****         }
+  64:src/Cache.cpp ****         curr->next = nullptr;
+ 209              		.loc 1 64 9 is_stmt 1 discriminator 2
+ 210              		.loc 1 64 20 is_stmt 0 discriminator 2
+ 211 0118 23B40700 		sd	zero,8(a5)
+  65:src/Cache.cpp ****         prev = curr;
+ 212              		.loc 1 65 9 is_stmt 1 discriminator 2
+ 213              	.LVL18:
+ 214              	.LBE5:
+  53:src/Cache.cpp ****         constructor((void*)((char*)startAddr + i*slotSize));
+ 215              		.loc 1 53 5 discriminator 2
+ 216 011c 93841400 		addi	s1,s1,1
+ 217              	.LVL19:
+ 218              	.LBB6:
+ 219              		.loc 1 65 14 is_stmt 0 discriminator 2
+ 220 0120 93890700 		mv	s3,a5
+ 221              	.LVL20:
+ 222              	.L13:
+ 223              	.LBE6:
+  53:src/Cache.cpp ****         constructor((void*)((char*)startAddr + i*slotSize));
+ 224              		.loc 1 53 25 is_stmt 1 discriminator 1
+  53:src/Cache.cpp ****         constructor((void*)((char*)startAddr + i*slotSize));
+ 225              		.loc 1 53 33 is_stmt 0 discriminator 1
+ 226 0124 83378903 		ld	a5,56(s2)
+  53:src/Cache.cpp ****         constructor((void*)((char*)startAddr + i*slotSize));
+ 227              		.loc 1 53 25 discriminator 1
+ 228 0128 63FCF402 		bleu	a5,s1,.L9
+ 229              	.LBB7:
+  54:src/Cache.cpp ****         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+ 230              		.loc 1 54 9 is_stmt 1
+ 231 012c 83378904 		ld	a5,72(s2)
+  54:src/Cache.cpp ****         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+ 232              		.loc 1 54 50 is_stmt 0
+ 233 0130 03350904 		ld	a0,64(s2)
+  54:src/Cache.cpp ****         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+ 234              		.loc 1 54 49
+ 235 0134 33059502 		mul	a0,a0,s1
+  54:src/Cache.cpp ****         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+ 236              		.loc 1 54 20
+ 237 0138 3385AA00 		add	a0,s5,a0
+ 238 013c E7800700 		jalr	a5
+ 239              	.LVL21:
+  55:src/Cache.cpp ****         curr->parentSlab = slab;
+ 240              		.loc 1 55 9 is_stmt 1
+GAS LISTING /tmp/ccoLfnqJ.s 			page 7
+
+
+  55:src/Cache.cpp ****         curr->parentSlab = slab;
+ 241              		.loc 1 55 51 is_stmt 0
+ 242 0140 83370904 		ld	a5,64(s2)
+  55:src/Cache.cpp ****         curr->parentSlab = slab;
+ 243              		.loc 1 55 50
+ 244 0144 B3879702 		mul	a5,a5,s1
+  55:src/Cache.cpp ****         curr->parentSlab = slab;
+ 245              		.loc 1 55 15
+ 246 0148 B387FA00 		add	a5,s5,a5
+ 247              	.LVL22:
+  56:src/Cache.cpp ****         curr->allocated = false;
+ 248              		.loc 1 56 9 is_stmt 1
+  56:src/Cache.cpp ****         curr->allocated = false;
+ 249              		.loc 1 56 26 is_stmt 0
+ 250 014c 23B84701 		sd	s4,16(a5)
+  57:src/Cache.cpp ****         if(prev) {
+ 251              		.loc 1 57 9 is_stmt 1
+  57:src/Cache.cpp ****         if(prev) {
+ 252              		.loc 1 57 25 is_stmt 0
+ 253 0150 23800700 		sb	zero,0(a5)
+  58:src/Cache.cpp ****             prev->next= curr;
+ 254              		.loc 1 58 9 is_stmt 1
+ 255 0154 E38009FC 		beqz	s3,.L11
+  59:src/Cache.cpp ****         }
+ 256              		.loc 1 59 13
+  59:src/Cache.cpp ****         }
+ 257              		.loc 1 59 23 is_stmt 0
+ 258 0158 23B4F900 		sd	a5,8(s3)
+ 259 015c 6FF0DFFB 		j	.L12
+ 260              	.LVL23:
+ 261              	.L9:
+ 262              	.LBE7:
+ 263              	.LBE8:
+  66:src/Cache.cpp ****     }
+  67:src/Cache.cpp **** 
+  68:src/Cache.cpp ****     return slab;
+  69:src/Cache.cpp **** }
+ 264              		.loc 1 69 1
+ 265 0160 13050A00 		mv	a0,s4
+ 266 0164 83308103 		ld	ra,56(sp)
+ 267              		.cfi_restore 1
+ 268 0168 03340103 		ld	s0,48(sp)
+ 269              		.cfi_restore 8
+ 270              		.cfi_def_cfa 2, 64
+ 271 016c 83348102 		ld	s1,40(sp)
+ 272              		.cfi_restore 9
+ 273              	.LVL24:
+ 274 0170 03390102 		ld	s2,32(sp)
+ 275              		.cfi_restore 18
+ 276              	.LVL25:
+ 277 0174 83398101 		ld	s3,24(sp)
+ 278              		.cfi_restore 19
+ 279              	.LVL26:
+ 280 0178 033A0101 		ld	s4,16(sp)
+ 281              		.cfi_restore 20
+ 282              	.LVL27:
+ 283 017c 833A8100 		ld	s5,8(sp)
+GAS LISTING /tmp/ccoLfnqJ.s 			page 8
+
+
+ 284              		.cfi_restore 21
+ 285              	.LVL28:
+ 286 0180 13010104 		addi	sp,sp,64
+ 287              		.cfi_def_cfa_offset 0
+ 288 0184 67800000 		jr	ra
+ 289              		.cfi_endproc
+ 290              	.LFE26:
+ 292              		.align	2
+ 293              		.globl	_ZN5Cache11slabListPutEPNS_4SlabEi
+ 295              	_ZN5Cache11slabListPutEPNS_4SlabEi:
+ 296              	.LFB27:
+  70:src/Cache.cpp **** 
+  71:src/Cache.cpp **** 
+  72:src/Cache.cpp **** void Cache::slabListPut(Cache::Slab *slab, int listNum) {
+ 297              		.loc 1 72 57 is_stmt 1
+ 298              		.cfi_startproc
+ 299              	.LVL29:
+ 300 0188 130101FF 		addi	sp,sp,-16
+ 301              		.cfi_def_cfa_offset 16
+ 302 018c 23348100 		sd	s0,8(sp)
+ 303              		.cfi_offset 8, -8
+ 304 0190 13040101 		addi	s0,sp,16
+ 305              		.cfi_def_cfa 8, 0
+  73:src/Cache.cpp ****     if (!slab || listNum < 0 || listNum > 2) return;
+ 306              		.loc 1 73 5
+ 307 0194 638A0502 		beqz	a1,.L15
+ 308              		.loc 1 73 15 is_stmt 0 discriminator 2
+ 309 0198 63480602 		bltz	a2,.L15
+ 310              		.loc 1 73 30 discriminator 4
+ 311 019c 93072000 		li	a5,2
+ 312 01a0 63C4C702 		bgt	a2,a5,.L15
+  74:src/Cache.cpp ****     slab->state = (SlabState)listNum;
+ 313              		.loc 1 74 5 is_stmt 1
+ 314              		.loc 1 74 17 is_stmt 0
+ 315 01a4 23A8C500 		sw	a2,16(a1)
+  75:src/Cache.cpp ****     if(slabList[listNum]) {
+ 316              		.loc 1 75 5 is_stmt 1
+ 317              		.loc 1 75 24 is_stmt 0
+ 318 01a8 93173600 		slli	a5,a2,3
+ 319 01ac B307F500 		add	a5,a0,a5
+ 320 01b0 83B78700 		ld	a5,8(a5)
+ 321              		.loc 1 75 5
+ 322 01b4 63840700 		beqz	a5,.L17
+  76:src/Cache.cpp ****         slab->next = slabList[listNum];
+ 323              		.loc 1 76 9 is_stmt 1
+ 324              		.loc 1 76 20 is_stmt 0
+ 325 01b8 23B4F500 		sd	a5,8(a1)
+ 326              	.L17:
+  77:src/Cache.cpp ****     }
+  78:src/Cache.cpp ****     slabList[listNum] = slab;
+ 327              		.loc 1 78 5 is_stmt 1
+ 328              		.loc 1 78 23 is_stmt 0
+ 329 01bc 13163600 		slli	a2,a2,3
+ 330              	.LVL30:
+ 331 01c0 3306C500 		add	a2,a0,a2
+ 332 01c4 2334B600 		sd	a1,8(a2)
+ 333              	.LVL31:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 9
+
+
+ 334              	.L15:
+  79:src/Cache.cpp **** }
+ 335              		.loc 1 79 1
+ 336 01c8 03348100 		ld	s0,8(sp)
+ 337              		.cfi_restore 8
+ 338              		.cfi_def_cfa 2, 16
+ 339 01cc 13010101 		addi	sp,sp,16
+ 340              		.cfi_def_cfa_offset 0
+ 341 01d0 67800000 		jr	ra
+ 342              		.cfi_endproc
+ 343              	.LFE27:
+ 345              		.align	2
+ 346              		.globl	_ZN5Cache14slabListRemoveEPNS_4SlabEi
+ 348              	_ZN5Cache14slabListRemoveEPNS_4SlabEi:
+ 349              	.LFB29:
+  80:src/Cache.cpp **** 
+  81:src/Cache.cpp **** void Cache::freeSlot(Slot* slot) {
+  82:src/Cache.cpp ****     if(slot->parentSlab->parentCache != this) {
+  83:src/Cache.cpp ****         errortype = FREESLOTERROR;
+  84:src/Cache.cpp ****         return;
+  85:src/Cache.cpp ****     }
+  86:src/Cache.cpp **** 
+  87:src/Cache.cpp ****     Slab* parentSlab = slot->parentSlab;
+  88:src/Cache.cpp ****     Cache* parentCache = parentSlab->parentCache;
+  89:src/Cache.cpp ****     slot->allocated = false;
+  90:src/Cache.cpp ****     parentSlab->allocatedSlots--;
+  91:src/Cache.cpp **** 
+  92:src/Cache.cpp ****     SlabState newState = parentSlab->calculateNewState();
+  93:src/Cache.cpp ****     if(parentSlab->state != newState) {
+  94:src/Cache.cpp ****         if(parentSlab->state != CREATED) parentCache->slabListRemove(parentSlab, parentSlab->state)
+  95:src/Cache.cpp ****         parentCache->slabListPut(parentSlab, newState);
+  96:src/Cache.cpp ****     }
+  97:src/Cache.cpp **** }
+  98:src/Cache.cpp **** 
+  99:src/Cache.cpp **** void Cache::slabListRemove(Cache::Slab *slab, int listNum) {
+ 350              		.loc 1 99 60 is_stmt 1
+ 351              		.cfi_startproc
+ 352              	.LVL32:
+ 353 01d4 130101FF 		addi	sp,sp,-16
+ 354              		.cfi_def_cfa_offset 16
+ 355 01d8 23348100 		sd	s0,8(sp)
+ 356              		.cfi_offset 8, -8
+ 357 01dc 13040101 		addi	s0,sp,16
+ 358              		.cfi_def_cfa 8, 0
+ 100:src/Cache.cpp ****     if(!slab || listNum < 0 || listNum > 2) return;
+ 359              		.loc 1 100 5
+ 360 01e0 63800504 		beqz	a1,.L19
+ 361              		.loc 1 100 14 is_stmt 0 discriminator 2
+ 362 01e4 634E0602 		bltz	a2,.L19
+ 363              		.loc 1 100 29 discriminator 4
+ 364 01e8 93072000 		li	a5,2
+ 365 01ec 63CAC702 		bgt	a2,a5,.L19
+ 101:src/Cache.cpp **** 
+ 102:src/Cache.cpp ****     Slab* prev = nullptr;
+ 366              		.loc 1 102 5 is_stmt 1
+ 367              	.LVL33:
+ 103:src/Cache.cpp ****     for(Slab* curr = slabList[listNum]; curr != nullptr; curr = curr->next) {
+GAS LISTING /tmp/ccoLfnqJ.s 			page 10
+
+
+ 368              		.loc 1 103 5
+ 369              	.LBB9:
+ 370              		.loc 1 103 15 is_stmt 0
+ 371 01f0 13163600 		slli	a2,a2,3
+ 372              	.LVL34:
+ 373 01f4 3306C500 		add	a2,a0,a2
+ 374 01f8 83378600 		ld	a5,8(a2)
+ 375              	.LVL35:
+ 376              	.LBE9:
+ 102:src/Cache.cpp ****     for(Slab* curr = slabList[listNum]; curr != nullptr; curr = curr->next) {
+ 377              		.loc 1 102 11
+ 378 01fc 13070000 		li	a4,0
+ 379              	.LVL36:
+ 380              	.L22:
+ 381              	.LBB10:
+ 382              		.loc 1 103 46 is_stmt 1 discriminator 1
+ 383 0200 63800702 		beqz	a5,.L19
+ 104:src/Cache.cpp ****         if(curr == slab) {
+ 384              		.loc 1 104 9
+ 385 0204 6388B700 		beq	a5,a1,.L24
+ 105:src/Cache.cpp ****             prev->next = curr->next;
+ 106:src/Cache.cpp ****             curr->next = nullptr;
+ 107:src/Cache.cpp ****             break;
+ 108:src/Cache.cpp ****         }
+ 109:src/Cache.cpp ****         prev = curr;
+ 386              		.loc 1 109 9 discriminator 2
+ 387              	.LVL37:
+ 103:src/Cache.cpp ****         if(curr == slab) {
+ 388              		.loc 1 103 5 discriminator 2
+ 389              		.loc 1 109 14 is_stmt 0 discriminator 2
+ 390 0208 13870700 		mv	a4,a5
+ 103:src/Cache.cpp ****         if(curr == slab) {
+ 391              		.loc 1 103 63 discriminator 2
+ 392 020c 83B78700 		ld	a5,8(a5)
+ 393              	.LVL38:
+ 103:src/Cache.cpp ****         if(curr == slab) {
+ 394              		.loc 1 103 5 discriminator 2
+ 395 0210 6FF01FFF 		j	.L22
+ 396              	.L24:
+ 105:src/Cache.cpp ****             prev->next = curr->next;
+ 397              		.loc 1 105 13 is_stmt 1
+ 105:src/Cache.cpp ****             prev->next = curr->next;
+ 398              		.loc 1 105 32 is_stmt 0
+ 399 0214 83B68700 		ld	a3,8(a5)
+ 105:src/Cache.cpp ****             prev->next = curr->next;
+ 400              		.loc 1 105 24
+ 401 0218 2334D700 		sd	a3,8(a4)
+ 106:src/Cache.cpp ****             break;
+ 402              		.loc 1 106 13 is_stmt 1
+ 106:src/Cache.cpp ****             break;
+ 403              		.loc 1 106 24 is_stmt 0
+ 404 021c 23B40700 		sd	zero,8(a5)
+ 107:src/Cache.cpp ****         }
+ 405              		.loc 1 107 13 is_stmt 1
+ 406              	.LVL39:
+ 407              	.L19:
+ 408              	.LBE10:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 11
+
+
+ 110:src/Cache.cpp ****     }
+ 111:src/Cache.cpp **** }
+ 409              		.loc 1 111 1 is_stmt 0
+ 410 0220 03348100 		ld	s0,8(sp)
+ 411              		.cfi_restore 8
+ 412              		.cfi_def_cfa 2, 16
+ 413 0224 13010101 		addi	sp,sp,16
+ 414              		.cfi_def_cfa_offset 0
+ 415 0228 67800000 		jr	ra
+ 416              		.cfi_endproc
+ 417              	.LFE29:
+ 419              		.section	.rodata.str1.8,"aMS",@progbits,1
+ 420              		.align	3
+ 421              	.LC0:
+ 422 0000 47726573 		.string	"Greska u oslobadjanju slota"
+ 422      6B612075 
+ 422      206F736C 
+ 422      6F626164 
+ 422      6A616E6A 
+ 423 001c 00000000 		.align	3
+ 424              	.LC1:
+ 425 0020 4E696A65 		.string	"Nije bilo greske u radu sa kesom"
+ 425      2062696C 
+ 425      6F206772 
+ 425      65736B65 
+ 425      20752072 
+ 426              		.text
+ 427              		.align	2
+ 428              		.globl	_ZN5Cache17printErrorMessageEv
+ 430              	_ZN5Cache17printErrorMessageEv:
+ 431              	.LFB30:
+ 112:src/Cache.cpp **** 
+ 113:src/Cache.cpp **** int Cache::printErrorMessage() {
+ 432              		.loc 1 113 32 is_stmt 1
+ 433              		.cfi_startproc
+ 434              	.LVL40:
+ 435 022c 130101FE 		addi	sp,sp,-32
+ 436              		.cfi_def_cfa_offset 32
+ 437 0230 233C1100 		sd	ra,24(sp)
+ 438 0234 23388100 		sd	s0,16(sp)
+ 439 0238 23349100 		sd	s1,8(sp)
+ 440              		.cfi_offset 1, -8
+ 441              		.cfi_offset 8, -16
+ 442              		.cfi_offset 9, -24
+ 443 023c 13040102 		addi	s0,sp,32
+ 444              		.cfi_def_cfa 8, 0
+ 445 0240 93040500 		mv	s1,a0
+ 114:src/Cache.cpp ****     switch(errortype) {
+ 446              		.loc 1 114 5
+ 447              		.loc 1 114 12 is_stmt 0
+ 448 0244 03270500 		lw	a4,0(a0)
+ 449              		.loc 1 114 5
+ 450 0248 93071000 		li	a5,1
+ 451 024c 6306F702 		beq	a4,a5,.L28
+ 452              	.LVL41:
+ 453              	.L26:
+ 115:src/Cache.cpp ****         case FREESLOTERROR:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 12
+
+
+ 116:src/Cache.cpp ****             printString("Greska u oslobadjanju slota");
+ 117:src/Cache.cpp ****         default:
+ 454              		.loc 1 117 9 is_stmt 1
+ 118:src/Cache.cpp ****             printString("Nije bilo greske u radu sa kesom");
+ 455              		.loc 1 118 13
+ 456              		.loc 1 118 24 is_stmt 0
+ 457 0250 17050000 		lla	a0,.LC1
+ 457      13050500 
+ 458 0258 97000000 		call	_Z11printStringPKc@plt
+ 458      E7800000 
+ 459              	.LVL42:
+ 119:src/Cache.cpp ****     }
+ 120:src/Cache.cpp ****     return errortype;
+ 460              		.loc 1 120 5 is_stmt 1
+ 121:src/Cache.cpp **** }
+ 461              		.loc 1 121 1 is_stmt 0
+ 462 0260 03A50400 		lw	a0,0(s1)
+ 463 0264 83308101 		ld	ra,24(sp)
+ 464              		.cfi_remember_state
+ 465              		.cfi_restore 1
+ 466 0268 03340101 		ld	s0,16(sp)
+ 467              		.cfi_restore 8
+ 468              		.cfi_def_cfa 2, 32
+ 469 026c 83348100 		ld	s1,8(sp)
+ 470              		.cfi_restore 9
+ 471              	.LVL43:
+ 472 0270 13010102 		addi	sp,sp,32
+ 473              		.cfi_def_cfa_offset 0
+ 474 0274 67800000 		jr	ra
+ 475              	.LVL44:
+ 476              	.L28:
+ 477              		.cfi_restore_state
+ 115:src/Cache.cpp ****             printString("Greska u oslobadjanju slota");
+ 478              		.loc 1 115 9 is_stmt 1
+ 116:src/Cache.cpp ****         default:
+ 479              		.loc 1 116 13
+ 116:src/Cache.cpp ****         default:
+ 480              		.loc 1 116 24 is_stmt 0
+ 481 0278 17050000 		lla	a0,.LC0
+ 481      13050500 
+ 482 0280 97000000 		call	_Z11printStringPKc@plt
+ 482      E7800000 
+ 483              	.LVL45:
+ 484 0288 6FF09FFC 		j	.L26
+ 485              		.cfi_endproc
+ 486              	.LFE30:
+ 488              		.align	2
+ 489              		.globl	_ZN5Cache19getNumSlabsAndSlotsEPiS0_
+ 491              	_ZN5Cache19getNumSlabsAndSlotsEPiS0_:
+ 492              	.LFB32:
+ 122:src/Cache.cpp **** // Ispis poruke: ime kesa, velicina objekta, broj slabova, broj slotova po slabu, broj alociranih s
+ 123:src/Cache.cpp **** void Cache::printCacheInfo() {
+ 124:src/Cache.cpp ****     int numSlabs = 0, numSlots = 0;
+ 125:src/Cache.cpp ****     getNumSlabsAndSlots(&numSlabs, &numSlots);
+ 126:src/Cache.cpp ****     printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, b
+ 127:src/Cache.cpp ****     printString(cacheName);
+ 128:src/Cache.cpp ****     printString(", ");
+GAS LISTING /tmp/ccoLfnqJ.s 			page 13
+
+
+ 129:src/Cache.cpp ****     printInt(objectSize);
+ 130:src/Cache.cpp ****     printString(", ");
+ 131:src/Cache.cpp ****     printInt(numSlabs);
+ 132:src/Cache.cpp ****     printString(", ");
+ 133:src/Cache.cpp ****     printInt(slotSize);
+ 134:src/Cache.cpp ****     printString(", ");
+ 135:src/Cache.cpp ****     printInt(optimalSlots);
+ 136:src/Cache.cpp ****     printString(", ");
+ 137:src/Cache.cpp ****     printInt(numSlots);
+ 138:src/Cache.cpp **** 
+ 139:src/Cache.cpp **** }
+ 140:src/Cache.cpp **** 
+ 141:src/Cache.cpp **** void Cache::getNumSlabsAndSlots(int *numSlabs, int *numSlots) {
+ 493              		.loc 1 141 63 is_stmt 1
+ 494              		.cfi_startproc
+ 495              	.LVL46:
+ 496 028c 130101FF 		addi	sp,sp,-16
+ 497              		.cfi_def_cfa_offset 16
+ 498 0290 23348100 		sd	s0,8(sp)
+ 499              		.cfi_offset 8, -8
+ 500 0294 13040101 		addi	s0,sp,16
+ 501              		.cfi_def_cfa 8, 0
+ 142:src/Cache.cpp ****     int slabs = 0, slots = 0;
+ 502              		.loc 1 142 5
+ 503              	.LVL47:
+ 143:src/Cache.cpp ****     for(int i = 0; i < 3; i++) {
+ 504              		.loc 1 143 5
+ 505              	.LBB11:
+ 506              		.loc 1 143 13 is_stmt 0
+ 507 0298 93080000 		li	a7,0
+ 508              	.LBE11:
+ 142:src/Cache.cpp ****     int slabs = 0, slots = 0;
+ 509              		.loc 1 142 20
+ 510 029c 13070000 		li	a4,0
+ 142:src/Cache.cpp ****     int slabs = 0, slots = 0;
+ 511              		.loc 1 142 9
+ 512 02a0 93060000 		li	a3,0
+ 513 02a4 6F008000 		j	.L33
+ 514              	.LVL48:
+ 515              	.L31:
+ 516              	.LBB13:
+ 517              		.loc 1 143 5 is_stmt 1 discriminator 2
+ 518 02a8 9B881800 		addiw	a7,a7,1
+ 519              	.LVL49:
+ 520              	.L33:
+ 521              		.loc 1 143 22 discriminator 1
+ 522 02ac 93072000 		li	a5,2
+ 523 02b0 63C41703 		bgt	a7,a5,.L30
+ 524              	.LBE13:
+ 144:src/Cache.cpp ****         for(Slab* curr = slabList[i]; curr != nullptr; curr = curr->next) {
+ 525              		.loc 1 144 9
+ 526              	.LBB14:
+ 527              	.LBB12:
+ 528              		.loc 1 144 19 is_stmt 0
+ 529 02b4 93973800 		slli	a5,a7,3
+ 530 02b8 B307F500 		add	a5,a0,a5
+ 531 02bc 83B78700 		ld	a5,8(a5)
+GAS LISTING /tmp/ccoLfnqJ.s 			page 14
+
+
+ 532              	.LVL50:
+ 533              	.L32:
+ 534              		.loc 1 144 44 is_stmt 1 discriminator 3
+ 535 02c0 E38407FE 		beqz	a5,.L31
+ 145:src/Cache.cpp ****              slabs++;
+ 536              		.loc 1 145 14 discriminator 2
+ 537              		.loc 1 145 19 is_stmt 0 discriminator 2
+ 538 02c4 9B861600 		addiw	a3,a3,1
+ 539              	.LVL51:
+ 146:src/Cache.cpp ****              slots += curr->allocatedSlots;
+ 540              		.loc 1 146 14 is_stmt 1 discriminator 2
+ 541              		.loc 1 146 29 is_stmt 0 discriminator 2
+ 542 02c8 03B80700 		ld	a6,0(a5)
+ 543              		.loc 1 146 20 discriminator 2
+ 544 02cc 3B07E800 		addw	a4,a6,a4
+ 545              	.LVL52:
+ 144:src/Cache.cpp ****         for(Slab* curr = slabList[i]; curr != nullptr; curr = curr->next) {
+ 546              		.loc 1 144 9 is_stmt 1 discriminator 2
+ 144:src/Cache.cpp ****         for(Slab* curr = slabList[i]; curr != nullptr; curr = curr->next) {
+ 547              		.loc 1 144 61 is_stmt 0 discriminator 2
+ 548 02d0 83B78700 		ld	a5,8(a5)
+ 549              	.LVL53:
+ 144:src/Cache.cpp ****         for(Slab* curr = slabList[i]; curr != nullptr; curr = curr->next) {
+ 550              		.loc 1 144 9 discriminator 2
+ 551 02d4 6FF0DFFE 		j	.L32
+ 552              	.LVL54:
+ 553              	.L30:
+ 554              	.LBE12:
+ 555              	.LBE14:
+ 147:src/Cache.cpp ****         }
+ 148:src/Cache.cpp ****     }
+ 149:src/Cache.cpp ****     (*numSlabs) = slabs;
+ 556              		.loc 1 149 5 is_stmt 1
+ 557              		.loc 1 149 17 is_stmt 0
+ 558 02d8 23A0D500 		sw	a3,0(a1)
+ 150:src/Cache.cpp ****     (*numSlots) = slots;
+ 559              		.loc 1 150 5 is_stmt 1
+ 560              		.loc 1 150 17 is_stmt 0
+ 561 02dc 2320E600 		sw	a4,0(a2)
+ 151:src/Cache.cpp **** }
+ 562              		.loc 1 151 1
+ 563 02e0 03348100 		ld	s0,8(sp)
+ 564              		.cfi_restore 8
+ 565              		.cfi_def_cfa 2, 16
+ 566 02e4 13010101 		addi	sp,sp,16
+ 567              		.cfi_def_cfa_offset 0
+ 568 02e8 67800000 		jr	ra
+ 569              		.cfi_endproc
+ 570              	.LFE32:
+ 572              		.section	.rodata.str1.8
+ 573 0041 00000000 		.align	3
+ 573      000000
+ 574              	.LC2:
+ 575 0048 696D6520 		.string	"ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, broj alo
+ 575      6B657361 
+ 575      2C207665 
+ 575      6C696369 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 15
+
+
+ 575      6E61206F 
+ 576 00b2 00000000 		.align	3
+ 576      0000
+ 577              	.LC3:
+ 578 00b8 2C2000   		.string	", "
+ 579              		.text
+ 580              		.align	2
+ 581              		.globl	_ZN5Cache14printCacheInfoEv
+ 583              	_ZN5Cache14printCacheInfoEv:
+ 584              	.LFB31:
+ 123:src/Cache.cpp ****     int numSlabs = 0, numSlots = 0;
+ 585              		.loc 1 123 30 is_stmt 1
+ 586              		.cfi_startproc
+ 587              	.LVL55:
+ 588 02ec 130101FD 		addi	sp,sp,-48
+ 589              		.cfi_def_cfa_offset 48
+ 590 02f0 23341102 		sd	ra,40(sp)
+ 591 02f4 23308102 		sd	s0,32(sp)
+ 592 02f8 233C9100 		sd	s1,24(sp)
+ 593              		.cfi_offset 1, -8
+ 594              		.cfi_offset 8, -16
+ 595              		.cfi_offset 9, -24
+ 596 02fc 13040103 		addi	s0,sp,48
+ 597              		.cfi_def_cfa 8, 0
+ 598 0300 93040500 		mv	s1,a0
+ 124:src/Cache.cpp ****     getNumSlabsAndSlots(&numSlabs, &numSlots);
+ 599              		.loc 1 124 5
+ 124:src/Cache.cpp ****     getNumSlabsAndSlots(&numSlabs, &numSlots);
+ 600              		.loc 1 124 9 is_stmt 0
+ 601 0304 232E04FC 		sw	zero,-36(s0)
+ 124:src/Cache.cpp ****     getNumSlabsAndSlots(&numSlabs, &numSlots);
+ 602              		.loc 1 124 23
+ 603 0308 232C04FC 		sw	zero,-40(s0)
+ 125:src/Cache.cpp ****     printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, b
+ 604              		.loc 1 125 5 is_stmt 1
+ 125:src/Cache.cpp ****     printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, b
+ 605              		.loc 1 125 24 is_stmt 0
+ 606 030c 130684FD 		addi	a2,s0,-40
+ 607 0310 9305C4FD 		addi	a1,s0,-36
+ 608 0314 97000000 		call	_ZN5Cache19getNumSlabsAndSlotsEPiS0_
+ 608      E7800000 
+ 609              	.LVL56:
+ 126:src/Cache.cpp ****     printString(cacheName);
+ 610              		.loc 1 126 5 is_stmt 1
+ 126:src/Cache.cpp ****     printString(cacheName);
+ 611              		.loc 1 126 16 is_stmt 0
+ 612 031c 17050000 		lla	a0,.LC2
+ 612      13050500 
+ 613 0324 97000000 		call	_Z11printStringPKc@plt
+ 613      E7800000 
+ 614              	.LVL57:
+ 127:src/Cache.cpp ****     printString(", ");
+ 615              		.loc 1 127 5 is_stmt 1
+ 127:src/Cache.cpp ****     printString(", ");
+ 616              		.loc 1 127 16 is_stmt 0
+ 617 032c 13850402 		addi	a0,s1,32
+ 618 0330 97000000 		call	_Z11printStringPKc@plt
+GAS LISTING /tmp/ccoLfnqJ.s 			page 16
+
+
+ 618      E7800000 
+ 619              	.LVL58:
+ 128:src/Cache.cpp ****     printInt(objectSize);
+ 620              		.loc 1 128 5 is_stmt 1
+ 128:src/Cache.cpp ****     printInt(objectSize);
+ 621              		.loc 1 128 16 is_stmt 0
+ 622 0338 17050000 		lla	a0,.LC3
+ 622      13050500 
+ 623 0340 97000000 		call	_Z11printStringPKc@plt
+ 623      E7800000 
+ 624              	.LVL59:
+ 129:src/Cache.cpp ****     printString(", ");
+ 625              		.loc 1 129 5 is_stmt 1
+ 129:src/Cache.cpp ****     printString(", ");
+ 626              		.loc 1 129 13 is_stmt 0
+ 627 0348 13060000 		li	a2,0
+ 628 034c 9305A000 		li	a1,10
+ 629 0350 03A50403 		lw	a0,48(s1)
+ 630 0354 97000000 		call	_Z8printIntiii@plt
+ 630      E7800000 
+ 631              	.LVL60:
+ 130:src/Cache.cpp ****     printInt(numSlabs);
+ 632              		.loc 1 130 5 is_stmt 1
+ 130:src/Cache.cpp ****     printInt(numSlabs);
+ 633              		.loc 1 130 16 is_stmt 0
+ 634 035c 17050000 		lla	a0,.LC3
+ 634      13050500 
+ 635 0364 97000000 		call	_Z11printStringPKc@plt
+ 635      E7800000 
+ 636              	.LVL61:
+ 131:src/Cache.cpp ****     printString(", ");
+ 637              		.loc 1 131 5 is_stmt 1
+ 131:src/Cache.cpp ****     printString(", ");
+ 638              		.loc 1 131 13 is_stmt 0
+ 639 036c 13060000 		li	a2,0
+ 640 0370 9305A000 		li	a1,10
+ 641 0374 0325C4FD 		lw	a0,-36(s0)
+ 642 0378 97000000 		call	_Z8printIntiii@plt
+ 642      E7800000 
+ 643              	.LVL62:
+ 132:src/Cache.cpp ****     printInt(slotSize);
+ 644              		.loc 1 132 5 is_stmt 1
+ 132:src/Cache.cpp ****     printInt(slotSize);
+ 645              		.loc 1 132 16 is_stmt 0
+ 646 0380 17050000 		lla	a0,.LC3
+ 646      13050500 
+ 647 0388 97000000 		call	_Z11printStringPKc@plt
+ 647      E7800000 
+ 648              	.LVL63:
+ 133:src/Cache.cpp ****     printString(", ");
+ 649              		.loc 1 133 5 is_stmt 1
+ 133:src/Cache.cpp ****     printString(", ");
+ 650              		.loc 1 133 13 is_stmt 0
+ 651 0390 13060000 		li	a2,0
+ 652 0394 9305A000 		li	a1,10
+ 653 0398 03A50404 		lw	a0,64(s1)
+ 654 039c 97000000 		call	_Z8printIntiii@plt
+GAS LISTING /tmp/ccoLfnqJ.s 			page 17
+
+
+ 654      E7800000 
+ 655              	.LVL64:
+ 134:src/Cache.cpp ****     printInt(optimalSlots);
+ 656              		.loc 1 134 5 is_stmt 1
+ 134:src/Cache.cpp ****     printInt(optimalSlots);
+ 657              		.loc 1 134 16 is_stmt 0
+ 658 03a4 17050000 		lla	a0,.LC3
+ 658      13050500 
+ 659 03ac 97000000 		call	_Z11printStringPKc@plt
+ 659      E7800000 
+ 660              	.LVL65:
+ 135:src/Cache.cpp ****     printString(", ");
+ 661              		.loc 1 135 5 is_stmt 1
+ 135:src/Cache.cpp ****     printString(", ");
+ 662              		.loc 1 135 13 is_stmt 0
+ 663 03b4 13060000 		li	a2,0
+ 664 03b8 9305A000 		li	a1,10
+ 665 03bc 03A58403 		lw	a0,56(s1)
+ 666 03c0 97000000 		call	_Z8printIntiii@plt
+ 666      E7800000 
+ 667              	.LVL66:
+ 136:src/Cache.cpp ****     printInt(numSlots);
+ 668              		.loc 1 136 5 is_stmt 1
+ 136:src/Cache.cpp ****     printInt(numSlots);
+ 669              		.loc 1 136 16 is_stmt 0
+ 670 03c8 17050000 		lla	a0,.LC3
+ 670      13050500 
+ 671 03d0 97000000 		call	_Z11printStringPKc@plt
+ 671      E7800000 
+ 672              	.LVL67:
+ 137:src/Cache.cpp **** 
+ 673              		.loc 1 137 5 is_stmt 1
+ 137:src/Cache.cpp **** 
+ 674              		.loc 1 137 13 is_stmt 0
+ 675 03d8 13060000 		li	a2,0
+ 676 03dc 9305A000 		li	a1,10
+ 677 03e0 032584FD 		lw	a0,-40(s0)
+ 678 03e4 97000000 		call	_Z8printIntiii@plt
+ 678      E7800000 
+ 679              	.LVL68:
+ 139:src/Cache.cpp **** 
+ 680              		.loc 1 139 1
+ 681 03ec 83308102 		ld	ra,40(sp)
+ 682              		.cfi_restore 1
+ 683 03f0 03340102 		ld	s0,32(sp)
+ 684              		.cfi_restore 8
+ 685              		.cfi_def_cfa 2, 48
+ 686 03f4 83348101 		ld	s1,24(sp)
+ 687              		.cfi_restore 9
+ 688              	.LVL69:
+ 689 03f8 13010103 		addi	sp,sp,48
+ 690              		.cfi_def_cfa_offset 0
+ 691 03fc 67800000 		jr	ra
+ 692              		.cfi_endproc
+ 693              	.LFE31:
+ 695              		.align	2
+ 696              		.globl	_ZN5Cache11deallocSlabEPNS_4SlabE
+GAS LISTING /tmp/ccoLfnqJ.s 			page 18
+
+
+ 698              	_ZN5Cache11deallocSlabEPNS_4SlabE:
+ 699              	.LFB34:
+ 152:src/Cache.cpp **** 
+ 153:src/Cache.cpp **** int Cache::deallocFreeSlabs() {
+ 154:src/Cache.cpp ****     int numSlabs = 0;
+ 155:src/Cache.cpp ****     for(Slab* curr = slabList[EMPTY]; curr != nullptr;) {
+ 156:src/Cache.cpp ****         numSlabs++;
+ 157:src/Cache.cpp ****         Slab* old = curr;
+ 158:src/Cache.cpp ****         curr = curr->next;
+ 159:src/Cache.cpp ****         deallocSlab(old);
+ 160:src/Cache.cpp ****     }
+ 161:src/Cache.cpp ****     slabList[EMPTY] = nullptr;
+ 162:src/Cache.cpp ****     return numSlabs;
+ 163:src/Cache.cpp **** }
+ 164:src/Cache.cpp **** 
+ 165:src/Cache.cpp **** void Cache::deallocSlab(Slab* slab) {
+ 700              		.loc 1 165 37 is_stmt 1
+ 701              		.cfi_startproc
+ 702              	.LVL70:
+ 703 0400 130101FD 		addi	sp,sp,-48
+ 704              		.cfi_def_cfa_offset 48
+ 705 0404 23341102 		sd	ra,40(sp)
+ 706 0408 23308102 		sd	s0,32(sp)
+ 707 040c 233C9100 		sd	s1,24(sp)
+ 708 0410 23382101 		sd	s2,16(sp)
+ 709 0414 23343101 		sd	s3,8(sp)
+ 710              		.cfi_offset 1, -8
+ 711              		.cfi_offset 8, -16
+ 712              		.cfi_offset 9, -24
+ 713              		.cfi_offset 18, -32
+ 714              		.cfi_offset 19, -40
+ 715 0418 13040103 		addi	s0,sp,48
+ 716              		.cfi_def_cfa 8, 0
+ 717 041c 13090500 		mv	s2,a0
+ 718 0420 93890500 		mv	s3,a1
+ 166:src/Cache.cpp ****     void* startAddr = (void*)((char*)slab + sizeof(Slab));
+ 719              		.loc 1 166 5
+ 720              	.LVL71:
+ 167:src/Cache.cpp ****     for(size_t i = 0; i < this->optimalSlots; i++) {
+ 721              		.loc 1 167 5
+ 722              	.LBB15:
+ 723              		.loc 1 167 16 is_stmt 0
+ 724 0424 93040000 		li	s1,0
+ 725              	.LVL72:
+ 726              	.L39:
+ 727              		.loc 1 167 25 is_stmt 1 discriminator 3
+ 728              		.loc 1 167 33 is_stmt 0 discriminator 3
+ 729 0428 83378903 		ld	a5,56(s2)
+ 730              		.loc 1 167 25 discriminator 3
+ 731 042c 63F2F402 		bleu	a5,s1,.L38
+ 168:src/Cache.cpp ****         destructor((void*)((char*)startAddr + i*slotSize));
+ 732              		.loc 1 168 9 is_stmt 1 discriminator 2
+ 733 0430 83370905 		ld	a5,80(s2)
+ 734              		.loc 1 168 49 is_stmt 0 discriminator 2
+ 735 0434 03350904 		ld	a0,64(s2)
+ 736              		.loc 1 168 48 discriminator 2
+ 737 0438 33059502 		mul	a0,a0,s1
+GAS LISTING /tmp/ccoLfnqJ.s 			page 19
+
+
+ 738              		.loc 1 168 19 discriminator 2
+ 739 043c 13058502 		addi	a0,a0,40
+ 740 0440 3385A900 		add	a0,s3,a0
+ 741 0444 E7800700 		jalr	a5
+ 742              	.LVL73:
+ 167:src/Cache.cpp ****     for(size_t i = 0; i < this->optimalSlots; i++) {
+ 743              		.loc 1 167 5 is_stmt 1 discriminator 2
+ 744 0448 93841400 		addi	s1,s1,1
+ 745              	.LVL74:
+ 746 044c 6FF0DFFD 		j	.L39
+ 747              	.L38:
+ 748              	.LBE15:
+ 169:src/Cache.cpp ****     }
+ 170:src/Cache.cpp ****     BuddyAllocator::buddyFree(slab, 1);
+ 749              		.loc 1 170 5
+ 750              		.loc 1 170 30 is_stmt 0
+ 751 0450 93051000 		li	a1,1
+ 752 0454 13850900 		mv	a0,s3
+ 753 0458 97000000 		call	_ZN14BuddyAllocator9buddyFreeEPvm@plt
+ 753      E7800000 
+ 754              	.LVL75:
+ 171:src/Cache.cpp **** }
+ 755              		.loc 1 171 1
+ 756 0460 83308102 		ld	ra,40(sp)
+ 757              		.cfi_restore 1
+ 758 0464 03340102 		ld	s0,32(sp)
+ 759              		.cfi_restore 8
+ 760              		.cfi_def_cfa 2, 48
+ 761 0468 83348101 		ld	s1,24(sp)
+ 762              		.cfi_restore 9
+ 763              	.LVL76:
+ 764 046c 03390101 		ld	s2,16(sp)
+ 765              		.cfi_restore 18
+ 766              	.LVL77:
+ 767 0470 83398100 		ld	s3,8(sp)
+ 768              		.cfi_restore 19
+ 769              	.LVL78:
+ 770 0474 13010103 		addi	sp,sp,48
+ 771              		.cfi_def_cfa_offset 0
+ 772 0478 67800000 		jr	ra
+ 773              		.cfi_endproc
+ 774              	.LFE34:
+ 776              		.align	2
+ 777              		.globl	_ZN5Cache16deallocFreeSlabsEv
+ 779              	_ZN5Cache16deallocFreeSlabsEv:
+ 780              	.LFB33:
+ 153:src/Cache.cpp ****     int numSlabs = 0;
+ 781              		.loc 1 153 31 is_stmt 1
+ 782              		.cfi_startproc
+ 783              	.LVL79:
+ 784 047c 130101FD 		addi	sp,sp,-48
+ 785              		.cfi_def_cfa_offset 48
+ 786 0480 23341102 		sd	ra,40(sp)
+ 787 0484 23308102 		sd	s0,32(sp)
+ 788 0488 233C9100 		sd	s1,24(sp)
+ 789 048c 23382101 		sd	s2,16(sp)
+ 790 0490 23343101 		sd	s3,8(sp)
+GAS LISTING /tmp/ccoLfnqJ.s 			page 20
+
+
+ 791              		.cfi_offset 1, -8
+ 792              		.cfi_offset 8, -16
+ 793              		.cfi_offset 9, -24
+ 794              		.cfi_offset 18, -32
+ 795              		.cfi_offset 19, -40
+ 796 0494 13040103 		addi	s0,sp,48
+ 797              		.cfi_def_cfa 8, 0
+ 798 0498 93090500 		mv	s3,a0
+ 154:src/Cache.cpp ****     for(Slab* curr = slabList[EMPTY]; curr != nullptr;) {
+ 799              		.loc 1 154 5
+ 800              	.LVL80:
+ 155:src/Cache.cpp ****         numSlabs++;
+ 801              		.loc 1 155 5
+ 802              	.LBB16:
+ 155:src/Cache.cpp ****         numSlabs++;
+ 803              		.loc 1 155 15 is_stmt 0
+ 804 049c 83358500 		ld	a1,8(a0)
+ 805              	.LVL81:
+ 806              	.LBE16:
+ 154:src/Cache.cpp ****     for(Slab* curr = slabList[EMPTY]; curr != nullptr;) {
+ 807              		.loc 1 154 9
+ 808 04a0 93040000 		li	s1,0
+ 809              	.LVL82:
+ 810              	.L43:
+ 811              	.LBB18:
+ 155:src/Cache.cpp ****         numSlabs++;
+ 812              		.loc 1 155 44 is_stmt 1 discriminator 1
+ 813 04a4 63800502 		beqz	a1,.L42
+ 814              	.LBB17:
+ 156:src/Cache.cpp ****         Slab* old = curr;
+ 815              		.loc 1 156 9
+ 156:src/Cache.cpp ****         Slab* old = curr;
+ 816              		.loc 1 156 17 is_stmt 0
+ 817 04a8 9B841400 		addiw	s1,s1,1
+ 818              	.LVL83:
+ 157:src/Cache.cpp ****         curr = curr->next;
+ 819              		.loc 1 157 9 is_stmt 1
+ 158:src/Cache.cpp ****         deallocSlab(old);
+ 820              		.loc 1 158 9
+ 158:src/Cache.cpp ****         deallocSlab(old);
+ 821              		.loc 1 158 14 is_stmt 0
+ 822 04ac 03B98500 		ld	s2,8(a1)
+ 823              	.LVL84:
+ 159:src/Cache.cpp ****     }
+ 824              		.loc 1 159 9 is_stmt 1
+ 159:src/Cache.cpp ****     }
+ 825              		.loc 1 159 20 is_stmt 0
+ 826 04b0 13850900 		mv	a0,s3
+ 827 04b4 97000000 		call	_ZN5Cache11deallocSlabEPNS_4SlabE
+ 827      E7800000 
+ 828              	.LVL85:
+ 158:src/Cache.cpp ****         deallocSlab(old);
+ 829              		.loc 1 158 14
+ 830 04bc 93050900 		mv	a1,s2
+ 831              	.LBE17:
+ 155:src/Cache.cpp ****         numSlabs++;
+ 832              		.loc 1 155 5
+GAS LISTING /tmp/ccoLfnqJ.s 			page 21
+
+
+ 833 04c0 6FF05FFE 		j	.L43
+ 834              	.LVL86:
+ 835              	.L42:
+ 836              	.LBE18:
+ 161:src/Cache.cpp ****     return numSlabs;
+ 837              		.loc 1 161 5 is_stmt 1
+ 161:src/Cache.cpp ****     return numSlabs;
+ 838              		.loc 1 161 21 is_stmt 0
+ 839 04c4 23B40900 		sd	zero,8(s3)
+ 162:src/Cache.cpp **** }
+ 840              		.loc 1 162 5 is_stmt 1
+ 163:src/Cache.cpp **** 
+ 841              		.loc 1 163 1 is_stmt 0
+ 842 04c8 13850400 		mv	a0,s1
+ 843 04cc 83308102 		ld	ra,40(sp)
+ 844              		.cfi_restore 1
+ 845 04d0 03340102 		ld	s0,32(sp)
+ 846              		.cfi_restore 8
+ 847              		.cfi_def_cfa 2, 48
+ 848 04d4 83348101 		ld	s1,24(sp)
+ 849              		.cfi_restore 9
+ 850              	.LVL87:
+ 851 04d8 03390101 		ld	s2,16(sp)
+ 852              		.cfi_restore 18
+ 853 04dc 83398100 		ld	s3,8(sp)
+ 854              		.cfi_restore 19
+ 855              	.LVL88:
+ 856 04e0 13010103 		addi	sp,sp,48
+ 857              		.cfi_def_cfa_offset 0
+ 858 04e4 67800000 		jr	ra
+ 859              		.cfi_endproc
+ 860              	.LFE33:
+ 862              		.align	2
+ 863              		.globl	_ZN5Cache12deallocCacheEv
+ 865              	_ZN5Cache12deallocCacheEv:
+ 866              	.LFB35:
+ 172:src/Cache.cpp **** 
+ 173:src/Cache.cpp **** void Cache::deallocCache() {
+ 867              		.loc 1 173 28 is_stmt 1
+ 868              		.cfi_startproc
+ 869              	.LVL89:
+ 870 04e8 130101FD 		addi	sp,sp,-48
+ 871              		.cfi_def_cfa_offset 48
+ 872 04ec 23341102 		sd	ra,40(sp)
+ 873 04f0 23308102 		sd	s0,32(sp)
+ 874 04f4 233C9100 		sd	s1,24(sp)
+ 875 04f8 23382101 		sd	s2,16(sp)
+ 876 04fc 23343101 		sd	s3,8(sp)
+ 877              		.cfi_offset 1, -8
+ 878              		.cfi_offset 8, -16
+ 879              		.cfi_offset 9, -24
+ 880              		.cfi_offset 18, -32
+ 881              		.cfi_offset 19, -40
+ 882 0500 13040103 		addi	s0,sp,48
+ 883              		.cfi_def_cfa 8, 0
+ 884 0504 13090500 		mv	s2,a0
+ 174:src/Cache.cpp ****     for(int i = 0; i < 3; i++) {
+GAS LISTING /tmp/ccoLfnqJ.s 			page 22
+
+
+ 885              		.loc 1 174 5
+ 886              	.LVL90:
+ 887              	.LBB19:
+ 888              		.loc 1 174 13 is_stmt 0
+ 889 0508 93090000 		li	s3,0
+ 890 050c 6F008000 		j	.L49
+ 891              	.LVL91:
+ 892              	.L47:
+ 893              		.loc 1 174 5 is_stmt 1 discriminator 2
+ 894 0510 9B891900 		addiw	s3,s3,1
+ 895              	.LVL92:
+ 896              	.L49:
+ 897              		.loc 1 174 22 discriminator 1
+ 898 0514 93072000 		li	a5,2
+ 899 0518 63C63703 		bgt	s3,a5,.L45
+ 900              	.LBB20:
+ 175:src/Cache.cpp ****         Slab* curr = slabList[i];
+ 901              		.loc 1 175 9
+ 902              		.loc 1 175 15 is_stmt 0
+ 903 051c 93973900 		slli	a5,s3,3
+ 904 0520 B307F900 		add	a5,s2,a5
+ 905 0524 83B58700 		ld	a1,8(a5)
+ 906              	.LVL93:
+ 907              	.L48:
+ 176:src/Cache.cpp ****         while(curr) {
+ 908              		.loc 1 176 9 is_stmt 1
+ 909              		.loc 1 176 15
+ 910 0528 E38405FE 		beqz	a1,.L47
+ 911              	.LBB21:
+ 177:src/Cache.cpp ****             Slab* old = curr;
+ 912              		.loc 1 177 13
+ 913              	.LVL94:
+ 178:src/Cache.cpp ****             curr = curr->next;
+ 914              		.loc 1 178 13
+ 915              		.loc 1 178 18 is_stmt 0
+ 916 052c 83B48500 		ld	s1,8(a1)
+ 917              	.LVL95:
+ 179:src/Cache.cpp ****             deallocSlab(old);
+ 918              		.loc 1 179 13 is_stmt 1
+ 919              		.loc 1 179 24 is_stmt 0
+ 920 0530 13050900 		mv	a0,s2
+ 921 0534 97000000 		call	_ZN5Cache11deallocSlabEPNS_4SlabE
+ 921      E7800000 
+ 922              	.LVL96:
+ 178:src/Cache.cpp ****             curr = curr->next;
+ 923              		.loc 1 178 18
+ 924 053c 93850400 		mv	a1,s1
+ 925              	.LBE21:
+ 176:src/Cache.cpp ****             Slab* old = curr;
+ 926              		.loc 1 176 9
+ 927 0540 6FF09FFE 		j	.L48
+ 928              	.LVL97:
+ 929              	.L45:
+ 930              	.LBE20:
+ 931              	.LBE19:
+ 180:src/Cache.cpp ****         }
+ 181:src/Cache.cpp ****     }
+GAS LISTING /tmp/ccoLfnqJ.s 			page 23
+
+
+ 182:src/Cache.cpp **** }
+ 932              		.loc 1 182 1
+ 933 0544 83308102 		ld	ra,40(sp)
+ 934              		.cfi_restore 1
+ 935 0548 03340102 		ld	s0,32(sp)
+ 936              		.cfi_restore 8
+ 937              		.cfi_def_cfa 2, 48
+ 938 054c 83348101 		ld	s1,24(sp)
+ 939              		.cfi_restore 9
+ 940 0550 03390101 		ld	s2,16(sp)
+ 941              		.cfi_restore 18
+ 942              	.LVL98:
+ 943 0554 83398100 		ld	s3,8(sp)
+ 944              		.cfi_restore 19
+ 945              	.LVL99:
+ 946 0558 13010103 		addi	sp,sp,48
+ 947              		.cfi_def_cfa_offset 0
+ 948 055c 67800000 		jr	ra
+ 949              		.cfi_endproc
+ 950              	.LFE35:
+ 952              		.align	2
+ 953              		.globl	_ZN5Cache4Slab17calculateNewStateEv
+ 955              	_ZN5Cache4Slab17calculateNewStateEv:
+ 956              	.LFB37:
+ 183:src/Cache.cpp **** 
+ 184:src/Cache.cpp **** 
+ 185:src/Cache.cpp **** Cache::Slot *Cache::Slab::getFreeSlot() {
+ 186:src/Cache.cpp ****     if(!slotHead || state == FULL) return nullptr;
+ 187:src/Cache.cpp **** 
+ 188:src/Cache.cpp ****     for(Slot* curr = slotHead; curr != nullptr; curr = curr->next) {
+ 189:src/Cache.cpp ****         if(curr->allocated == false) {
+ 190:src/Cache.cpp ****             this->allocatedSlots++;
+ 191:src/Cache.cpp ****             curr->allocated = true;
+ 192:src/Cache.cpp ****             curr->parentSlab = this;
+ 193:src/Cache.cpp **** 
+ 194:src/Cache.cpp ****             SlabState newState = calculateNewState();
+ 195:src/Cache.cpp ****             if(this->state != newState) {
+ 196:src/Cache.cpp ****                 if(this->state != CREATED) parentCache->slabListRemove(this, this->state);
+ 197:src/Cache.cpp ****                 parentCache->slabListPut(this, newState);
+ 198:src/Cache.cpp ****             }
+ 199:src/Cache.cpp **** 
+ 200:src/Cache.cpp ****             return curr;
+ 201:src/Cache.cpp ****         }
+ 202:src/Cache.cpp ****     }
+ 203:src/Cache.cpp **** 
+ 204:src/Cache.cpp ****     return nullptr;
+ 205:src/Cache.cpp **** }
+ 206:src/Cache.cpp **** 
+ 207:src/Cache.cpp **** Cache::SlabState Cache::Slab::calculateNewState() {
+ 957              		.loc 1 207 51 is_stmt 1
+ 958              		.cfi_startproc
+ 959              	.LVL100:
+ 960 0560 130101FF 		addi	sp,sp,-16
+ 961              		.cfi_def_cfa_offset 16
+ 962 0564 23348100 		sd	s0,8(sp)
+ 963              		.cfi_offset 8, -8
+ 964 0568 13040101 		addi	s0,sp,16
+GAS LISTING /tmp/ccoLfnqJ.s 			page 24
+
+
+ 965              		.cfi_def_cfa 8, 0
+ 208:src/Cache.cpp ****     if(allocatedSlots == 0) {
+ 966              		.loc 1 208 5
+ 967              		.loc 1 208 8 is_stmt 0
+ 968 056c 83370500 		ld	a5,0(a0)
+ 969              		.loc 1 208 5
+ 970 0570 63800702 		beqz	a5,.L53
+ 209:src/Cache.cpp ****         return EMPTY;
+ 210:src/Cache.cpp ****     }
+ 211:src/Cache.cpp ****     else if(allocatedSlots == parentCache->optimalSlots) {
+ 971              		.loc 1 211 10 is_stmt 1
+ 972              		.loc 1 211 31 is_stmt 0
+ 973 0574 03378501 		ld	a4,24(a0)
+ 974              		.loc 1 211 44
+ 975 0578 03378703 		ld	a4,56(a4)
+ 976              		.loc 1 211 10
+ 977 057c 638EE700 		beq	a5,a4,.L54
+ 212:src/Cache.cpp ****         return FULL;
+ 213:src/Cache.cpp ****     }
+ 214:src/Cache.cpp ****     return PARTIAL;
+ 978              		.loc 1 214 12
+ 979 0580 13051000 		li	a0,1
+ 980              	.LVL101:
+ 981              	.L52:
+ 215:src/Cache.cpp **** }
+ 982              		.loc 1 215 1
+ 983 0584 03348100 		ld	s0,8(sp)
+ 984              		.cfi_remember_state
+ 985              		.cfi_restore 8
+ 986              		.cfi_def_cfa 2, 16
+ 987 0588 13010101 		addi	sp,sp,16
+ 988              		.cfi_def_cfa_offset 0
+ 989 058c 67800000 		jr	ra
+ 990              	.LVL102:
+ 991              	.L53:
+ 992              		.cfi_restore_state
+ 209:src/Cache.cpp ****         return EMPTY;
+ 993              		.loc 1 209 16
+ 994 0590 13050000 		li	a0,0
+ 995              	.LVL103:
+ 996 0594 6FF01FFF 		j	.L52
+ 997              	.LVL104:
+ 998              	.L54:
+ 212:src/Cache.cpp ****         return FULL;
+ 999              		.loc 1 212 16
+ 1000 0598 13052000 		li	a0,2
+ 1001              	.LVL105:
+ 1002 059c 6FF09FFE 		j	.L52
+ 1003              		.cfi_endproc
+ 1004              	.LFE37:
+ 1006              		.align	2
+ 1007              		.globl	_ZN5Cache8freeSlotEPNS_4SlotE
+ 1009              	_ZN5Cache8freeSlotEPNS_4SlotE:
+ 1010              	.LFB28:
+  81:src/Cache.cpp ****     if(slot->parentSlab->parentCache != this) {
+ 1011              		.loc 1 81 34 is_stmt 1
+ 1012              		.cfi_startproc
+GAS LISTING /tmp/ccoLfnqJ.s 			page 25
+
+
+ 1013              	.LVL106:
+ 1014 05a0 130101FD 		addi	sp,sp,-48
+ 1015              		.cfi_def_cfa_offset 48
+ 1016 05a4 23341102 		sd	ra,40(sp)
+ 1017 05a8 23308102 		sd	s0,32(sp)
+ 1018 05ac 233C9100 		sd	s1,24(sp)
+ 1019 05b0 23382101 		sd	s2,16(sp)
+ 1020 05b4 23343101 		sd	s3,8(sp)
+ 1021              		.cfi_offset 1, -8
+ 1022              		.cfi_offset 8, -16
+ 1023              		.cfi_offset 9, -24
+ 1024              		.cfi_offset 18, -32
+ 1025              		.cfi_offset 19, -40
+ 1026 05b8 13040103 		addi	s0,sp,48
+ 1027              		.cfi_def_cfa 8, 0
+  82:src/Cache.cpp ****         errortype = FREESLOTERROR;
+ 1028              		.loc 1 82 5
+  82:src/Cache.cpp ****         errortype = FREESLOTERROR;
+ 1029              		.loc 1 82 14 is_stmt 0
+ 1030 05bc 83B40501 		ld	s1,16(a1)
+  82:src/Cache.cpp ****         errortype = FREESLOTERROR;
+ 1031              		.loc 1 82 26
+ 1032 05c0 03B98401 		ld	s2,24(s1)
+  82:src/Cache.cpp ****         errortype = FREESLOTERROR;
+ 1033              		.loc 1 82 5
+ 1034 05c4 6304A902 		beq	s2,a0,.L57
+  83:src/Cache.cpp ****         return;
+ 1035              		.loc 1 83 9 is_stmt 1
+  83:src/Cache.cpp ****         return;
+ 1036              		.loc 1 83 19 is_stmt 0
+ 1037 05c8 93071000 		li	a5,1
+ 1038 05cc 2320F500 		sw	a5,0(a0)
+  84:src/Cache.cpp ****     }
+ 1039              		.loc 1 84 9 is_stmt 1
+ 1040              	.LVL107:
+ 1041              	.L56:
+  97:src/Cache.cpp **** 
+ 1042              		.loc 1 97 1 is_stmt 0
+ 1043 05d0 83308102 		ld	ra,40(sp)
+ 1044              		.cfi_remember_state
+ 1045              		.cfi_restore 1
+ 1046 05d4 03340102 		ld	s0,32(sp)
+ 1047              		.cfi_restore 8
+ 1048              		.cfi_def_cfa 2, 48
+ 1049 05d8 83348101 		ld	s1,24(sp)
+ 1050              		.cfi_restore 9
+ 1051 05dc 03390101 		ld	s2,16(sp)
+ 1052              		.cfi_restore 18
+ 1053 05e0 83398100 		ld	s3,8(sp)
+ 1054              		.cfi_restore 19
+ 1055 05e4 13010103 		addi	sp,sp,48
+ 1056              		.cfi_def_cfa_offset 0
+ 1057 05e8 67800000 		jr	ra
+ 1058              	.LVL108:
+ 1059              	.L57:
+ 1060              		.cfi_restore_state
+  87:src/Cache.cpp ****     Cache* parentCache = parentSlab->parentCache;
+GAS LISTING /tmp/ccoLfnqJ.s 			page 26
+
+
+ 1061              		.loc 1 87 5 is_stmt 1
+  88:src/Cache.cpp ****     slot->allocated = false;
+ 1062              		.loc 1 88 5
+  89:src/Cache.cpp ****     parentSlab->allocatedSlots--;
+ 1063              		.loc 1 89 5
+  89:src/Cache.cpp ****     parentSlab->allocatedSlots--;
+ 1064              		.loc 1 89 21 is_stmt 0
+ 1065 05ec 23800500 		sb	zero,0(a1)
+  90:src/Cache.cpp **** 
+ 1066              		.loc 1 90 5 is_stmt 1
+  90:src/Cache.cpp **** 
+ 1067              		.loc 1 90 17 is_stmt 0
+ 1068 05f0 83B70400 		ld	a5,0(s1)
+  90:src/Cache.cpp **** 
+ 1069              		.loc 1 90 31
+ 1070 05f4 9387F7FF 		addi	a5,a5,-1
+ 1071 05f8 23B0F400 		sd	a5,0(s1)
+  92:src/Cache.cpp ****     if(parentSlab->state != newState) {
+ 1072              		.loc 1 92 5 is_stmt 1
+  92:src/Cache.cpp ****     if(parentSlab->state != newState) {
+ 1073              		.loc 1 92 55 is_stmt 0
+ 1074 05fc 13850400 		mv	a0,s1
+ 1075              	.LVL109:
+ 1076 0600 97000000 		call	_ZN5Cache4Slab17calculateNewStateEv
+ 1076      E7800000 
+ 1077              	.LVL110:
+ 1078 0608 93090500 		mv	s3,a0
+ 1079              	.LVL111:
+  93:src/Cache.cpp ****         if(parentSlab->state != CREATED) parentCache->slabListRemove(parentSlab, parentSlab->state)
+ 1080              		.loc 1 93 5 is_stmt 1
+  93:src/Cache.cpp ****         if(parentSlab->state != CREATED) parentCache->slabListRemove(parentSlab, parentSlab->state)
+ 1081              		.loc 1 93 20 is_stmt 0
+ 1082 060c 03A60401 		lw	a2,16(s1)
+  93:src/Cache.cpp ****         if(parentSlab->state != CREATED) parentCache->slabListRemove(parentSlab, parentSlab->state)
+ 1083              		.loc 1 93 5
+ 1084 0610 E300A6FC 		beq	a2,a0,.L56
+  94:src/Cache.cpp ****         parentCache->slabListPut(parentSlab, newState);
+ 1085              		.loc 1 94 9 is_stmt 1
+ 1086 0614 93073000 		li	a5,3
+ 1087 0618 631EF600 		bne	a2,a5,.L61
+ 1088              	.LVL112:
+ 1089              	.L59:
+  95:src/Cache.cpp ****     }
+ 1090              		.loc 1 95 9
+  95:src/Cache.cpp ****     }
+ 1091              		.loc 1 95 33 is_stmt 0
+ 1092 061c 1B860900 		sext.w	a2,s3
+ 1093 0620 93850400 		mv	a1,s1
+ 1094 0624 13050900 		mv	a0,s2
+ 1095 0628 97000000 		call	_ZN5Cache11slabListPutEPNS_4SlabEi
+ 1095      E7800000 
+ 1096              	.LVL113:
+ 1097 0630 6FF01FFA 		j	.L56
+ 1098              	.LVL114:
+ 1099              	.L61:
+  94:src/Cache.cpp ****         parentCache->slabListPut(parentSlab, newState);
+ 1100              		.loc 1 94 42 is_stmt 1 discriminator 1
+GAS LISTING /tmp/ccoLfnqJ.s 			page 27
+
+
+  94:src/Cache.cpp ****         parentCache->slabListPut(parentSlab, newState);
+ 1101              		.loc 1 94 69 is_stmt 0 discriminator 1
+ 1102 0634 93850400 		mv	a1,s1
+ 1103 0638 13050900 		mv	a0,s2
+ 1104              	.LVL115:
+ 1105 063c 97000000 		call	_ZN5Cache14slabListRemoveEPNS_4SlabEi
+ 1105      E7800000 
+ 1106              	.LVL116:
+ 1107 0644 6FF09FFD 		j	.L59
+ 1108              		.cfi_endproc
+ 1109              	.LFE28:
+ 1111              		.align	2
+ 1112              		.globl	_ZN5Cache4Slab11getFreeSlotEv
+ 1114              	_ZN5Cache4Slab11getFreeSlotEv:
+ 1115              	.LFB36:
+ 185:src/Cache.cpp ****     if(!slotHead || state == FULL) return nullptr;
+ 1116              		.loc 1 185 41 is_stmt 1
+ 1117              		.cfi_startproc
+ 1118              	.LVL117:
+ 1119 0648 130101FD 		addi	sp,sp,-48
+ 1120              		.cfi_def_cfa_offset 48
+ 1121 064c 23341102 		sd	ra,40(sp)
+ 1122 0650 23308102 		sd	s0,32(sp)
+ 1123 0654 233C9100 		sd	s1,24(sp)
+ 1124 0658 23382101 		sd	s2,16(sp)
+ 1125 065c 23343101 		sd	s3,8(sp)
+ 1126              		.cfi_offset 1, -8
+ 1127              		.cfi_offset 8, -16
+ 1128              		.cfi_offset 9, -24
+ 1129              		.cfi_offset 18, -32
+ 1130              		.cfi_offset 19, -40
+ 1131 0660 13040103 		addi	s0,sp,48
+ 1132              		.cfi_def_cfa 8, 0
+ 186:src/Cache.cpp **** 
+ 1133              		.loc 1 186 5
+ 186:src/Cache.cpp **** 
+ 1134              		.loc 1 186 9 is_stmt 0
+ 1135 0664 83340502 		ld	s1,32(a0)
+ 186:src/Cache.cpp **** 
+ 1136              		.loc 1 186 5
+ 1137 0668 638A0406 		beqz	s1,.L62
+ 1138 066c 13090500 		mv	s2,a0
+ 186:src/Cache.cpp **** 
+ 1139              		.loc 1 186 21 discriminator 2
+ 1140 0670 03270501 		lw	a4,16(a0)
+ 186:src/Cache.cpp **** 
+ 1141              		.loc 1 186 18 discriminator 2
+ 1142 0674 93072000 		li	a5,2
+ 1143 0678 630CF708 		beq	a4,a5,.L68
+ 1144              	.L67:
+ 1145              	.LVL118:
+ 1146              	.LBB22:
+ 188:src/Cache.cpp ****         if(curr->allocated == false) {
+ 1147              		.loc 1 188 37 is_stmt 1 discriminator 1
+ 1148 067c 63800406 		beqz	s1,.L62
+ 1149              	.LBE22:
+ 189:src/Cache.cpp ****             this->allocatedSlots++;
+GAS LISTING /tmp/ccoLfnqJ.s 			page 28
+
+
+ 1150              		.loc 1 189 9
+ 1151              	.LBB28:
+ 1152              	.LBB23:
+ 189:src/Cache.cpp ****             this->allocatedSlots++;
+ 1153              		.loc 1 189 18 is_stmt 0
+ 1154 0680 83C70400 		lbu	a5,0(s1)
+ 189:src/Cache.cpp ****             this->allocatedSlots++;
+ 1155              		.loc 1 189 9
+ 1156 0684 63860700 		beqz	a5,.L70
+ 1157              	.LBE23:
+ 188:src/Cache.cpp ****         if(curr->allocated == false) {
+ 1158              		.loc 1 188 5 is_stmt 1 discriminator 2
+ 188:src/Cache.cpp ****         if(curr->allocated == false) {
+ 1159              		.loc 1 188 54 is_stmt 0 discriminator 2
+ 1160 0688 83B48400 		ld	s1,8(s1)
+ 1161              	.LVL119:
+ 188:src/Cache.cpp ****         if(curr->allocated == false) {
+ 1162              		.loc 1 188 5 discriminator 2
+ 1163 068c 6FF01FFF 		j	.L67
+ 1164              	.L70:
+ 1165              	.LBB26:
+ 1166              	.LBB24:
+ 190:src/Cache.cpp ****             curr->allocated = true;
+ 1167              		.loc 1 190 13 is_stmt 1
+ 190:src/Cache.cpp ****             curr->allocated = true;
+ 1168              		.loc 1 190 19 is_stmt 0
+ 1169 0690 83370900 		ld	a5,0(s2)
+ 190:src/Cache.cpp ****             curr->allocated = true;
+ 1170              		.loc 1 190 33
+ 1171 0694 93871700 		addi	a5,a5,1
+ 1172 0698 2330F900 		sd	a5,0(s2)
+ 191:src/Cache.cpp ****             curr->parentSlab = this;
+ 1173              		.loc 1 191 13 is_stmt 1
+ 191:src/Cache.cpp ****             curr->parentSlab = this;
+ 1174              		.loc 1 191 29 is_stmt 0
+ 1175 069c 93071000 		li	a5,1
+ 1176 06a0 2380F400 		sb	a5,0(s1)
+ 192:src/Cache.cpp **** 
+ 1177              		.loc 1 192 13 is_stmt 1
+ 192:src/Cache.cpp **** 
+ 1178              		.loc 1 192 30 is_stmt 0
+ 1179 06a4 23B82401 		sd	s2,16(s1)
+ 194:src/Cache.cpp ****             if(this->state != newState) {
+ 1180              		.loc 1 194 13 is_stmt 1
+ 194:src/Cache.cpp ****             if(this->state != newState) {
+ 1181              		.loc 1 194 51 is_stmt 0
+ 1182 06a8 13050900 		mv	a0,s2
+ 1183              	.LVL120:
+ 1184 06ac 97000000 		call	_ZN5Cache4Slab17calculateNewStateEv
+ 1184      E7800000 
+ 1185              	.LVL121:
+ 1186 06b4 93090500 		mv	s3,a0
+ 1187              	.LVL122:
+ 195:src/Cache.cpp ****                 if(this->state != CREATED) parentCache->slabListRemove(this, this->state);
+ 1188              		.loc 1 195 13 is_stmt 1
+ 195:src/Cache.cpp ****                 if(this->state != CREATED) parentCache->slabListRemove(this, this->state);
+ 1189              		.loc 1 195 22 is_stmt 0
+GAS LISTING /tmp/ccoLfnqJ.s 			page 29
+
+
+ 1190 06b8 03260901 		lw	a2,16(s2)
+ 195:src/Cache.cpp ****                 if(this->state != CREATED) parentCache->slabListRemove(this, this->state);
+ 1191              		.loc 1 195 13
+ 1192 06bc 6300A602 		beq	a2,a0,.L62
+ 196:src/Cache.cpp ****                 parentCache->slabListPut(this, newState);
+ 1193              		.loc 1 196 17 is_stmt 1
+ 1194 06c0 93073000 		li	a5,3
+ 1195 06c4 631CF602 		bne	a2,a5,.L71
+ 1196              	.LVL123:
+ 1197              	.L66:
+ 197:src/Cache.cpp ****             }
+ 1198              		.loc 1 197 17
+ 197:src/Cache.cpp ****             }
+ 1199              		.loc 1 197 41 is_stmt 0
+ 1200 06c8 1B860900 		sext.w	a2,s3
+ 1201 06cc 93050900 		mv	a1,s2
+ 1202 06d0 03358901 		ld	a0,24(s2)
+ 1203 06d4 97000000 		call	_ZN5Cache11slabListPutEPNS_4SlabEi
+ 1203      E7800000 
+ 1204              	.LVL124:
+ 200:src/Cache.cpp ****         }
+ 1205              		.loc 1 200 13 is_stmt 1
+ 1206              	.L62:
+ 1207              	.LBE24:
+ 1208              	.LBE26:
+ 1209              	.LBE28:
+ 205:src/Cache.cpp **** 
+ 1210              		.loc 1 205 1 is_stmt 0
+ 1211 06dc 13850400 		mv	a0,s1
+ 1212 06e0 83308102 		ld	ra,40(sp)
+ 1213              		.cfi_remember_state
+ 1214              		.cfi_restore 1
+ 1215 06e4 03340102 		ld	s0,32(sp)
+ 1216              		.cfi_restore 8
+ 1217              		.cfi_def_cfa 2, 48
+ 1218 06e8 83348101 		ld	s1,24(sp)
+ 1219              		.cfi_restore 9
+ 1220 06ec 03390101 		ld	s2,16(sp)
+ 1221              		.cfi_restore 18
+ 1222 06f0 83398100 		ld	s3,8(sp)
+ 1223              		.cfi_restore 19
+ 1224 06f4 13010103 		addi	sp,sp,48
+ 1225              		.cfi_def_cfa_offset 0
+ 1226 06f8 67800000 		jr	ra
+ 1227              	.LVL125:
+ 1228              	.L71:
+ 1229              		.cfi_restore_state
+ 1230              	.LBB29:
+ 1231              	.LBB27:
+ 1232              	.LBB25:
+ 196:src/Cache.cpp ****                 parentCache->slabListPut(this, newState);
+ 1233              		.loc 1 196 44 is_stmt 1 discriminator 1
+ 196:src/Cache.cpp ****                 parentCache->slabListPut(this, newState);
+ 1234              		.loc 1 196 71 is_stmt 0 discriminator 1
+ 1235 06fc 93050900 		mv	a1,s2
+ 1236 0700 03358901 		ld	a0,24(s2)
+ 1237              	.LVL126:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 30
+
+
+ 1238 0704 97000000 		call	_ZN5Cache14slabListRemoveEPNS_4SlabEi
+ 1238      E7800000 
+ 1239              	.LVL127:
+ 1240 070c 6FF0DFFB 		j	.L66
+ 1241              	.LVL128:
+ 1242              	.L68:
+ 1243              	.LBE25:
+ 1244              	.LBE27:
+ 1245              	.LBE29:
+ 186:src/Cache.cpp **** 
+ 1246              		.loc 1 186 43
+ 1247 0710 93040000 		li	s1,0
+ 1248 0714 6FF09FFC 		j	.L62
+ 1249              		.cfi_endproc
+ 1250              	.LFE36:
+ 1252              		.align	2
+ 1253              		.globl	_ZN5Cache12allocateSlotEv
+ 1255              	_ZN5Cache12allocateSlotEv:
+ 1256              	.LFB25:
+  24:src/Cache.cpp ****     if(slabList[PARTIAL]) {
+ 1257              		.loc 1 24 29 is_stmt 1
+ 1258              		.cfi_startproc
+ 1259              	.LVL129:
+ 1260 0718 130101FF 		addi	sp,sp,-16
+ 1261              		.cfi_def_cfa_offset 16
+ 1262 071c 23341100 		sd	ra,8(sp)
+ 1263 0720 23308100 		sd	s0,0(sp)
+ 1264              		.cfi_offset 1, -8
+ 1265              		.cfi_offset 8, -16
+ 1266 0724 13040101 		addi	s0,sp,16
+ 1267              		.cfi_def_cfa 8, 0
+ 1268 0728 93070500 		mv	a5,a0
+  25:src/Cache.cpp ****         Slab* slab = slabList[PARTIAL];
+ 1269              		.loc 1 25 5
+ 1270              	.LBB30:
+  25:src/Cache.cpp ****         Slab* slab = slabList[PARTIAL];
+ 1271              		.loc 1 25 24 is_stmt 0
+ 1272 072c 03350501 		ld	a0,16(a0)
+ 1273              	.LVL130:
+  25:src/Cache.cpp ****         Slab* slab = slabList[PARTIAL];
+ 1274              		.loc 1 25 5
+ 1275 0730 63020502 		beqz	a0,.L73
+ 1276              	.LBB31:
+  26:src/Cache.cpp ****         slabList[PARTIAL] = slabList[PARTIAL]->next;
+ 1277              		.loc 1 26 9 is_stmt 1
+ 1278              	.LVL131:
+  27:src/Cache.cpp ****         return slab->getFreeSlot();
+ 1279              		.loc 1 27 9
+  27:src/Cache.cpp ****         return slab->getFreeSlot();
+ 1280              		.loc 1 27 48 is_stmt 0
+ 1281 0734 03378500 		ld	a4,8(a0)
+  27:src/Cache.cpp ****         return slab->getFreeSlot();
+ 1282              		.loc 1 27 27
+ 1283 0738 23B8E700 		sd	a4,16(a5)
+  28:src/Cache.cpp ****     }
+ 1284              		.loc 1 28 9 is_stmt 1
+  28:src/Cache.cpp ****     }
+GAS LISTING /tmp/ccoLfnqJ.s 			page 31
+
+
+ 1285              		.loc 1 28 33 is_stmt 0
+ 1286 073c 97000000 		call	_ZN5Cache4Slab11getFreeSlotEv
+ 1286      E7800000 
+ 1287              	.LVL132:
+ 1288              	.L72:
+ 1289              	.LBE31:
+ 1290              	.LBE30:
+  43:src/Cache.cpp **** 
+ 1291              		.loc 1 43 1
+ 1292 0744 83308100 		ld	ra,8(sp)
+ 1293              		.cfi_remember_state
+ 1294              		.cfi_restore 1
+ 1295 0748 03340100 		ld	s0,0(sp)
+ 1296              		.cfi_restore 8
+ 1297              		.cfi_def_cfa 2, 16
+ 1298 074c 13010101 		addi	sp,sp,16
+ 1299              		.cfi_def_cfa_offset 0
+ 1300 0750 67800000 		jr	ra
+ 1301              	.LVL133:
+ 1302              	.L73:
+ 1303              		.cfi_restore_state
+  30:src/Cache.cpp ****         Slab* slab = slabList[EMPTY];
+ 1304              		.loc 1 30 10 is_stmt 1
+ 1305              	.LBB35:
+ 1306              	.LBB32:
+  30:src/Cache.cpp ****         Slab* slab = slabList[EMPTY];
+ 1307              		.loc 1 30 27 is_stmt 0
+ 1308 0754 03B58700 		ld	a0,8(a5)
+  30:src/Cache.cpp ****         Slab* slab = slabList[EMPTY];
+ 1309              		.loc 1 30 10
+ 1310 0758 630C0500 		beqz	a0,.L75
+ 1311              	.LBB33:
+  31:src/Cache.cpp ****         slabList[EMPTY] = slabList[EMPTY]->next;
+ 1312              		.loc 1 31 9 is_stmt 1
+ 1313              	.LVL134:
+  32:src/Cache.cpp ****         Slot* slot = slab->getFreeSlot();
+ 1314              		.loc 1 32 9
+  32:src/Cache.cpp ****         Slot* slot = slab->getFreeSlot();
+ 1315              		.loc 1 32 44 is_stmt 0
+ 1316 075c 03378500 		ld	a4,8(a0)
+  32:src/Cache.cpp ****         Slot* slot = slab->getFreeSlot();
+ 1317              		.loc 1 32 25
+ 1318 0760 23B4E700 		sd	a4,8(a5)
+  33:src/Cache.cpp **** 
+ 1319              		.loc 1 33 9 is_stmt 1
+  33:src/Cache.cpp **** 
+ 1320              		.loc 1 33 39 is_stmt 0
+ 1321 0764 97000000 		call	_ZN5Cache4Slab11getFreeSlotEv
+ 1321      E7800000 
+ 1322              	.LVL135:
+  35:src/Cache.cpp ****     }
+ 1323              		.loc 1 35 9 is_stmt 1
+  35:src/Cache.cpp ****     }
+ 1324              		.loc 1 35 16 is_stmt 0
+ 1325 076c 6FF09FFD 		j	.L72
+ 1326              	.LVL136:
+ 1327              	.L75:
+GAS LISTING /tmp/ccoLfnqJ.s 			page 32
+
+
+ 1328              	.LBE33:
+ 1329              	.LBB34:
+  38:src/Cache.cpp ****         return slab->getFreeSlot();
+ 1330              		.loc 1 38 9 is_stmt 1
+  38:src/Cache.cpp ****         return slab->getFreeSlot();
+ 1331              		.loc 1 38 34 is_stmt 0
+ 1332 0770 13850700 		mv	a0,a5
+ 1333 0774 97000000 		call	_ZN5Cache12allocateSlabEv
+ 1333      E7800000 
+ 1334              	.LVL137:
+  39:src/Cache.cpp ****     }
+ 1335              		.loc 1 39 9 is_stmt 1
+  39:src/Cache.cpp ****     }
+ 1336              		.loc 1 39 33 is_stmt 0
+ 1337 077c 97000000 		call	_ZN5Cache4Slab11getFreeSlotEv
+ 1337      E7800000 
+ 1338              	.LVL138:
+  39:src/Cache.cpp ****     }
+ 1339              		.loc 1 39 34
+ 1340 0784 6FF01FFC 		j	.L72
+ 1341              	.LBE34:
+ 1342              	.LBE32:
+ 1343              	.LBE35:
+ 1344              		.cfi_endproc
+ 1345              	.LFE25:
+ 1347              	.Letext0:
+ 1348              		.file 2 "src/../h/hw.h"
+ 1349              		.file 3 "src/../h/Cache.h"
+ 1350              		.file 4 "src/../h/BuddyAllocator.h"
+ 1351              		.file 5 "src/../h/syscall_c.h"
+ 1352              		.file 6 "src/../h/printing.hpp"
+GAS LISTING /tmp/ccoLfnqJ.s 			page 33
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 Cache.cpp
+     /tmp/ccoLfnqJ.s:9      .text:0000000000000000 _ZN5Cache11getNumSlotsEm
+     /tmp/ccoLfnqJ.s:13     .text:0000000000000000 .L0 
+     /tmp/ccoLfnqJ.s:15     .text:0000000000000000 .L0 
+     /tmp/ccoLfnqJ.s:16     .text:0000000000000004 .L0 
+     /tmp/ccoLfnqJ.s:18     .text:0000000000000008 .L0 
+     /tmp/ccoLfnqJ.s:20     .text:000000000000000c .L0 
+     /tmp/ccoLfnqJ.s:22     .text:000000000000000c .L0 
+     /tmp/ccoLfnqJ.s:23     .text:000000000000000c .L0 
+     /tmp/ccoLfnqJ.s:28     .text:0000000000000018 .L0 
+     /tmp/ccoLfnqJ.s:30     .text:0000000000000020 .L0 
+     /tmp/ccoLfnqJ.s:31     .text:0000000000000020 .L0 
+     /tmp/ccoLfnqJ.s:33     .text:0000000000000024 .L0 
+     /tmp/ccoLfnqJ.s:35     .text:0000000000000028 .L0 
+     /tmp/ccoLfnqJ.s:41     .text:0000000000000028 _ZN5Cache9initCacheEPKcmPFvPvES4_
+     /tmp/ccoLfnqJ.s:44     .text:0000000000000028 .L0 
+     /tmp/ccoLfnqJ.s:46     .text:0000000000000028 .L0 
+     /tmp/ccoLfnqJ.s:47     .text:000000000000002c .L0 
+     /tmp/ccoLfnqJ.s:51     .text:0000000000000038 .L0 
+     /tmp/ccoLfnqJ.s:52     .text:0000000000000038 .L0 
+     /tmp/ccoLfnqJ.s:53     .text:0000000000000038 .L0 
+     /tmp/ccoLfnqJ.s:55     .text:000000000000003c .L0 
+     /tmp/ccoLfnqJ.s:60     .text:0000000000000040 .L0 
+     /tmp/ccoLfnqJ.s:61     .text:0000000000000040 .L0 
+     /tmp/ccoLfnqJ.s:65     .text:0000000000000044 .L0 
+     /tmp/ccoLfnqJ.s:66     .text:0000000000000044 .L0 
+     /tmp/ccoLfnqJ.s:69     .text:000000000000004c .L0 
+     /tmp/ccoLfnqJ.s:72     .text:0000000000000054 .L0 
+     /tmp/ccoLfnqJ.s:73     .text:0000000000000054 .L0 
+     /tmp/ccoLfnqJ.s:75     .text:0000000000000058 .L0 
+     /tmp/ccoLfnqJ.s:77     .text:000000000000005c .L0 
+     /tmp/ccoLfnqJ.s:80     .text:0000000000000060 .L0 
+     /tmp/ccoLfnqJ.s:81     .text:0000000000000060 .L0 
+     /tmp/ccoLfnqJ.s:87     .text:0000000000000064 .L0 
+     /tmp/ccoLfnqJ.s:91     .text:0000000000000068 .L0 
+     /tmp/ccoLfnqJ.s:94     .text:0000000000000070 .L0 
+     /tmp/ccoLfnqJ.s:95     .text:0000000000000070 .L0 
+     /tmp/ccoLfnqJ.s:99     .text:000000000000007c .L0 
+     /tmp/ccoLfnqJ.s:106    .text:0000000000000084 .L0 
+     /tmp/ccoLfnqJ.s:107    .text:0000000000000084 .L0 
+     /tmp/ccoLfnqJ.s:109    .text:0000000000000088 .L0 
+     /tmp/ccoLfnqJ.s:110    .text:0000000000000088 .L0 
+     /tmp/ccoLfnqJ.s:112    .text:000000000000008c .L0 
+     /tmp/ccoLfnqJ.s:113    .text:000000000000008c .L0 
+     /tmp/ccoLfnqJ.s:115    .text:0000000000000090 .L0 
+     /tmp/ccoLfnqJ.s:116    .text:0000000000000090 .L0 
+     /tmp/ccoLfnqJ.s:118    .text:0000000000000094 .L0 
+     /tmp/ccoLfnqJ.s:120    .text:0000000000000098 .L0 
+     /tmp/ccoLfnqJ.s:121    .text:0000000000000098 .L0 
+     /tmp/ccoLfnqJ.s:124    .text:00000000000000a0 .L0 
+     /tmp/ccoLfnqJ.s:126    .text:00000000000000a4 .L0 
+     /tmp/ccoLfnqJ.s:127    .text:00000000000000a8 .L0 
+     /tmp/ccoLfnqJ.s:129    .text:00000000000000ac .L0 
+     /tmp/ccoLfnqJ.s:130    .text:00000000000000ac .L0 
+     /tmp/ccoLfnqJ.s:132    .text:00000000000000b0 .L0 
+     /tmp/ccoLfnqJ.s:135    .text:00000000000000b4 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 34
+
+
+     /tmp/ccoLfnqJ.s:137    .text:00000000000000b8 .L0 
+     /tmp/ccoLfnqJ.s:143    .text:00000000000000b8 _ZN5Cache12allocateSlabEv
+     /tmp/ccoLfnqJ.s:146    .text:00000000000000b8 .L0 
+     /tmp/ccoLfnqJ.s:148    .text:00000000000000b8 .L0 
+     /tmp/ccoLfnqJ.s:149    .text:00000000000000bc .L0 
+     /tmp/ccoLfnqJ.s:157    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:158    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:159    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:160    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:161    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:162    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:163    .text:00000000000000d8 .L0 
+     /tmp/ccoLfnqJ.s:165    .text:00000000000000dc .L0 
+     /tmp/ccoLfnqJ.s:168    .text:00000000000000e0 .L0 
+     /tmp/ccoLfnqJ.s:169    .text:00000000000000e0 .L0 
+     /tmp/ccoLfnqJ.s:176    .text:00000000000000f0 .L0 
+     /tmp/ccoLfnqJ.s:177    .text:00000000000000f0 .L0 
+     /tmp/ccoLfnqJ.s:179    .text:00000000000000f4 .L0 
+     /tmp/ccoLfnqJ.s:180    .text:00000000000000f4 .L0 
+     /tmp/ccoLfnqJ.s:182    .text:00000000000000f8 .L0 
+     /tmp/ccoLfnqJ.s:183    .text:00000000000000f8 .L0 
+     /tmp/ccoLfnqJ.s:186    .text:0000000000000100 .L0 
+     /tmp/ccoLfnqJ.s:187    .text:0000000000000100 .L0 
+     /tmp/ccoLfnqJ.s:189    .text:0000000000000104 .L0 
+     /tmp/ccoLfnqJ.s:190    .text:0000000000000104 .L0 
+     /tmp/ccoLfnqJ.s:193    .text:0000000000000108 .L0 
+     /tmp/ccoLfnqJ.s:195    .text:0000000000000108 .L0 
+     /tmp/ccoLfnqJ.s:196    .text:0000000000000108 .L0 
+     /tmp/ccoLfnqJ.s:199    .text:000000000000010c .L0 
+     /tmp/ccoLfnqJ.s:206    .text:0000000000000114 .L0 
+     /tmp/ccoLfnqJ.s:207    .text:0000000000000114 .L0 
+     /tmp/ccoLfnqJ.s:210    .text:0000000000000118 .L0 
+     /tmp/ccoLfnqJ.s:211    .text:0000000000000118 .L0 
+     /tmp/ccoLfnqJ.s:215    .text:000000000000011c .L0 
+     /tmp/ccoLfnqJ.s:216    .text:000000000000011c .L0 
+     /tmp/ccoLfnqJ.s:220    .text:0000000000000120 .L0 
+     /tmp/ccoLfnqJ.s:225    .text:0000000000000124 .L0 
+     /tmp/ccoLfnqJ.s:226    .text:0000000000000124 .L0 
+     /tmp/ccoLfnqJ.s:228    .text:0000000000000128 .L0 
+     /tmp/ccoLfnqJ.s:231    .text:000000000000012c .L0 
+     /tmp/ccoLfnqJ.s:233    .text:0000000000000130 .L0 
+     /tmp/ccoLfnqJ.s:235    .text:0000000000000134 .L0 
+     /tmp/ccoLfnqJ.s:237    .text:0000000000000138 .L0 
+     /tmp/ccoLfnqJ.s:241    .text:0000000000000140 .L0 
+     /tmp/ccoLfnqJ.s:242    .text:0000000000000140 .L0 
+     /tmp/ccoLfnqJ.s:244    .text:0000000000000144 .L0 
+     /tmp/ccoLfnqJ.s:246    .text:0000000000000148 .L0 
+     /tmp/ccoLfnqJ.s:249    .text:000000000000014c .L0 
+     /tmp/ccoLfnqJ.s:250    .text:000000000000014c .L0 
+     /tmp/ccoLfnqJ.s:252    .text:0000000000000150 .L0 
+     /tmp/ccoLfnqJ.s:253    .text:0000000000000150 .L0 
+     /tmp/ccoLfnqJ.s:255    .text:0000000000000154 .L0 
+     /tmp/ccoLfnqJ.s:257    .text:0000000000000158 .L0 
+     /tmp/ccoLfnqJ.s:258    .text:0000000000000158 .L0 
+     /tmp/ccoLfnqJ.s:265    .text:0000000000000160 .L0 
+     /tmp/ccoLfnqJ.s:267    .text:0000000000000168 .L0 
+     /tmp/ccoLfnqJ.s:269    .text:000000000000016c .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 35
+
+
+     /tmp/ccoLfnqJ.s:270    .text:000000000000016c .L0 
+     /tmp/ccoLfnqJ.s:272    .text:0000000000000170 .L0 
+     /tmp/ccoLfnqJ.s:275    .text:0000000000000174 .L0 
+     /tmp/ccoLfnqJ.s:278    .text:0000000000000178 .L0 
+     /tmp/ccoLfnqJ.s:281    .text:000000000000017c .L0 
+     /tmp/ccoLfnqJ.s:284    .text:0000000000000180 .L0 
+     /tmp/ccoLfnqJ.s:287    .text:0000000000000184 .L0 
+     /tmp/ccoLfnqJ.s:289    .text:0000000000000188 .L0 
+     /tmp/ccoLfnqJ.s:295    .text:0000000000000188 _ZN5Cache11slabListPutEPNS_4SlabEi
+     /tmp/ccoLfnqJ.s:298    .text:0000000000000188 .L0 
+     /tmp/ccoLfnqJ.s:300    .text:0000000000000188 .L0 
+     /tmp/ccoLfnqJ.s:301    .text:000000000000018c .L0 
+     /tmp/ccoLfnqJ.s:303    .text:0000000000000190 .L0 
+     /tmp/ccoLfnqJ.s:305    .text:0000000000000194 .L0 
+     /tmp/ccoLfnqJ.s:307    .text:0000000000000194 .L0 
+     /tmp/ccoLfnqJ.s:309    .text:0000000000000198 .L0 
+     /tmp/ccoLfnqJ.s:311    .text:000000000000019c .L0 
+     /tmp/ccoLfnqJ.s:314    .text:00000000000001a4 .L0 
+     /tmp/ccoLfnqJ.s:315    .text:00000000000001a4 .L0 
+     /tmp/ccoLfnqJ.s:317    .text:00000000000001a8 .L0 
+     /tmp/ccoLfnqJ.s:318    .text:00000000000001a8 .L0 
+     /tmp/ccoLfnqJ.s:322    .text:00000000000001b4 .L0 
+     /tmp/ccoLfnqJ.s:324    .text:00000000000001b8 .L0 
+     /tmp/ccoLfnqJ.s:325    .text:00000000000001b8 .L0 
+     /tmp/ccoLfnqJ.s:328    .text:00000000000001bc .L0 
+     /tmp/ccoLfnqJ.s:329    .text:00000000000001bc .L0 
+     /tmp/ccoLfnqJ.s:336    .text:00000000000001c8 .L0 
+     /tmp/ccoLfnqJ.s:337    .text:00000000000001cc .L0 
+     /tmp/ccoLfnqJ.s:338    .text:00000000000001cc .L0 
+     /tmp/ccoLfnqJ.s:340    .text:00000000000001d0 .L0 
+     /tmp/ccoLfnqJ.s:342    .text:00000000000001d4 .L0 
+     /tmp/ccoLfnqJ.s:348    .text:00000000000001d4 _ZN5Cache14slabListRemoveEPNS_4SlabEi
+     /tmp/ccoLfnqJ.s:351    .text:00000000000001d4 .L0 
+     /tmp/ccoLfnqJ.s:353    .text:00000000000001d4 .L0 
+     /tmp/ccoLfnqJ.s:354    .text:00000000000001d8 .L0 
+     /tmp/ccoLfnqJ.s:356    .text:00000000000001dc .L0 
+     /tmp/ccoLfnqJ.s:358    .text:00000000000001e0 .L0 
+     /tmp/ccoLfnqJ.s:360    .text:00000000000001e0 .L0 
+     /tmp/ccoLfnqJ.s:362    .text:00000000000001e4 .L0 
+     /tmp/ccoLfnqJ.s:364    .text:00000000000001e8 .L0 
+     /tmp/ccoLfnqJ.s:368    .text:00000000000001f0 .L0 
+     /tmp/ccoLfnqJ.s:370    .text:00000000000001f0 .L0 
+     /tmp/ccoLfnqJ.s:371    .text:00000000000001f0 .L0 
+     /tmp/ccoLfnqJ.s:378    .text:00000000000001fc .L0 
+     /tmp/ccoLfnqJ.s:383    .text:0000000000000200 .L0 
+     /tmp/ccoLfnqJ.s:385    .text:0000000000000204 .L0 
+     /tmp/ccoLfnqJ.s:388    .text:0000000000000208 .L0 
+     /tmp/ccoLfnqJ.s:389    .text:0000000000000208 .L0 
+     /tmp/ccoLfnqJ.s:390    .text:0000000000000208 .L0 
+     /tmp/ccoLfnqJ.s:392    .text:000000000000020c .L0 
+     /tmp/ccoLfnqJ.s:395    .text:0000000000000210 .L0 
+     /tmp/ccoLfnqJ.s:398    .text:0000000000000214 .L0 
+     /tmp/ccoLfnqJ.s:399    .text:0000000000000214 .L0 
+     /tmp/ccoLfnqJ.s:401    .text:0000000000000218 .L0 
+     /tmp/ccoLfnqJ.s:403    .text:000000000000021c .L0 
+     /tmp/ccoLfnqJ.s:404    .text:000000000000021c .L0 
+     /tmp/ccoLfnqJ.s:409    .text:0000000000000220 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 36
+
+
+     /tmp/ccoLfnqJ.s:410    .text:0000000000000220 .L0 
+     /tmp/ccoLfnqJ.s:411    .text:0000000000000224 .L0 
+     /tmp/ccoLfnqJ.s:412    .text:0000000000000224 .L0 
+     /tmp/ccoLfnqJ.s:414    .text:0000000000000228 .L0 
+     /tmp/ccoLfnqJ.s:416    .text:000000000000022c .L0 
+     /tmp/ccoLfnqJ.s:430    .text:000000000000022c _ZN5Cache17printErrorMessageEv
+     /tmp/ccoLfnqJ.s:433    .text:000000000000022c .L0 
+     /tmp/ccoLfnqJ.s:435    .text:000000000000022c .L0 
+     /tmp/ccoLfnqJ.s:436    .text:0000000000000230 .L0 
+     /tmp/ccoLfnqJ.s:440    .text:000000000000023c .L0 
+     /tmp/ccoLfnqJ.s:441    .text:000000000000023c .L0 
+     /tmp/ccoLfnqJ.s:442    .text:000000000000023c .L0 
+     /tmp/ccoLfnqJ.s:444    .text:0000000000000240 .L0 
+     /tmp/ccoLfnqJ.s:447    .text:0000000000000244 .L0 
+     /tmp/ccoLfnqJ.s:448    .text:0000000000000244 .L0 
+     /tmp/ccoLfnqJ.s:450    .text:0000000000000248 .L0 
+     /tmp/ccoLfnqJ.s:455    .text:0000000000000250 .L0 
+     /tmp/ccoLfnqJ.s:456    .text:0000000000000250 .L0 
+     /tmp/ccoLfnqJ.s:457    .text:0000000000000250 .L0 
+     /tmp/ccoLfnqJ.s:461    .text:0000000000000260 .L0 
+     /tmp/ccoLfnqJ.s:462    .text:0000000000000260 .L0 
+     /tmp/ccoLfnqJ.s:464    .text:0000000000000268 .L0 
+     /tmp/ccoLfnqJ.s:465    .text:0000000000000268 .L0 
+     /tmp/ccoLfnqJ.s:467    .text:000000000000026c .L0 
+     /tmp/ccoLfnqJ.s:468    .text:000000000000026c .L0 
+     /tmp/ccoLfnqJ.s:470    .text:0000000000000270 .L0 
+     /tmp/ccoLfnqJ.s:473    .text:0000000000000274 .L0 
+     /tmp/ccoLfnqJ.s:477    .text:0000000000000278 .L0 
+     /tmp/ccoLfnqJ.s:479    .text:0000000000000278 .L0 
+     /tmp/ccoLfnqJ.s:480    .text:0000000000000278 .L0 
+     /tmp/ccoLfnqJ.s:481    .text:0000000000000278 .L0 
+     /tmp/ccoLfnqJ.s:485    .text:000000000000028c .L0 
+     /tmp/ccoLfnqJ.s:491    .text:000000000000028c _ZN5Cache19getNumSlabsAndSlotsEPiS0_
+     /tmp/ccoLfnqJ.s:494    .text:000000000000028c .L0 
+     /tmp/ccoLfnqJ.s:496    .text:000000000000028c .L0 
+     /tmp/ccoLfnqJ.s:497    .text:0000000000000290 .L0 
+     /tmp/ccoLfnqJ.s:499    .text:0000000000000294 .L0 
+     /tmp/ccoLfnqJ.s:501    .text:0000000000000298 .L0 
+     /tmp/ccoLfnqJ.s:504    .text:0000000000000298 .L0 
+     /tmp/ccoLfnqJ.s:506    .text:0000000000000298 .L0 
+     /tmp/ccoLfnqJ.s:507    .text:0000000000000298 .L0 
+     /tmp/ccoLfnqJ.s:510    .text:000000000000029c .L0 
+     /tmp/ccoLfnqJ.s:512    .text:00000000000002a0 .L0 
+     /tmp/ccoLfnqJ.s:518    .text:00000000000002a8 .L0 
+     /tmp/ccoLfnqJ.s:522    .text:00000000000002ac .L0 
+     /tmp/ccoLfnqJ.s:528    .text:00000000000002b4 .L0 
+     /tmp/ccoLfnqJ.s:529    .text:00000000000002b4 .L0 
+     /tmp/ccoLfnqJ.s:535    .text:00000000000002c0 .L0 
+     /tmp/ccoLfnqJ.s:537    .text:00000000000002c4 .L0 
+     /tmp/ccoLfnqJ.s:538    .text:00000000000002c4 .L0 
+     /tmp/ccoLfnqJ.s:541    .text:00000000000002c8 .L0 
+     /tmp/ccoLfnqJ.s:542    .text:00000000000002c8 .L0 
+     /tmp/ccoLfnqJ.s:544    .text:00000000000002cc .L0 
+     /tmp/ccoLfnqJ.s:547    .text:00000000000002d0 .L0 
+     /tmp/ccoLfnqJ.s:548    .text:00000000000002d0 .L0 
+     /tmp/ccoLfnqJ.s:551    .text:00000000000002d4 .L0 
+     /tmp/ccoLfnqJ.s:557    .text:00000000000002d8 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 37
+
+
+     /tmp/ccoLfnqJ.s:558    .text:00000000000002d8 .L0 
+     /tmp/ccoLfnqJ.s:560    .text:00000000000002dc .L0 
+     /tmp/ccoLfnqJ.s:561    .text:00000000000002dc .L0 
+     /tmp/ccoLfnqJ.s:563    .text:00000000000002e0 .L0 
+     /tmp/ccoLfnqJ.s:564    .text:00000000000002e4 .L0 
+     /tmp/ccoLfnqJ.s:565    .text:00000000000002e4 .L0 
+     /tmp/ccoLfnqJ.s:567    .text:00000000000002e8 .L0 
+     /tmp/ccoLfnqJ.s:569    .text:00000000000002ec .L0 
+     /tmp/ccoLfnqJ.s:583    .text:00000000000002ec _ZN5Cache14printCacheInfoEv
+     /tmp/ccoLfnqJ.s:586    .text:00000000000002ec .L0 
+     /tmp/ccoLfnqJ.s:588    .text:00000000000002ec .L0 
+     /tmp/ccoLfnqJ.s:589    .text:00000000000002f0 .L0 
+     /tmp/ccoLfnqJ.s:593    .text:00000000000002fc .L0 
+     /tmp/ccoLfnqJ.s:594    .text:00000000000002fc .L0 
+     /tmp/ccoLfnqJ.s:595    .text:00000000000002fc .L0 
+     /tmp/ccoLfnqJ.s:597    .text:0000000000000300 .L0 
+     /tmp/ccoLfnqJ.s:600    .text:0000000000000304 .L0 
+     /tmp/ccoLfnqJ.s:601    .text:0000000000000304 .L0 
+     /tmp/ccoLfnqJ.s:603    .text:0000000000000308 .L0 
+     /tmp/ccoLfnqJ.s:605    .text:000000000000030c .L0 
+     /tmp/ccoLfnqJ.s:606    .text:000000000000030c .L0 
+     /tmp/ccoLfnqJ.s:611    .text:000000000000031c .L0 
+     /tmp/ccoLfnqJ.s:612    .text:000000000000031c .L0 
+     /tmp/ccoLfnqJ.s:616    .text:000000000000032c .L0 
+     /tmp/ccoLfnqJ.s:617    .text:000000000000032c .L0 
+     /tmp/ccoLfnqJ.s:621    .text:0000000000000338 .L0 
+     /tmp/ccoLfnqJ.s:622    .text:0000000000000338 .L0 
+     /tmp/ccoLfnqJ.s:626    .text:0000000000000348 .L0 
+     /tmp/ccoLfnqJ.s:627    .text:0000000000000348 .L0 
+     /tmp/ccoLfnqJ.s:633    .text:000000000000035c .L0 
+     /tmp/ccoLfnqJ.s:634    .text:000000000000035c .L0 
+     /tmp/ccoLfnqJ.s:638    .text:000000000000036c .L0 
+     /tmp/ccoLfnqJ.s:639    .text:000000000000036c .L0 
+     /tmp/ccoLfnqJ.s:645    .text:0000000000000380 .L0 
+     /tmp/ccoLfnqJ.s:646    .text:0000000000000380 .L0 
+     /tmp/ccoLfnqJ.s:650    .text:0000000000000390 .L0 
+     /tmp/ccoLfnqJ.s:651    .text:0000000000000390 .L0 
+     /tmp/ccoLfnqJ.s:657    .text:00000000000003a4 .L0 
+     /tmp/ccoLfnqJ.s:658    .text:00000000000003a4 .L0 
+     /tmp/ccoLfnqJ.s:662    .text:00000000000003b4 .L0 
+     /tmp/ccoLfnqJ.s:663    .text:00000000000003b4 .L0 
+     /tmp/ccoLfnqJ.s:669    .text:00000000000003c8 .L0 
+     /tmp/ccoLfnqJ.s:670    .text:00000000000003c8 .L0 
+     /tmp/ccoLfnqJ.s:674    .text:00000000000003d8 .L0 
+     /tmp/ccoLfnqJ.s:675    .text:00000000000003d8 .L0 
+     /tmp/ccoLfnqJ.s:681    .text:00000000000003ec .L0 
+     /tmp/ccoLfnqJ.s:682    .text:00000000000003f0 .L0 
+     /tmp/ccoLfnqJ.s:684    .text:00000000000003f4 .L0 
+     /tmp/ccoLfnqJ.s:685    .text:00000000000003f4 .L0 
+     /tmp/ccoLfnqJ.s:687    .text:00000000000003f8 .L0 
+     /tmp/ccoLfnqJ.s:690    .text:00000000000003fc .L0 
+     /tmp/ccoLfnqJ.s:692    .text:0000000000000400 .L0 
+     /tmp/ccoLfnqJ.s:698    .text:0000000000000400 _ZN5Cache11deallocSlabEPNS_4SlabE
+     /tmp/ccoLfnqJ.s:701    .text:0000000000000400 .L0 
+     /tmp/ccoLfnqJ.s:703    .text:0000000000000400 .L0 
+     /tmp/ccoLfnqJ.s:704    .text:0000000000000404 .L0 
+     /tmp/ccoLfnqJ.s:710    .text:0000000000000418 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 38
+
+
+     /tmp/ccoLfnqJ.s:711    .text:0000000000000418 .L0 
+     /tmp/ccoLfnqJ.s:712    .text:0000000000000418 .L0 
+     /tmp/ccoLfnqJ.s:713    .text:0000000000000418 .L0 
+     /tmp/ccoLfnqJ.s:714    .text:0000000000000418 .L0 
+     /tmp/ccoLfnqJ.s:716    .text:000000000000041c .L0 
+     /tmp/ccoLfnqJ.s:721    .text:0000000000000424 .L0 
+     /tmp/ccoLfnqJ.s:723    .text:0000000000000424 .L0 
+     /tmp/ccoLfnqJ.s:724    .text:0000000000000424 .L0 
+     /tmp/ccoLfnqJ.s:728    .text:0000000000000428 .L0 
+     /tmp/ccoLfnqJ.s:729    .text:0000000000000428 .L0 
+     /tmp/ccoLfnqJ.s:731    .text:000000000000042c .L0 
+     /tmp/ccoLfnqJ.s:733    .text:0000000000000430 .L0 
+     /tmp/ccoLfnqJ.s:735    .text:0000000000000434 .L0 
+     /tmp/ccoLfnqJ.s:737    .text:0000000000000438 .L0 
+     /tmp/ccoLfnqJ.s:739    .text:000000000000043c .L0 
+     /tmp/ccoLfnqJ.s:744    .text:0000000000000448 .L0 
+     /tmp/ccoLfnqJ.s:750    .text:0000000000000450 .L0 
+     /tmp/ccoLfnqJ.s:751    .text:0000000000000450 .L0 
+     /tmp/ccoLfnqJ.s:756    .text:0000000000000460 .L0 
+     /tmp/ccoLfnqJ.s:757    .text:0000000000000464 .L0 
+     /tmp/ccoLfnqJ.s:759    .text:0000000000000468 .L0 
+     /tmp/ccoLfnqJ.s:760    .text:0000000000000468 .L0 
+     /tmp/ccoLfnqJ.s:762    .text:000000000000046c .L0 
+     /tmp/ccoLfnqJ.s:765    .text:0000000000000470 .L0 
+     /tmp/ccoLfnqJ.s:768    .text:0000000000000474 .L0 
+     /tmp/ccoLfnqJ.s:771    .text:0000000000000478 .L0 
+     /tmp/ccoLfnqJ.s:773    .text:000000000000047c .L0 
+     /tmp/ccoLfnqJ.s:779    .text:000000000000047c _ZN5Cache16deallocFreeSlabsEv
+     /tmp/ccoLfnqJ.s:782    .text:000000000000047c .L0 
+     /tmp/ccoLfnqJ.s:784    .text:000000000000047c .L0 
+     /tmp/ccoLfnqJ.s:785    .text:0000000000000480 .L0 
+     /tmp/ccoLfnqJ.s:791    .text:0000000000000494 .L0 
+     /tmp/ccoLfnqJ.s:792    .text:0000000000000494 .L0 
+     /tmp/ccoLfnqJ.s:793    .text:0000000000000494 .L0 
+     /tmp/ccoLfnqJ.s:794    .text:0000000000000494 .L0 
+     /tmp/ccoLfnqJ.s:795    .text:0000000000000494 .L0 
+     /tmp/ccoLfnqJ.s:797    .text:0000000000000498 .L0 
+     /tmp/ccoLfnqJ.s:801    .text:000000000000049c .L0 
+     /tmp/ccoLfnqJ.s:803    .text:000000000000049c .L0 
+     /tmp/ccoLfnqJ.s:804    .text:000000000000049c .L0 
+     /tmp/ccoLfnqJ.s:808    .text:00000000000004a0 .L0 
+     /tmp/ccoLfnqJ.s:813    .text:00000000000004a4 .L0 
+     /tmp/ccoLfnqJ.s:816    .text:00000000000004a8 .L0 
+     /tmp/ccoLfnqJ.s:817    .text:00000000000004a8 .L0 
+     /tmp/ccoLfnqJ.s:820    .text:00000000000004ac .L0 
+     /tmp/ccoLfnqJ.s:821    .text:00000000000004ac .L0 
+     /tmp/ccoLfnqJ.s:822    .text:00000000000004ac .L0 
+     /tmp/ccoLfnqJ.s:825    .text:00000000000004b0 .L0 
+     /tmp/ccoLfnqJ.s:826    .text:00000000000004b0 .L0 
+     /tmp/ccoLfnqJ.s:830    .text:00000000000004bc .L0 
+     /tmp/ccoLfnqJ.s:833    .text:00000000000004c0 .L0 
+     /tmp/ccoLfnqJ.s:838    .text:00000000000004c4 .L0 
+     /tmp/ccoLfnqJ.s:839    .text:00000000000004c4 .L0 
+     /tmp/ccoLfnqJ.s:841    .text:00000000000004c8 .L0 
+     /tmp/ccoLfnqJ.s:842    .text:00000000000004c8 .L0 
+     /tmp/ccoLfnqJ.s:844    .text:00000000000004d0 .L0 
+     /tmp/ccoLfnqJ.s:846    .text:00000000000004d4 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 39
+
+
+     /tmp/ccoLfnqJ.s:847    .text:00000000000004d4 .L0 
+     /tmp/ccoLfnqJ.s:849    .text:00000000000004d8 .L0 
+     /tmp/ccoLfnqJ.s:852    .text:00000000000004dc .L0 
+     /tmp/ccoLfnqJ.s:854    .text:00000000000004e0 .L0 
+     /tmp/ccoLfnqJ.s:857    .text:00000000000004e4 .L0 
+     /tmp/ccoLfnqJ.s:859    .text:00000000000004e8 .L0 
+     /tmp/ccoLfnqJ.s:865    .text:00000000000004e8 _ZN5Cache12deallocCacheEv
+     /tmp/ccoLfnqJ.s:868    .text:00000000000004e8 .L0 
+     /tmp/ccoLfnqJ.s:870    .text:00000000000004e8 .L0 
+     /tmp/ccoLfnqJ.s:871    .text:00000000000004ec .L0 
+     /tmp/ccoLfnqJ.s:877    .text:0000000000000500 .L0 
+     /tmp/ccoLfnqJ.s:878    .text:0000000000000500 .L0 
+     /tmp/ccoLfnqJ.s:879    .text:0000000000000500 .L0 
+     /tmp/ccoLfnqJ.s:880    .text:0000000000000500 .L0 
+     /tmp/ccoLfnqJ.s:881    .text:0000000000000500 .L0 
+     /tmp/ccoLfnqJ.s:883    .text:0000000000000504 .L0 
+     /tmp/ccoLfnqJ.s:888    .text:0000000000000508 .L0 
+     /tmp/ccoLfnqJ.s:889    .text:0000000000000508 .L0 
+     /tmp/ccoLfnqJ.s:894    .text:0000000000000510 .L0 
+     /tmp/ccoLfnqJ.s:898    .text:0000000000000514 .L0 
+     /tmp/ccoLfnqJ.s:902    .text:000000000000051c .L0 
+     /tmp/ccoLfnqJ.s:903    .text:000000000000051c .L0 
+     /tmp/ccoLfnqJ.s:909    .text:0000000000000528 .L0 
+     /tmp/ccoLfnqJ.s:910    .text:0000000000000528 .L0 
+     /tmp/ccoLfnqJ.s:914    .text:000000000000052c .L0 
+     /tmp/ccoLfnqJ.s:915    .text:000000000000052c .L0 
+     /tmp/ccoLfnqJ.s:916    .text:000000000000052c .L0 
+     /tmp/ccoLfnqJ.s:919    .text:0000000000000530 .L0 
+     /tmp/ccoLfnqJ.s:920    .text:0000000000000530 .L0 
+     /tmp/ccoLfnqJ.s:924    .text:000000000000053c .L0 
+     /tmp/ccoLfnqJ.s:927    .text:0000000000000540 .L0 
+     /tmp/ccoLfnqJ.s:933    .text:0000000000000544 .L0 
+     /tmp/ccoLfnqJ.s:934    .text:0000000000000548 .L0 
+     /tmp/ccoLfnqJ.s:936    .text:000000000000054c .L0 
+     /tmp/ccoLfnqJ.s:937    .text:000000000000054c .L0 
+     /tmp/ccoLfnqJ.s:939    .text:0000000000000550 .L0 
+     /tmp/ccoLfnqJ.s:941    .text:0000000000000554 .L0 
+     /tmp/ccoLfnqJ.s:944    .text:0000000000000558 .L0 
+     /tmp/ccoLfnqJ.s:947    .text:000000000000055c .L0 
+     /tmp/ccoLfnqJ.s:949    .text:0000000000000560 .L0 
+     /tmp/ccoLfnqJ.s:955    .text:0000000000000560 _ZN5Cache4Slab17calculateNewStateEv
+     /tmp/ccoLfnqJ.s:958    .text:0000000000000560 .L0 
+     /tmp/ccoLfnqJ.s:960    .text:0000000000000560 .L0 
+     /tmp/ccoLfnqJ.s:961    .text:0000000000000564 .L0 
+     /tmp/ccoLfnqJ.s:963    .text:0000000000000568 .L0 
+     /tmp/ccoLfnqJ.s:965    .text:000000000000056c .L0 
+     /tmp/ccoLfnqJ.s:967    .text:000000000000056c .L0 
+     /tmp/ccoLfnqJ.s:968    .text:000000000000056c .L0 
+     /tmp/ccoLfnqJ.s:970    .text:0000000000000570 .L0 
+     /tmp/ccoLfnqJ.s:972    .text:0000000000000574 .L0 
+     /tmp/ccoLfnqJ.s:973    .text:0000000000000574 .L0 
+     /tmp/ccoLfnqJ.s:975    .text:0000000000000578 .L0 
+     /tmp/ccoLfnqJ.s:977    .text:000000000000057c .L0 
+     /tmp/ccoLfnqJ.s:979    .text:0000000000000580 .L0 
+     /tmp/ccoLfnqJ.s:983    .text:0000000000000584 .L0 
+     /tmp/ccoLfnqJ.s:984    .text:0000000000000588 .L0 
+     /tmp/ccoLfnqJ.s:985    .text:0000000000000588 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 40
+
+
+     /tmp/ccoLfnqJ.s:986    .text:0000000000000588 .L0 
+     /tmp/ccoLfnqJ.s:988    .text:000000000000058c .L0 
+     /tmp/ccoLfnqJ.s:992    .text:0000000000000590 .L0 
+     /tmp/ccoLfnqJ.s:994    .text:0000000000000590 .L0 
+     /tmp/ccoLfnqJ.s:1000   .text:0000000000000598 .L0 
+     /tmp/ccoLfnqJ.s:1003   .text:00000000000005a0 .L0 
+     /tmp/ccoLfnqJ.s:1009   .text:00000000000005a0 _ZN5Cache8freeSlotEPNS_4SlotE
+     /tmp/ccoLfnqJ.s:1012   .text:00000000000005a0 .L0 
+     /tmp/ccoLfnqJ.s:1014   .text:00000000000005a0 .L0 
+     /tmp/ccoLfnqJ.s:1015   .text:00000000000005a4 .L0 
+     /tmp/ccoLfnqJ.s:1021   .text:00000000000005b8 .L0 
+     /tmp/ccoLfnqJ.s:1022   .text:00000000000005b8 .L0 
+     /tmp/ccoLfnqJ.s:1023   .text:00000000000005b8 .L0 
+     /tmp/ccoLfnqJ.s:1024   .text:00000000000005b8 .L0 
+     /tmp/ccoLfnqJ.s:1025   .text:00000000000005b8 .L0 
+     /tmp/ccoLfnqJ.s:1027   .text:00000000000005bc .L0 
+     /tmp/ccoLfnqJ.s:1029   .text:00000000000005bc .L0 
+     /tmp/ccoLfnqJ.s:1030   .text:00000000000005bc .L0 
+     /tmp/ccoLfnqJ.s:1032   .text:00000000000005c0 .L0 
+     /tmp/ccoLfnqJ.s:1034   .text:00000000000005c4 .L0 
+     /tmp/ccoLfnqJ.s:1036   .text:00000000000005c8 .L0 
+     /tmp/ccoLfnqJ.s:1037   .text:00000000000005c8 .L0 
+     /tmp/ccoLfnqJ.s:1042   .text:00000000000005d0 .L0 
+     /tmp/ccoLfnqJ.s:1043   .text:00000000000005d0 .L0 
+     /tmp/ccoLfnqJ.s:1044   .text:00000000000005d4 .L0 
+     /tmp/ccoLfnqJ.s:1045   .text:00000000000005d4 .L0 
+     /tmp/ccoLfnqJ.s:1047   .text:00000000000005d8 .L0 
+     /tmp/ccoLfnqJ.s:1048   .text:00000000000005d8 .L0 
+     /tmp/ccoLfnqJ.s:1050   .text:00000000000005dc .L0 
+     /tmp/ccoLfnqJ.s:1052   .text:00000000000005e0 .L0 
+     /tmp/ccoLfnqJ.s:1054   .text:00000000000005e4 .L0 
+     /tmp/ccoLfnqJ.s:1056   .text:00000000000005e8 .L0 
+     /tmp/ccoLfnqJ.s:1060   .text:00000000000005ec .L0 
+     /tmp/ccoLfnqJ.s:1062   .text:00000000000005ec .L0 
+     /tmp/ccoLfnqJ.s:1063   .text:00000000000005ec .L0 
+     /tmp/ccoLfnqJ.s:1064   .text:00000000000005ec .L0 
+     /tmp/ccoLfnqJ.s:1065   .text:00000000000005ec .L0 
+     /tmp/ccoLfnqJ.s:1067   .text:00000000000005f0 .L0 
+     /tmp/ccoLfnqJ.s:1068   .text:00000000000005f0 .L0 
+     /tmp/ccoLfnqJ.s:1070   .text:00000000000005f4 .L0 
+     /tmp/ccoLfnqJ.s:1073   .text:00000000000005fc .L0 
+     /tmp/ccoLfnqJ.s:1074   .text:00000000000005fc .L0 
+     /tmp/ccoLfnqJ.s:1081   .text:000000000000060c .L0 
+     /tmp/ccoLfnqJ.s:1082   .text:000000000000060c .L0 
+     /tmp/ccoLfnqJ.s:1084   .text:0000000000000610 .L0 
+     /tmp/ccoLfnqJ.s:1086   .text:0000000000000614 .L0 
+     /tmp/ccoLfnqJ.s:1091   .text:000000000000061c .L0 
+     /tmp/ccoLfnqJ.s:1092   .text:000000000000061c .L0 
+     /tmp/ccoLfnqJ.s:1101   .text:0000000000000634 .L0 
+     /tmp/ccoLfnqJ.s:1102   .text:0000000000000634 .L0 
+     /tmp/ccoLfnqJ.s:1108   .text:0000000000000648 .L0 
+     /tmp/ccoLfnqJ.s:1114   .text:0000000000000648 _ZN5Cache4Slab11getFreeSlotEv
+     /tmp/ccoLfnqJ.s:1117   .text:0000000000000648 .L0 
+     /tmp/ccoLfnqJ.s:1119   .text:0000000000000648 .L0 
+     /tmp/ccoLfnqJ.s:1120   .text:000000000000064c .L0 
+     /tmp/ccoLfnqJ.s:1126   .text:0000000000000660 .L0 
+     /tmp/ccoLfnqJ.s:1127   .text:0000000000000660 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 41
+
+
+     /tmp/ccoLfnqJ.s:1128   .text:0000000000000660 .L0 
+     /tmp/ccoLfnqJ.s:1129   .text:0000000000000660 .L0 
+     /tmp/ccoLfnqJ.s:1130   .text:0000000000000660 .L0 
+     /tmp/ccoLfnqJ.s:1132   .text:0000000000000664 .L0 
+     /tmp/ccoLfnqJ.s:1134   .text:0000000000000664 .L0 
+     /tmp/ccoLfnqJ.s:1135   .text:0000000000000664 .L0 
+     /tmp/ccoLfnqJ.s:1137   .text:0000000000000668 .L0 
+     /tmp/ccoLfnqJ.s:1140   .text:0000000000000670 .L0 
+     /tmp/ccoLfnqJ.s:1142   .text:0000000000000674 .L0 
+     /tmp/ccoLfnqJ.s:1148   .text:000000000000067c .L0 
+     /tmp/ccoLfnqJ.s:1153   .text:0000000000000680 .L0 
+     /tmp/ccoLfnqJ.s:1154   .text:0000000000000680 .L0 
+     /tmp/ccoLfnqJ.s:1156   .text:0000000000000684 .L0 
+     /tmp/ccoLfnqJ.s:1159   .text:0000000000000688 .L0 
+     /tmp/ccoLfnqJ.s:1160   .text:0000000000000688 .L0 
+     /tmp/ccoLfnqJ.s:1163   .text:000000000000068c .L0 
+     /tmp/ccoLfnqJ.s:1168   .text:0000000000000690 .L0 
+     /tmp/ccoLfnqJ.s:1169   .text:0000000000000690 .L0 
+     /tmp/ccoLfnqJ.s:1171   .text:0000000000000694 .L0 
+     /tmp/ccoLfnqJ.s:1174   .text:000000000000069c .L0 
+     /tmp/ccoLfnqJ.s:1175   .text:000000000000069c .L0 
+     /tmp/ccoLfnqJ.s:1178   .text:00000000000006a4 .L0 
+     /tmp/ccoLfnqJ.s:1179   .text:00000000000006a4 .L0 
+     /tmp/ccoLfnqJ.s:1181   .text:00000000000006a8 .L0 
+     /tmp/ccoLfnqJ.s:1182   .text:00000000000006a8 .L0 
+     /tmp/ccoLfnqJ.s:1189   .text:00000000000006b8 .L0 
+     /tmp/ccoLfnqJ.s:1190   .text:00000000000006b8 .L0 
+     /tmp/ccoLfnqJ.s:1192   .text:00000000000006bc .L0 
+     /tmp/ccoLfnqJ.s:1194   .text:00000000000006c0 .L0 
+     /tmp/ccoLfnqJ.s:1199   .text:00000000000006c8 .L0 
+     /tmp/ccoLfnqJ.s:1200   .text:00000000000006c8 .L0 
+     /tmp/ccoLfnqJ.s:1210   .text:00000000000006dc .L0 
+     /tmp/ccoLfnqJ.s:1211   .text:00000000000006dc .L0 
+     /tmp/ccoLfnqJ.s:1213   .text:00000000000006e4 .L0 
+     /tmp/ccoLfnqJ.s:1214   .text:00000000000006e4 .L0 
+     /tmp/ccoLfnqJ.s:1216   .text:00000000000006e8 .L0 
+     /tmp/ccoLfnqJ.s:1217   .text:00000000000006e8 .L0 
+     /tmp/ccoLfnqJ.s:1219   .text:00000000000006ec .L0 
+     /tmp/ccoLfnqJ.s:1221   .text:00000000000006f0 .L0 
+     /tmp/ccoLfnqJ.s:1223   .text:00000000000006f4 .L0 
+     /tmp/ccoLfnqJ.s:1225   .text:00000000000006f8 .L0 
+     /tmp/ccoLfnqJ.s:1229   .text:00000000000006fc .L0 
+     /tmp/ccoLfnqJ.s:1234   .text:00000000000006fc .L0 
+     /tmp/ccoLfnqJ.s:1235   .text:00000000000006fc .L0 
+     /tmp/ccoLfnqJ.s:1247   .text:0000000000000710 .L0 
+     /tmp/ccoLfnqJ.s:1249   .text:0000000000000718 .L0 
+     /tmp/ccoLfnqJ.s:1255   .text:0000000000000718 _ZN5Cache12allocateSlotEv
+     /tmp/ccoLfnqJ.s:1258   .text:0000000000000718 .L0 
+     /tmp/ccoLfnqJ.s:1260   .text:0000000000000718 .L0 
+     /tmp/ccoLfnqJ.s:1261   .text:000000000000071c .L0 
+     /tmp/ccoLfnqJ.s:1264   .text:0000000000000724 .L0 
+     /tmp/ccoLfnqJ.s:1265   .text:0000000000000724 .L0 
+     /tmp/ccoLfnqJ.s:1267   .text:0000000000000728 .L0 
+     /tmp/ccoLfnqJ.s:1271   .text:000000000000072c .L0 
+     /tmp/ccoLfnqJ.s:1272   .text:000000000000072c .L0 
+     /tmp/ccoLfnqJ.s:1275   .text:0000000000000730 .L0 
+     /tmp/ccoLfnqJ.s:1279   .text:0000000000000734 .L0 
+GAS LISTING /tmp/ccoLfnqJ.s 			page 42
+
+
+     /tmp/ccoLfnqJ.s:1280   .text:0000000000000734 .L0 
+     /tmp/ccoLfnqJ.s:1281   .text:0000000000000734 .L0 
+     /tmp/ccoLfnqJ.s:1283   .text:0000000000000738 .L0 
+     /tmp/ccoLfnqJ.s:1285   .text:000000000000073c .L0 
+     /tmp/ccoLfnqJ.s:1286   .text:000000000000073c .L0 
+     /tmp/ccoLfnqJ.s:1292   .text:0000000000000744 .L0 
+     /tmp/ccoLfnqJ.s:1293   .text:0000000000000748 .L0 
+     /tmp/ccoLfnqJ.s:1294   .text:0000000000000748 .L0 
+     /tmp/ccoLfnqJ.s:1296   .text:000000000000074c .L0 
+     /tmp/ccoLfnqJ.s:1297   .text:000000000000074c .L0 
+     /tmp/ccoLfnqJ.s:1299   .text:0000000000000750 .L0 
+     /tmp/ccoLfnqJ.s:1303   .text:0000000000000754 .L0 
+     /tmp/ccoLfnqJ.s:1307   .text:0000000000000754 .L0 
+     /tmp/ccoLfnqJ.s:1308   .text:0000000000000754 .L0 
+     /tmp/ccoLfnqJ.s:1310   .text:0000000000000758 .L0 
+     /tmp/ccoLfnqJ.s:1314   .text:000000000000075c .L0 
+     /tmp/ccoLfnqJ.s:1315   .text:000000000000075c .L0 
+     /tmp/ccoLfnqJ.s:1316   .text:000000000000075c .L0 
+     /tmp/ccoLfnqJ.s:1318   .text:0000000000000760 .L0 
+     /tmp/ccoLfnqJ.s:1320   .text:0000000000000764 .L0 
+     /tmp/ccoLfnqJ.s:1321   .text:0000000000000764 .L0 
+     /tmp/ccoLfnqJ.s:1324   .text:000000000000076c .L0 
+     /tmp/ccoLfnqJ.s:1325   .text:000000000000076c .L0 
+     /tmp/ccoLfnqJ.s:1331   .text:0000000000000770 .L0 
+     /tmp/ccoLfnqJ.s:1332   .text:0000000000000770 .L0 
+     /tmp/ccoLfnqJ.s:1336   .text:000000000000077c .L0 
+     /tmp/ccoLfnqJ.s:1337   .text:000000000000077c .L0 
+     /tmp/ccoLfnqJ.s:1340   .text:0000000000000784 .L0 
+     /tmp/ccoLfnqJ.s:1344   .text:0000000000000788 .L0 
+     /tmp/ccoLfnqJ.s:1353   .text:0000000000000788 .L0 
+     /tmp/ccoLfnqJ.s:424    .rodata.str1.8:0000000000000020 .LC1
+     /tmp/ccoLfnqJ.s:457    .text:0000000000000250 .L0 
+     /tmp/ccoLfnqJ.s:421    .rodata.str1.8:0000000000000000 .LC0
+     /tmp/ccoLfnqJ.s:481    .text:0000000000000278 .L0 
+     /tmp/ccoLfnqJ.s:574    .rodata.str1.8:0000000000000048 .LC2
+     /tmp/ccoLfnqJ.s:612    .text:000000000000031c .L0 
+     /tmp/ccoLfnqJ.s:577    .rodata.str1.8:00000000000000b8 .LC3
+     /tmp/ccoLfnqJ.s:622    .text:0000000000000338 .L0 
+     /tmp/ccoLfnqJ.s:634    .text:000000000000035c .L0 
+     /tmp/ccoLfnqJ.s:646    .text:0000000000000380 .L0 
+     /tmp/ccoLfnqJ.s:658    .text:00000000000003a4 .L0 
+     /tmp/ccoLfnqJ.s:670    .text:00000000000003c8 .L0 
+     /tmp/ccoLfnqJ.s:83     .text:0000000000000064 .L7
+     /tmp/ccoLfnqJ.s:63     .text:0000000000000044 .L5
+     /tmp/ccoLfnqJ.s:103    .text:0000000000000084 .L6
+     /tmp/ccoLfnqJ.s:89     .text:0000000000000068 .L4
+     /tmp/ccoLfnqJ.s:222    .text:0000000000000124 .L13
+     /tmp/ccoLfnqJ.s:261    .text:0000000000000160 .L9
+     /tmp/ccoLfnqJ.s:202    .text:0000000000000114 .L11
+     /tmp/ccoLfnqJ.s:208    .text:0000000000000118 .L12
+     /tmp/ccoLfnqJ.s:334    .text:00000000000001c8 .L15
+     /tmp/ccoLfnqJ.s:326    .text:00000000000001bc .L17
+     /tmp/ccoLfnqJ.s:407    .text:0000000000000220 .L19
+     /tmp/ccoLfnqJ.s:396    .text:0000000000000214 .L24
+     /tmp/ccoLfnqJ.s:380    .text:0000000000000200 .L22
+     /tmp/ccoLfnqJ.s:476    .text:0000000000000278 .L28
+     /tmp/ccoLfnqJ.s:453    .text:0000000000000250 .L26
+GAS LISTING /tmp/ccoLfnqJ.s 			page 43
+
+
+     /tmp/ccoLfnqJ.s:520    .text:00000000000002ac .L33
+     /tmp/ccoLfnqJ.s:553    .text:00000000000002d8 .L30
+     /tmp/ccoLfnqJ.s:515    .text:00000000000002a8 .L31
+     /tmp/ccoLfnqJ.s:533    .text:00000000000002c0 .L32
+     /tmp/ccoLfnqJ.s:747    .text:0000000000000450 .L38
+     /tmp/ccoLfnqJ.s:726    .text:0000000000000428 .L39
+     /tmp/ccoLfnqJ.s:835    .text:00000000000004c4 .L42
+     /tmp/ccoLfnqJ.s:810    .text:00000000000004a4 .L43
+     /tmp/ccoLfnqJ.s:896    .text:0000000000000514 .L49
+     /tmp/ccoLfnqJ.s:929    .text:0000000000000544 .L45
+     /tmp/ccoLfnqJ.s:892    .text:0000000000000510 .L47
+     /tmp/ccoLfnqJ.s:907    .text:0000000000000528 .L48
+     /tmp/ccoLfnqJ.s:991    .text:0000000000000590 .L53
+     /tmp/ccoLfnqJ.s:998    .text:0000000000000598 .L54
+     /tmp/ccoLfnqJ.s:981    .text:0000000000000584 .L52
+     /tmp/ccoLfnqJ.s:1059   .text:00000000000005ec .L57
+     /tmp/ccoLfnqJ.s:1041   .text:00000000000005d0 .L56
+     /tmp/ccoLfnqJ.s:1099   .text:0000000000000634 .L61
+     /tmp/ccoLfnqJ.s:1089   .text:000000000000061c .L59
+     /tmp/ccoLfnqJ.s:1206   .text:00000000000006dc .L62
+     /tmp/ccoLfnqJ.s:1242   .text:0000000000000710 .L68
+     /tmp/ccoLfnqJ.s:1164   .text:0000000000000690 .L70
+     /tmp/ccoLfnqJ.s:1144   .text:000000000000067c .L67
+     /tmp/ccoLfnqJ.s:1228   .text:00000000000006fc .L71
+     /tmp/ccoLfnqJ.s:1197   .text:00000000000006c8 .L66
+     /tmp/ccoLfnqJ.s:1302   .text:0000000000000754 .L73
+     /tmp/ccoLfnqJ.s:1327   .text:0000000000000770 .L75
+     /tmp/ccoLfnqJ.s:1288   .text:0000000000000744 .L72
+     /tmp/ccoLfnqJ.s:3219   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+     /tmp/ccoLfnqJ.s:5357   .debug_str:0000000000000700 .LASF129
+     /tmp/ccoLfnqJ.s:5127   .debug_str:000000000000000d .LASF130
+     /tmp/ccoLfnqJ.s:5215   .debug_str:00000000000002a4 .LASF131
+     /tmp/ccoLfnqJ.s:5      .text:0000000000000000 .Ltext0
+     /tmp/ccoLfnqJ.s:1347   .text:0000000000000788 .Letext0
+     /tmp/ccoLfnqJ.s:5123   .debug_line:0000000000000000 .Ldebug_line0
+     /tmp/ccoLfnqJ.s:5219   .debug_str:00000000000002d3 .LASF0
+     /tmp/ccoLfnqJ.s:5241   .debug_str:0000000000000379 .LASF1
+     /tmp/ccoLfnqJ.s:5313   .debug_str:00000000000005b7 .LASF2
+     /tmp/ccoLfnqJ.s:5319   .debug_str:00000000000005e0 .LASF4
+     /tmp/ccoLfnqJ.s:5223   .debug_str:00000000000002f1 .LASF3
+     /tmp/ccoLfnqJ.s:5131   .debug_str:0000000000000027 .LASF5
+     /tmp/ccoLfnqJ.s:5291   .debug_str:0000000000000502 .LASF6
+     /tmp/ccoLfnqJ.s:5231   .debug_str:0000000000000341 .LASF7
+     /tmp/ccoLfnqJ.s:5203   .debug_str:0000000000000236 .LASF8
+     /tmp/ccoLfnqJ.s:5211   .debug_str:0000000000000270 .LASF9
+     /tmp/ccoLfnqJ.s:5163   .debug_str:0000000000000110 .LASF10
+     /tmp/ccoLfnqJ.s:5191   .debug_str:00000000000001f2 .LASF11
+     /tmp/ccoLfnqJ.s:5173   .debug_str:000000000000014b .LASF12
+     /tmp/ccoLfnqJ.s:5161   .debug_str:0000000000000100 .LASF13
+     /tmp/ccoLfnqJ.s:5339   .debug_str:0000000000000692 .LASF14
+     /tmp/ccoLfnqJ.s:5183   .debug_str:000000000000018f .LASF15
+     /tmp/ccoLfnqJ.s:5333   .debug_str:0000000000000652 .LASF16
+     /tmp/ccoLfnqJ.s:5373   .debug_str:000000000000084a .LASF77
+     /tmp/ccoLfnqJ.s:5177   .debug_str:0000000000000160 .LASF132
+     /tmp/ccoLfnqJ.s:5253   .debug_str:00000000000003e7 .LASF17
+     /tmp/ccoLfnqJ.s:5139   .debug_str:0000000000000069 .LASF18
+     /tmp/ccoLfnqJ.s:5387   .debug_str:0000000000000914 .LASF133
+GAS LISTING /tmp/ccoLfnqJ.s 			page 44
+
+
+     /tmp/ccoLfnqJ.s:5151   .debug_str:00000000000000c1 .LASF19
+     /tmp/ccoLfnqJ.s:5205   .debug_str:0000000000000246 .LASF20
+     /tmp/ccoLfnqJ.s:5285   .debug_str:00000000000004ed .LASF21
+     /tmp/ccoLfnqJ.s:5305   .debug_str:0000000000000592 .LASF22
+     /tmp/ccoLfnqJ.s:5235   .debug_str:0000000000000360 .LASF26
+     /tmp/ccoLfnqJ.s:5275   .debug_str:0000000000000499 .LASF23
+     /tmp/ccoLfnqJ.s:5165   .debug_str:000000000000011f .LASF24
+     /tmp/ccoLfnqJ.s:5155   .debug_str:00000000000000cc .LASF25
+     /tmp/ccoLfnqJ.s:5351   .debug_str:00000000000006e6 .LASF27
+     /tmp/ccoLfnqJ.s:5187   .debug_str:00000000000001c0 .LASF28
+     /tmp/ccoLfnqJ.s:5181   .debug_str:0000000000000189 .LASF29
+     /tmp/ccoLfnqJ.s:5199   .debug_str:0000000000000222 .LASF30
+     /tmp/ccoLfnqJ.s:5143   .debug_str:000000000000007c .LASF55
+     /tmp/ccoLfnqJ.s:5263   .debug_str:0000000000000423 .LASF57
+     /tmp/ccoLfnqJ.s:5331   .debug_str:0000000000000649 .LASF31
+     /tmp/ccoLfnqJ.s:5283   .debug_str:00000000000004db .LASF34
+     /tmp/ccoLfnqJ.s:5147   .debug_str:0000000000000091 .LASF36
+     /tmp/ccoLfnqJ.s:5299   .debug_str:0000000000000549 .LASF32
+     /tmp/ccoLfnqJ.s:5247   .debug_str:00000000000003b3 .LASF33
+     /tmp/ccoLfnqJ.s:5309   .debug_str:00000000000005a6 .LASF35
+     /tmp/ccoLfnqJ.s:5369   .debug_str:000000000000081d .LASF37
+     /tmp/ccoLfnqJ.s:5303   .debug_str:0000000000000583 .LASF38
+     /tmp/ccoLfnqJ.s:5213   .debug_str:000000000000027e .LASF39
+     /tmp/ccoLfnqJ.s:5207   .debug_str:000000000000024e .LASF40
+     /tmp/ccoLfnqJ.s:5395   .debug_str:000000000000094b .LASF41
+     /tmp/ccoLfnqJ.s:5193   .debug_str:0000000000000201 .LASF42
+     /tmp/ccoLfnqJ.s:5145   .debug_str:0000000000000088 .LASF43
+     /tmp/ccoLfnqJ.s:5129   .debug_str:000000000000001b .LASF44
+     /tmp/ccoLfnqJ.s:5233   .debug_str:0000000000000354 .LASF45
+     /tmp/ccoLfnqJ.s:5289   .debug_str:00000000000004f7 .LASF46
+     /tmp/ccoLfnqJ.s:5353   .debug_str:00000000000006eb .LASF47
+     /tmp/ccoLfnqJ.s:5389   .debug_str:000000000000091e .LASF48
+     /tmp/ccoLfnqJ.s:5261   .debug_str:00000000000003fe .LASF49
+     /tmp/ccoLfnqJ.s:5307   .debug_str:000000000000059a .LASF50
+     /tmp/ccoLfnqJ.s:5385   .debug_str:00000000000008fb .LASF51
+     /tmp/ccoLfnqJ.s:5137   .debug_str:000000000000005b .LASF52
+     /tmp/ccoLfnqJ.s:5159   .debug_str:00000000000000f2 .LASF53
+     /tmp/ccoLfnqJ.s:5201   .debug_str:000000000000022e .LASF54
+     /tmp/ccoLfnqJ.s:5329   .debug_str:0000000000000637 .LASF61
+     /tmp/ccoLfnqJ.s:5179   .debug_str:000000000000016a .LASF63
+     /tmp/ccoLfnqJ.s:5197   .debug_str:0000000000000213 .LASF56
+     /tmp/ccoLfnqJ.s:5265   .debug_str:0000000000000441 .LASF58
+     /tmp/ccoLfnqJ.s:5367   .debug_str:0000000000000813 .LASF59
+     /tmp/ccoLfnqJ.s:5133   .debug_str:000000000000002e .LASF60
+     /tmp/ccoLfnqJ.s:5227   .debug_str:0000000000000327 .LASF62
+     /tmp/ccoLfnqJ.s:5321   .debug_str:00000000000005e7 .LASF64
+     /tmp/ccoLfnqJ.s:5397   .debug_str:0000000000000956 .LASF65
+     /tmp/ccoLfnqJ.s:5323   .debug_str:0000000000000601 .LASF66
+     /tmp/ccoLfnqJ.s:5317   .debug_str:00000000000005cf .LASF67
+     /tmp/ccoLfnqJ.s:5381   .debug_str:00000000000008ae .LASF68
+     /tmp/ccoLfnqJ.s:5393   .debug_str:000000000000093e .LASF69
+     /tmp/ccoLfnqJ.s:5361   .debug_str:00000000000007e4 .LASF70
+     /tmp/ccoLfnqJ.s:5149   .debug_str:00000000000000b5 .LASF71
+     /tmp/ccoLfnqJ.s:5295   .debug_str:000000000000051e .LASF72
+     /tmp/ccoLfnqJ.s:5273   .debug_str:000000000000048c .LASF73
+     /tmp/ccoLfnqJ.s:5269   .debug_str:000000000000046c .LASF74
+     /tmp/ccoLfnqJ.s:5259   .debug_str:00000000000003f9 .LASF75
+GAS LISTING /tmp/ccoLfnqJ.s 			page 45
+
+
+     /tmp/ccoLfnqJ.s:5349   .debug_str:00000000000006e1 .LASF76
+     /tmp/ccoLfnqJ.s:5267   .debug_str:000000000000045d .LASF78
+     /tmp/ccoLfnqJ.s:5365   .debug_str:0000000000000808 .LASF79
+     /tmp/ccoLfnqJ.s:5335   .debug_str:0000000000000668 .LASF80
+     /tmp/ccoLfnqJ.s:5153   .debug_str:00000000000000c7 .LASF81
+     /tmp/ccoLfnqJ.s:5237   .debug_str:0000000000000365 .LASF82
+     /tmp/ccoLfnqJ.s:5301   .debug_str:0000000000000553 .LASF83
+     /tmp/ccoLfnqJ.s:5251   .debug_str:00000000000003de .LASF84
+     /tmp/ccoLfnqJ.s:5383   .debug_str:00000000000008cc .LASF85
+     /tmp/ccoLfnqJ.s:5371   .debug_str:0000000000000840 .LASF86
+     /tmp/ccoLfnqJ.s:5363   .debug_str:00000000000007fe .LASF87
+     /tmp/ccoLfnqJ.s:5279   .debug_str:00000000000004c5 .LASF88
+     /tmp/ccoLfnqJ.s:5209   .debug_str:0000000000000258 .LASF89
+     /tmp/ccoLfnqJ.s:5271   .debug_str:0000000000000486 .LASF90
+     /tmp/ccoLfnqJ.s:5355   .debug_str:00000000000006f6 .LASF91
+     /tmp/ccoLfnqJ.s:5125   .debug_str:0000000000000000 .LASF92
+     /tmp/ccoLfnqJ.s:5225   .debug_str:0000000000000303 .LASF93
+     /tmp/ccoLfnqJ.s:5229   .debug_str:0000000000000334 .LASF94
+     /tmp/ccoLfnqJ.s:5379   .debug_str:000000000000088a .LASF95
+     /tmp/ccoLfnqJ.s:5221   .debug_str:00000000000002e0 .LASF96
+     /tmp/ccoLfnqJ.s:5375   .debug_str:0000000000000850 .LASF97
+     /tmp/ccoLfnqJ.s:5167   .debug_str:0000000000000124 .LASF98
+     /tmp/ccoLfnqJ.s:5189   .debug_str:00000000000001cf .LASF99
+     /tmp/ccoLfnqJ.s:5377   .debug_str:000000000000087a .LASF100
+     /tmp/ccoLfnqJ.s:5343   .debug_str:00000000000006a8 .LASF101
+     /tmp/ccoLfnqJ.s:5345   .debug_str:00000000000006d0 .LASF134
+     /tmp/ccoLfnqJ.s:5249   .debug_str:00000000000003bc .LASF135
+     /tmp/ccoLfnqJ.s:5135   .debug_str:0000000000000050 .LASF102
+     /tmp/ccoLfnqJ.s:5243   .debug_str:000000000000038c .LASF103
+     /tmp/ccoLfnqJ.s:5341   .debug_str:000000000000069e .LASF104
+     /tmp/ccoLfnqJ.s:5277   .debug_str:00000000000004a3 .LASF105
+     /tmp/ccoLfnqJ.s:5217   .debug_str:00000000000002c9 .LASF136
+     /tmp/ccoLfnqJ.s:5359   .debug_str:00000000000007c4 .LASF137
+     /tmp/ccoLfnqJ.s:5157   .debug_str:00000000000000d7 .LASF106
+     /tmp/ccoLfnqJ.s:5315   .debug_str:00000000000005c5 .LASF107
+     /tmp/ccoLfnqJ.s:5185   .debug_str:00000000000001a5 .LASF108
+     /tmp/ccoLfnqJ.s:956    .text:0000000000000560 .LFB37
+     /tmp/ccoLfnqJ.s:1004   .text:00000000000005a0 .LFE37
+     /tmp/ccoLfnqJ.s:5195   .debug_str:000000000000020e .LASF109
+     /tmp/ccoLfnqJ.s:4299   .debug_loc:0000000000000000 .LLST36
+     /tmp/ccoLfnqJ.s:1115   .text:0000000000000648 .LFB36
+     /tmp/ccoLfnqJ.s:1250   .text:0000000000000718 .LFE36
+     /tmp/ccoLfnqJ.s:4335   .debug_loc:000000000000008b .LLST40
+     /tmp/ccoLfnqJ.s:5073   .debug_ranges:0000000000000000 .Ldebug_ranges0
+     /tmp/ccoLfnqJ.s:5399   .debug_str:000000000000095f .LASF110
+     /tmp/ccoLfnqJ.s:4361   .debug_loc:00000000000000fd .LLST41
+     /tmp/ccoLfnqJ.s:5281   .debug_str:00000000000004d2 .LASF111
+     /tmp/ccoLfnqJ.s:4372   .debug_loc:0000000000000133 .LLST42
+     /tmp/ccoLfnqJ.s:1185   .text:00000000000006b4 .LVL121
+     /tmp/ccoLfnqJ.s:1204   .text:00000000000006dc .LVL124
+     /tmp/ccoLfnqJ.s:1239   .text:000000000000070c .LVL127
+     /tmp/ccoLfnqJ.s:866    .text:00000000000004e8 .LFB35
+     /tmp/ccoLfnqJ.s:950    .text:0000000000000560 .LFE35
+     /tmp/ccoLfnqJ.s:4383   .debug_loc:0000000000000169 .LLST32
+     /tmp/ccoLfnqJ.s:887    .text:0000000000000508 .LBB19
+     /tmp/ccoLfnqJ.s:931    .text:0000000000000544 .LBE19
+     /tmp/ccoLfnqJ.s:4401   .debug_loc:00000000000001b5 .LLST33
+GAS LISTING /tmp/ccoLfnqJ.s 			page 46
+
+
+     /tmp/ccoLfnqJ.s:900    .text:000000000000051c .LBB20
+     /tmp/ccoLfnqJ.s:930    .text:0000000000000544 .LBE20
+     /tmp/ccoLfnqJ.s:4413   .debug_loc:00000000000001ec .LLST34
+     /tmp/ccoLfnqJ.s:911    .text:000000000000052c .LBB21
+     /tmp/ccoLfnqJ.s:925    .text:0000000000000540 .LBE21
+     /tmp/ccoLfnqJ.s:4428   .debug_loc:0000000000000235 .LLST35
+     /tmp/ccoLfnqJ.s:922    .text:000000000000053c .LVL96
+     /tmp/ccoLfnqJ.s:699    .text:0000000000000400 .LFB34
+     /tmp/ccoLfnqJ.s:774    .text:000000000000047c .LFE34
+     /tmp/ccoLfnqJ.s:4435   .debug_loc:0000000000000258 .LLST24
+     /tmp/ccoLfnqJ.s:5287   .debug_str:00000000000004f2 .LASF113
+     /tmp/ccoLfnqJ.s:4453   .debug_loc:00000000000002a4 .LLST25
+     /tmp/ccoLfnqJ.s:4471   .debug_loc:00000000000002f0 .LLST26
+     /tmp/ccoLfnqJ.s:722    .text:0000000000000424 .LBB15
+     /tmp/ccoLfnqJ.s:748    .text:0000000000000450 .LBE15
+     /tmp/ccoLfnqJ.s:4495   .debug_loc:0000000000000342 .LLST27
+     /tmp/ccoLfnqJ.s:754    .text:0000000000000460 .LVL75
+     /tmp/ccoLfnqJ.s:780    .text:000000000000047c .LFB33
+     /tmp/ccoLfnqJ.s:860    .text:00000000000004e8 .LFE33
+     /tmp/ccoLfnqJ.s:4507   .debug_loc:0000000000000379 .LLST28
+     /tmp/ccoLfnqJ.s:5297   .debug_str:0000000000000540 .LASF112
+     /tmp/ccoLfnqJ.s:4525   .debug_loc:00000000000003c5 .LLST29
+     /tmp/ccoLfnqJ.s:4541   .debug_loc:000000000000040f .LLST30
+     /tmp/ccoLfnqJ.s:814    .text:00000000000004a8 .LBB17
+     /tmp/ccoLfnqJ.s:831    .text:00000000000004c0 .LBE17
+     /tmp/ccoLfnqJ.s:4556   .debug_loc:0000000000000458 .LLST31
+     /tmp/ccoLfnqJ.s:828    .text:00000000000004bc .LVL85
+     /tmp/ccoLfnqJ.s:492    .text:000000000000028c .LFB32
+     /tmp/ccoLfnqJ.s:570    .text:00000000000002ec .LFE32
+     /tmp/ccoLfnqJ.s:5327   .debug_str:000000000000062e .LASF114
+     /tmp/ccoLfnqJ.s:5337   .debug_str:000000000000068c .LASF115
+     /tmp/ccoLfnqJ.s:4563   .debug_loc:000000000000047b .LLST19
+     /tmp/ccoLfnqJ.s:5347   .debug_str:00000000000006db .LASF116
+     /tmp/ccoLfnqJ.s:4579   .debug_loc:00000000000004c5 .LLST20
+     /tmp/ccoLfnqJ.s:4595   .debug_loc:000000000000050f .LLST21
+     /tmp/ccoLfnqJ.s:527    .text:00000000000002b4 .LBB12
+     /tmp/ccoLfnqJ.s:554    .text:00000000000002d8 .LBE12
+     /tmp/ccoLfnqJ.s:4607   .debug_loc:0000000000000546 .LLST22
+     /tmp/ccoLfnqJ.s:584    .text:00000000000002ec .LFB31
+     /tmp/ccoLfnqJ.s:693    .text:0000000000000400 .LFE31
+     /tmp/ccoLfnqJ.s:4618   .debug_loc:000000000000057c .LLST23
+     /tmp/ccoLfnqJ.s:609    .text:000000000000031c .LVL56
+     /tmp/ccoLfnqJ.s:614    .text:000000000000032c .LVL57
+     /tmp/ccoLfnqJ.s:619    .text:0000000000000338 .LVL58
+     /tmp/ccoLfnqJ.s:624    .text:0000000000000348 .LVL59
+     /tmp/ccoLfnqJ.s:631    .text:000000000000035c .LVL60
+     /tmp/ccoLfnqJ.s:636    .text:000000000000036c .LVL61
+     /tmp/ccoLfnqJ.s:643    .text:0000000000000380 .LVL62
+     /tmp/ccoLfnqJ.s:648    .text:0000000000000390 .LVL63
+     /tmp/ccoLfnqJ.s:655    .text:00000000000003a4 .LVL64
+     /tmp/ccoLfnqJ.s:660    .text:00000000000003b4 .LVL65
+     /tmp/ccoLfnqJ.s:667    .text:00000000000003c8 .LVL66
+     /tmp/ccoLfnqJ.s:672    .text:00000000000003d8 .LVL67
+     /tmp/ccoLfnqJ.s:679    .text:00000000000003ec .LVL68
+     /tmp/ccoLfnqJ.s:431    .text:000000000000022c .LFB30
+     /tmp/ccoLfnqJ.s:486    .text:000000000000028c .LFE30
+     /tmp/ccoLfnqJ.s:4636   .debug_loc:00000000000005c8 .LLST18
+GAS LISTING /tmp/ccoLfnqJ.s 			page 47
+
+
+     /tmp/ccoLfnqJ.s:459    .text:0000000000000260 .LVL42
+     /tmp/ccoLfnqJ.s:483    .text:0000000000000288 .LVL45
+     /tmp/ccoLfnqJ.s:349    .text:00000000000001d4 .LFB29
+     /tmp/ccoLfnqJ.s:417    .text:000000000000022c .LFE29
+     /tmp/ccoLfnqJ.s:5239   .debug_str:0000000000000371 .LASF117
+     /tmp/ccoLfnqJ.s:4658   .debug_loc:0000000000000627 .LLST15
+     /tmp/ccoLfnqJ.s:5141   .debug_str:0000000000000077 .LASF118
+     /tmp/ccoLfnqJ.s:4672   .debug_loc:0000000000000660 .LLST16
+     /tmp/ccoLfnqJ.s:4692   .debug_loc:00000000000006bd .LLST17
+     /tmp/ccoLfnqJ.s:1010   .text:00000000000005a0 .LFB28
+     /tmp/ccoLfnqJ.s:1109   .text:0000000000000648 .LFE28
+     /tmp/ccoLfnqJ.s:4708   .debug_loc:0000000000000707 .LLST37
+     /tmp/ccoLfnqJ.s:5255   .debug_str:00000000000003ef .LASF119
+     /tmp/ccoLfnqJ.s:4733   .debug_loc:0000000000000769 .LLST38
+     /tmp/ccoLfnqJ.s:4758   .debug_loc:00000000000007cb .LLST39
+     /tmp/ccoLfnqJ.s:1077   .text:0000000000000608 .LVL110
+     /tmp/ccoLfnqJ.s:1096   .text:0000000000000630 .LVL113
+     /tmp/ccoLfnqJ.s:1106   .text:0000000000000644 .LVL116
+     /tmp/ccoLfnqJ.s:296    .text:0000000000000188 .LFB27
+     /tmp/ccoLfnqJ.s:343    .text:00000000000001d4 .LFE27
+     /tmp/ccoLfnqJ.s:4769   .debug_loc:0000000000000801 .LLST14
+     /tmp/ccoLfnqJ.s:144    .text:00000000000000b8 .LFB26
+     /tmp/ccoLfnqJ.s:290    .text:0000000000000188 .LFE26
+     /tmp/ccoLfnqJ.s:4788   .debug_loc:000000000000084e .LLST8
+     /tmp/ccoLfnqJ.s:4806   .debug_loc:000000000000089a .LLST9
+     /tmp/ccoLfnqJ.s:4821   .debug_loc:00000000000008e3 .LLST10
+     /tmp/ccoLfnqJ.s:4834   .debug_loc:000000000000091b .LLST11
+     /tmp/ccoLfnqJ.s:4854   .debug_loc:0000000000000978 .LLST12
+     /tmp/ccoLfnqJ.s:4866   .debug_loc:00000000000009af .LLST13
+     /tmp/ccoLfnqJ.s:172    .text:00000000000000ec .LVL14
+     /tmp/ccoLfnqJ.s:1256   .text:0000000000000718 .LFB25
+     /tmp/ccoLfnqJ.s:1345   .text:0000000000000788 .LFE25
+     /tmp/ccoLfnqJ.s:4877   .debug_loc:00000000000009e5 .LLST43
+     /tmp/ccoLfnqJ.s:1276   .text:0000000000000734 .LBB31
+     /tmp/ccoLfnqJ.s:1289   .text:0000000000000744 .LBE31
+     /tmp/ccoLfnqJ.s:4917   .debug_loc:0000000000000a83 .LLST44
+     /tmp/ccoLfnqJ.s:1287   .text:0000000000000744 .LVL132
+     /tmp/ccoLfnqJ.s:1311   .text:000000000000075c .LBB33
+     /tmp/ccoLfnqJ.s:1328   .text:0000000000000770 .LBE33
+     /tmp/ccoLfnqJ.s:4924   .debug_loc:0000000000000aa6 .LLST45
+     /tmp/ccoLfnqJ.s:4931   .debug_loc:0000000000000ac9 .LLST46
+     /tmp/ccoLfnqJ.s:1322   .text:000000000000076c .LVL135
+     /tmp/ccoLfnqJ.s:1329   .text:0000000000000770 .LBB34
+     /tmp/ccoLfnqJ.s:1341   .text:0000000000000788 .LBE34
+     /tmp/ccoLfnqJ.s:4938   .debug_loc:0000000000000aec .LLST47
+     /tmp/ccoLfnqJ.s:1334   .text:000000000000077c .LVL137
+     /tmp/ccoLfnqJ.s:1338   .text:0000000000000784 .LVL138
+     /tmp/ccoLfnqJ.s:10     .text:0000000000000000 .LFB24
+     /tmp/ccoLfnqJ.s:36     .text:0000000000000028 .LFE24
+     /tmp/ccoLfnqJ.s:5169   .debug_str:0000000000000130 .LASF120
+     /tmp/ccoLfnqJ.s:4945   .debug_loc:0000000000000b0f .LLST0
+     /tmp/ccoLfnqJ.s:42     .text:0000000000000028 .LFB23
+     /tmp/ccoLfnqJ.s:138    .text:00000000000000b8 .LFE23
+     /tmp/ccoLfnqJ.s:4959   .debug_loc:0000000000000b48 .LLST1
+     /tmp/ccoLfnqJ.s:5245   .debug_str:00000000000003ae .LASF121
+     /tmp/ccoLfnqJ.s:4977   .debug_loc:0000000000000b94 .LLST2
+     /tmp/ccoLfnqJ.s:5175   .debug_str:000000000000015b .LASF122
+GAS LISTING /tmp/ccoLfnqJ.s 			page 48
+
+
+     /tmp/ccoLfnqJ.s:4991   .debug_loc:0000000000000bcd .LLST3
+     /tmp/ccoLfnqJ.s:5257   .debug_str:00000000000003f4 .LASF123
+     /tmp/ccoLfnqJ.s:5005   .debug_loc:0000000000000c06 .LLST4
+     /tmp/ccoLfnqJ.s:5311   .debug_str:00000000000005b2 .LASF124
+     /tmp/ccoLfnqJ.s:5019   .debug_loc:0000000000000c3f .LLST5
+     /tmp/ccoLfnqJ.s:59     .text:0000000000000040 .LBB2
+     /tmp/ccoLfnqJ.s:84     .text:0000000000000064 .LBE2
+     /tmp/ccoLfnqJ.s:5033   .debug_loc:0000000000000c78 .LLST6
+     /tmp/ccoLfnqJ.s:85     .text:0000000000000064 .LBB3
+     /tmp/ccoLfnqJ.s:104    .text:0000000000000084 .LBE3
+     /tmp/ccoLfnqJ.s:5049   .debug_loc:0000000000000cc2 .LLST7
+     /tmp/ccoLfnqJ.s:122    .text:00000000000000a0 .LVL10
+     /tmp/ccoLfnqJ.s:5171   .debug_str:0000000000000138 .LASF125
+     /tmp/ccoLfnqJ.s:5391   .debug_str:0000000000000932 .LASF127
+     /tmp/ccoLfnqJ.s:5325   .debug_str:000000000000061f .LASF126
+     /tmp/ccoLfnqJ.s:5293   .debug_str:0000000000000515 .LASF128
+     /tmp/ccoLfnqJ.s:959    .text:0000000000000560 .LVL100
+     /tmp/ccoLfnqJ.s:980    .text:0000000000000584 .LVL101
+     /tmp/ccoLfnqJ.s:990    .text:0000000000000590 .LVL102
+     /tmp/ccoLfnqJ.s:995    .text:0000000000000594 .LVL103
+     /tmp/ccoLfnqJ.s:997    .text:0000000000000598 .LVL104
+     /tmp/ccoLfnqJ.s:1001   .text:000000000000059c .LVL105
+     /tmp/ccoLfnqJ.s:1118   .text:0000000000000648 .LVL117
+     /tmp/ccoLfnqJ.s:1183   .text:00000000000006ac .LVL120
+     /tmp/ccoLfnqJ.s:1227   .text:00000000000006fc .LVL125
+     /tmp/ccoLfnqJ.s:1241   .text:0000000000000710 .LVL128
+     /tmp/ccoLfnqJ.s:1145   .text:000000000000067c .LVL118
+     /tmp/ccoLfnqJ.s:1187   .text:00000000000006b8 .LVL122
+     /tmp/ccoLfnqJ.s:1196   .text:00000000000006c8 .LVL123
+     /tmp/ccoLfnqJ.s:1237   .text:0000000000000704 .LVL126
+     /tmp/ccoLfnqJ.s:869    .text:00000000000004e8 .LVL89
+     /tmp/ccoLfnqJ.s:891    .text:0000000000000510 .LVL91
+     /tmp/ccoLfnqJ.s:942    .text:0000000000000554 .LVL98
+     /tmp/ccoLfnqJ.s:886    .text:0000000000000508 .LVL90
+     /tmp/ccoLfnqJ.s:945    .text:0000000000000558 .LVL99
+     /tmp/ccoLfnqJ.s:895    .text:0000000000000514 .LVL92
+     /tmp/ccoLfnqJ.s:906    .text:0000000000000528 .LVL93
+     /tmp/ccoLfnqJ.s:917    .text:0000000000000530 .LVL95
+     /tmp/ccoLfnqJ.s:928    .text:0000000000000544 .LVL97
+     /tmp/ccoLfnqJ.s:913    .text:000000000000052c .LVL94
+     /tmp/ccoLfnqJ.s:702    .text:0000000000000400 .LVL70
+     /tmp/ccoLfnqJ.s:725    .text:0000000000000428 .LVL72
+     /tmp/ccoLfnqJ.s:766    .text:0000000000000470 .LVL77
+     /tmp/ccoLfnqJ.s:769    .text:0000000000000474 .LVL78
+     /tmp/ccoLfnqJ.s:720    .text:0000000000000424 .LVL71
+     /tmp/ccoLfnqJ.s:763    .text:000000000000046c .LVL76
+     /tmp/ccoLfnqJ.s:783    .text:000000000000047c .LVL79
+     /tmp/ccoLfnqJ.s:809    .text:00000000000004a4 .LVL82
+     /tmp/ccoLfnqJ.s:855    .text:00000000000004e0 .LVL88
+     /tmp/ccoLfnqJ.s:800    .text:000000000000049c .LVL80
+     /tmp/ccoLfnqJ.s:818    .text:00000000000004ac .LVL83
+     /tmp/ccoLfnqJ.s:834    .text:00000000000004c4 .LVL86
+     /tmp/ccoLfnqJ.s:850    .text:00000000000004d8 .LVL87
+     /tmp/ccoLfnqJ.s:805    .text:00000000000004a0 .LVL81
+     /tmp/ccoLfnqJ.s:823    .text:00000000000004b0 .LVL84
+     /tmp/ccoLfnqJ.s:503    .text:0000000000000298 .LVL47
+     /tmp/ccoLfnqJ.s:514    .text:00000000000002a8 .LVL48
+GAS LISTING /tmp/ccoLfnqJ.s 			page 49
+
+
+     /tmp/ccoLfnqJ.s:539    .text:00000000000002c8 .LVL51
+     /tmp/ccoLfnqJ.s:552    .text:00000000000002d8 .LVL54
+     /tmp/ccoLfnqJ.s:545    .text:00000000000002d0 .LVL52
+     /tmp/ccoLfnqJ.s:519    .text:00000000000002ac .LVL49
+     /tmp/ccoLfnqJ.s:532    .text:00000000000002c0 .LVL50
+     /tmp/ccoLfnqJ.s:587    .text:00000000000002ec .LVL55
+     /tmp/ccoLfnqJ.s:688    .text:00000000000003f8 .LVL69
+     /tmp/ccoLfnqJ.s:434    .text:000000000000022c .LVL40
+     /tmp/ccoLfnqJ.s:452    .text:0000000000000250 .LVL41
+     /tmp/ccoLfnqJ.s:471    .text:0000000000000270 .LVL43
+     /tmp/ccoLfnqJ.s:475    .text:0000000000000278 .LVL44
+     /tmp/ccoLfnqJ.s:352    .text:00000000000001d4 .LVL32
+     /tmp/ccoLfnqJ.s:372    .text:00000000000001f4 .LVL34
+     /tmp/ccoLfnqJ.s:367    .text:00000000000001f0 .LVL33
+     /tmp/ccoLfnqJ.s:379    .text:0000000000000200 .LVL36
+     /tmp/ccoLfnqJ.s:387    .text:0000000000000208 .LVL37
+     /tmp/ccoLfnqJ.s:393    .text:0000000000000210 .LVL38
+     /tmp/ccoLfnqJ.s:406    .text:0000000000000220 .LVL39
+     /tmp/ccoLfnqJ.s:375    .text:00000000000001fc .LVL35
+     /tmp/ccoLfnqJ.s:1013   .text:00000000000005a0 .LVL106
+     /tmp/ccoLfnqJ.s:1040   .text:00000000000005d0 .LVL107
+     /tmp/ccoLfnqJ.s:1058   .text:00000000000005ec .LVL108
+     /tmp/ccoLfnqJ.s:1075   .text:0000000000000600 .LVL109
+     /tmp/ccoLfnqJ.s:1079   .text:000000000000060c .LVL111
+     /tmp/ccoLfnqJ.s:1088   .text:000000000000061c .LVL112
+     /tmp/ccoLfnqJ.s:1098   .text:0000000000000634 .LVL114
+     /tmp/ccoLfnqJ.s:1104   .text:000000000000063c .LVL115
+     /tmp/ccoLfnqJ.s:299    .text:0000000000000188 .LVL29
+     /tmp/ccoLfnqJ.s:330    .text:00000000000001c0 .LVL30
+     /tmp/ccoLfnqJ.s:333    .text:00000000000001c8 .LVL31
+     /tmp/ccoLfnqJ.s:147    .text:00000000000000b8 .LVL12
+     /tmp/ccoLfnqJ.s:170    .text:00000000000000e4 .LVL13
+     /tmp/ccoLfnqJ.s:276    .text:0000000000000174 .LVL25
+     /tmp/ccoLfnqJ.s:174    .text:00000000000000f0 .LVL15
+     /tmp/ccoLfnqJ.s:201    .text:0000000000000114 .LVL17
+     /tmp/ccoLfnqJ.s:282    .text:000000000000017c .LVL27
+     /tmp/ccoLfnqJ.s:191    .text:0000000000000108 .LVL16
+     /tmp/ccoLfnqJ.s:285    .text:0000000000000180 .LVL28
+     /tmp/ccoLfnqJ.s:213    .text:000000000000011c .LVL18
+     /tmp/ccoLfnqJ.s:221    .text:0000000000000124 .LVL20
+     /tmp/ccoLfnqJ.s:279    .text:0000000000000178 .LVL26
+     /tmp/ccoLfnqJ.s:273    .text:0000000000000170 .LVL24
+     /tmp/ccoLfnqJ.s:247    .text:000000000000014c .LVL22
+     /tmp/ccoLfnqJ.s:260    .text:0000000000000160 .LVL23
+     /tmp/ccoLfnqJ.s:1259   .text:0000000000000718 .LVL129
+     /tmp/ccoLfnqJ.s:1273   .text:0000000000000730 .LVL130
+     /tmp/ccoLfnqJ.s:1301   .text:0000000000000754 .LVL133
+     /tmp/ccoLfnqJ.s:1326   .text:0000000000000770 .LVL136
+     /tmp/ccoLfnqJ.s:1278   .text:0000000000000734 .LVL131
+     /tmp/ccoLfnqJ.s:1313   .text:000000000000075c .LVL134
+     /tmp/ccoLfnqJ.s:14     .text:0000000000000000 .LVL0
+     /tmp/ccoLfnqJ.s:26     .text:0000000000000018 .LVL1
+     /tmp/ccoLfnqJ.s:45     .text:0000000000000028 .LVL2
+     /tmp/ccoLfnqJ.s:102    .text:0000000000000084 .LVL9
+     /tmp/ccoLfnqJ.s:133    .text:00000000000000b0 .LVL11
+     /tmp/ccoLfnqJ.s:88     .text:0000000000000068 .LVL7
+     /tmp/ccoLfnqJ.s:58     .text:0000000000000040 .LVL3
+GAS LISTING /tmp/ccoLfnqJ.s 			page 50
+
+
+     /tmp/ccoLfnqJ.s:62     .text:0000000000000044 .LVL4
+     /tmp/ccoLfnqJ.s:78     .text:0000000000000060 .LVL5
+     /tmp/ccoLfnqJ.s:82     .text:0000000000000064 .LVL6
+     /tmp/ccoLfnqJ.s:100    .text:0000000000000080 .LVL8
+     /tmp/ccoLfnqJ.s:1354   .debug_info:0000000000000000 .Ldebug_info0
+     /tmp/ccoLfnqJ.s:194    .text:0000000000000108 .LBB4
+     /tmp/ccoLfnqJ.s:197    .text:000000000000010c .LBE4
+     /tmp/ccoLfnqJ.s:203    .text:0000000000000114 .LBB8
+     /tmp/ccoLfnqJ.s:263    .text:0000000000000160 .LBE8
+     /tmp/ccoLfnqJ.s:204    .text:0000000000000114 .LBB5
+     /tmp/ccoLfnqJ.s:214    .text:000000000000011c .LBE5
+     /tmp/ccoLfnqJ.s:218    .text:0000000000000120 .LBB6
+     /tmp/ccoLfnqJ.s:223    .text:0000000000000124 .LBE6
+     /tmp/ccoLfnqJ.s:229    .text:000000000000012c .LBB7
+     /tmp/ccoLfnqJ.s:262    .text:0000000000000160 .LBE7
+     /tmp/ccoLfnqJ.s:369    .text:00000000000001f0 .LBB9
+     /tmp/ccoLfnqJ.s:376    .text:00000000000001fc .LBE9
+     /tmp/ccoLfnqJ.s:381    .text:0000000000000200 .LBB10
+     /tmp/ccoLfnqJ.s:408    .text:0000000000000220 .LBE10
+     /tmp/ccoLfnqJ.s:505    .text:0000000000000298 .LBB11
+     /tmp/ccoLfnqJ.s:508    .text:000000000000029c .LBE11
+     /tmp/ccoLfnqJ.s:516    .text:00000000000002a8 .LBB13
+     /tmp/ccoLfnqJ.s:524    .text:00000000000002b4 .LBE13
+     /tmp/ccoLfnqJ.s:526    .text:00000000000002b4 .LBB14
+     /tmp/ccoLfnqJ.s:555    .text:00000000000002d8 .LBE14
+     /tmp/ccoLfnqJ.s:802    .text:000000000000049c .LBB16
+     /tmp/ccoLfnqJ.s:806    .text:00000000000004a0 .LBE16
+     /tmp/ccoLfnqJ.s:811    .text:00000000000004a4 .LBB18
+     /tmp/ccoLfnqJ.s:836    .text:00000000000004c4 .LBE18
+     /tmp/ccoLfnqJ.s:1146   .text:000000000000067c .LBB22
+     /tmp/ccoLfnqJ.s:1149   .text:0000000000000680 .LBE22
+     /tmp/ccoLfnqJ.s:1151   .text:0000000000000680 .LBB28
+     /tmp/ccoLfnqJ.s:1209   .text:00000000000006dc .LBE28
+     /tmp/ccoLfnqJ.s:1230   .text:00000000000006fc .LBB29
+     /tmp/ccoLfnqJ.s:1245   .text:0000000000000710 .LBE29
+     /tmp/ccoLfnqJ.s:1166   .text:0000000000000690 .LBB24
+     /tmp/ccoLfnqJ.s:1207   .text:00000000000006dc .LBE24
+     /tmp/ccoLfnqJ.s:1232   .text:00000000000006fc .LBB25
+     /tmp/ccoLfnqJ.s:1243   .text:0000000000000710 .LBE25
+
+UNDEFINED SYMBOLS
+_ZN14BuddyAllocator10buddyAllocEm
+_Z11printStringPKc
+_Z8printIntiii
+_ZN14BuddyAllocator9buddyFreeEPvm

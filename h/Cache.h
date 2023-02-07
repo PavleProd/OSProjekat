@@ -13,7 +13,7 @@ private:
     ERRORTYPE errortype = NOERROR;
 
     enum SlabState {
-        EMPTY = 0, PARTIAL = 1, FULL = 2
+        EMPTY = 0, PARTIAL = 1, FULL = 2, CREATED = 3
     };
 
     struct Slab;
@@ -35,7 +35,7 @@ private:
         SlabState calculateNewState();
     };
 
-    Slab* slabList[3]; // za svako stanje
+    Slab* slabList[3] = {}; // za svako stanje
     // stavlja slab u odgovarajucu listu listNum i menja mu stanje na listNum
     void slabListPut(Slab* slab, int listNum);
     // brise slab iz liste listNum

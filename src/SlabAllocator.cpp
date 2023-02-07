@@ -23,11 +23,11 @@ Cache* SlabAllocator::createCache(const char *name, size_t size, void (*ctor)(vo
 }
 
 void *SlabAllocator::allocSlot(Cache *cache) {
-    return cache->allocateSlot();
+    return (void*)((char*)cache->allocateSlot() + sizeof(Cache::Slot)); // za pocetnu adresu objekta
 }
 
 void SlabAllocator::freeSlot(Cache *cache, void *obj) {
-    cache->freeSlot((Cache::Slot*)obj);
+    cache->freeSlot((Cache::Slot*)((char*)obj - sizeof(Cache::Slot))); // za pocetnu adresu slota
 }
 
 int SlabAllocator::printErrorMessage(Cache *cache) {

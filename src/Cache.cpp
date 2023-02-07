@@ -6,6 +6,9 @@ void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void 
         cacheName[i] = name[i];
         if(name[i] == '\0') break;
     }
+    for(int i = 0; i < 3; i++) {
+        slabList[i] = nullptr;
+    }
     objectSize = size;
     constructor = ctor;
     destructor = dtor;
@@ -42,9 +45,24 @@ void *Cache::allocateSlot() {
 Cache::Slab *Cache::allocateSlab() {
     Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(1);
     slab->parentCache = this;
+    slab->next = nullptr;
+    slab->state = CREATED;
+    slab->allocatedSlots = 0;
     void* startAddr = (void*)((char*)slab + sizeof(Slab));
-    for(int i = 0; i < this->optimalSlots; i++) {
+    Slot* prev = nullptr;
+    for(size_t i = 0; i < this->optimalSlots; i++) {
         constructor((void*)((char*)startAddr + i*slotSize));
+        Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
+        curr->parentSlab = slab;
+        curr->allocated = false;
+        if(prev) {
+            prev->next= curr;
+        }
+        else {
+            slab->slotHead = curr;
+        }
+        curr->next = nullptr;
+        prev = curr;
     }
 
     return slab;
@@ -73,7 +91,7 @@ void Cache::freeSlot(Slot* slot) {
 
     SlabState newState = parentSlab->calculateNewState();
     if(parentSlab->state != newState) {
-        parentCache->slabListRemove(parentSlab, parentSlab->state);
+        if(parentSlab->state != CREATED) parentCache->slabListRemove(parentSlab, parentSlab->state);
         parentCache->slabListPut(parentSlab, newState);
     }
 }
@@ -146,7 +164,7 @@ int Cache::deallocFreeSlabs() {
 
 void Cache::deallocSlab(Slab* slab) {
     void* startAddr = (void*)((char*)slab + sizeof(Slab));
-    for(int i = 0; i < this->optimalSlots; i++) {
+    for(size_t i = 0; i < this->optimalSlots; i++) {
         destructor((void*)((char*)startAddr + i*slotSize));
     }
     BuddyAllocator::buddyFree(slab, 1);
@@ -175,7 +193,7 @@ Cache::Slot *Cache::Slab::getFreeSlot() {
 
             SlabState newState = calculateNewState();
             if(this->state != newState) {
-                parentCache->slabListRemove(this, this->state);
+                if(this->state != CREATED) parentCache->slabListRemove(this, this->state);
                 parentCache->slabListPut(this, newState);
             }
 

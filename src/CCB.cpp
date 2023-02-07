@@ -12,7 +12,7 @@ SCB* CCB::inputBufferEmpty = nullptr;
 IOBuffer CCB::inputBuffer;
 IOBuffer CCB::outputBuffer;
 
-void CCB::inputBody(void *) {
+void CCB::inputBody(void*) {
     while(true) {
         while(*(char*)CONSOLE_STATUS & CONSOLE_RX_STATUS_BIT) {
             inputBuffer.pushBack(*(char*)CONSOLE_RX_DATA);
@@ -24,7 +24,7 @@ void CCB::inputBody(void *) {
     }
 }
 
-void CCB::outputBody(void *) {
+void CCB::outputBody(void*) {
     while(true) {
         while(*(char*)CONSOLE_STATUS & CONSOLE_TX_STATUS_BIT) {
             if(outputBuffer.peekFront() != 0) {

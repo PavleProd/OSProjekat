@@ -3,12 +3,30 @@
 #include "../h/MemoryAllocator.h"
 #include "../h/kernel.h"
 #include "../h/syscall_c.h"
+#include "../h/slab.h"
 
 PCB* PCB::running = nullptr;
 size_t PCB::timeSliceCounter = 0;
 
+void PCB::createObject(void* addr) {
+}
+
+void PCB::freeObject(void* addr) {
+    PCB* object = (PCB*)addr;
+    delete[] object->stack;
+    delete[] object->sysStack;
+}
+
+kmem_cache_t* PCB::pcbCache = nullptr;
+
 PCB *PCB::createProccess(PCB::processMain main, void* arguments) {
     return new PCB(main, DEFAULT_TIME_SLICE, arguments);
+}
+
+PCB *PCB::createSysProcess(PCB::processMain main, void* arguments) {
+    PCB* object = (PCB*) kmem_cache_alloc(pcbCache);
+    object->initObject(main, DEFAULT_TIME_SLICE, arguments);
+    return object;
 }
 
 void PCB::yield() {
@@ -36,16 +54,7 @@ void PCB::dispatch() {
 
 // main_ == nullptr ako smo u glavnom procesu
 PCB::PCB(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
-    finished = blocked = semDeleted = false;
-    main = main_;
-    timeSlice = timeSlice_;
-    mainArguments = mainArguments_;
-    registers = (size_t*)MemoryAllocator::mem_alloc(33*sizeof(size_t)); // mozemo direktno jer se zove iz sistemskog rezima samo
-    sysStack = (size_t*)MemoryAllocator::mem_alloc(DEFAULT_STACK_SIZE*sizeof(size_t));
-    registers[0] = (size_t)&sysStack[DEFAULT_STACK_SIZE]; // ssp postavljamo na vrh steka
-    registers[32] = (size_t)&proccessWrapper; // u ra cuvamo proccessWrapper
-    stack = nullptr; // stek pravimo u sistemskom pozivu thread_create
-    if(main == nullptr) firstCall = false; //  jer je glavni proces vec pokrenut, necemo ici u process_wrapper
+    initObject(main_, timeSlice_, mainArguments_);
 }
 
 PCB::~PCB() {
@@ -71,4 +80,21 @@ void PCB::proccessWrapper() { // iz prekidne rutine skacemo ovde kada prvi put u
 
 size_t *PCB::getContext() {
     return running->registers;
+}
+
+void PCB::initObject(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
+    finished = blocked = semDeleted = false;
+    main = main_;
+    timeSlice = timeSlice_;
+    mainArguments = mainArguments_;
+    registers = (size_t*)MemoryAllocator::mem_alloc(33*sizeof(size_t)); // mozemo direktno jer se zove iz sistemskog rezima samo
+    sysStack = (size_t*)MemoryAllocator::mem_alloc(DEFAULT_STACK_SIZE*sizeof(size_t));
+    registers[0] = (size_t)&sysStack[DEFAULT_STACK_SIZE]; // ssp postavljamo na vrh steka
+    registers[32] = (size_t)&proccessWrapper; // u ra cuvamo proccessWrapper
+    stack = nullptr; // stek pravimo u sistemskom pozivu thread_create
+    if(main == nullptr) firstCall = false; //  jer je glavni proces vec pokrenut, necemo ici u process_wrapper
+}
+
+void PCB::initPCBCache() {
+    pcbCache = (kmem_cache_t*)kmem_cache_create("PCB", sizeof(PCB), &createObject, &freeObject);
 }

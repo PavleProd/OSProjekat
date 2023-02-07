@@ -2,6 +2,7 @@
 #define PCB_H
 
 #include "hw.h"
+#include "slab.h"
 
 extern "C" void interruptHandler();
 
@@ -56,6 +57,7 @@ public:
 
     // Pravi novi proces koji izvrasva funkciju main
     static PCB* createProccess(processMain main, void* arguments);
+    static PCB* createSysProcess(processMain main, void* arguments);
     // Cuva kontekst trenutnog procesa, vrsi promenu tekuceg procesa i vraca kontekst novog procesa
     static void yield();
     static PCB* running; // tekuci proces
@@ -67,8 +69,14 @@ public:
     void operator delete(void* memSegment);
 
     static size_t* getContext();
+    static void initPCBCache();
+    static kmem_cache_t* pcbCache;//TODO private
 private:
     PCB(processMain main, size_t timeSlice, void* mainArguments);
+
+    static void createObject(void* addr);
+    static void freeObject(void* addr);
+    void initObject(PCB::processMain main_, size_t timeSlice_, void* mainArguments_);
 
     /*struct Context {
         size_t ra; // (x1) kada menjamo kontekst moramo da sacuvamo dokle je proces stigao sa obradom
