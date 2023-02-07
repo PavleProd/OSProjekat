@@ -13,7 +13,8 @@ void kmem_init(void *space, int block_num);
 konstruktor i destruktor objekata; povratna vrednost je pokazivač na ručku keša;*/
 kmem_cache_t *kmem_cache_create(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *));
 
-int kmem_cache_shrink(kmem_cache_t *cachep); // Shrink cache
+// oslobadja sve slabove koji su slobodni skroz, vraca broj oslobodjenih blokova
+int kmem_cache_shrink(kmem_cache_t *cachep);
 
 
 // alocira jedan objekat iz kesa, ako nema parcijalno popunjenih slabova trazi u praznim i ako nema praznih alocira novi
@@ -21,9 +22,12 @@ void *kmem_cache_alloc(kmem_cache_t *cachep);
 
 // dealokacija jednog slota. Slot ima pokazivac na sleb a on pokazivac na kes
 void kmem_cache_free(kmem_cache_t *cachep, void *objp);
-void *kmalloc(size_t size); // Alloacate one small memory buffer
-void kfree(const void *objp); // Deallocate one small memory buffer
-void kmem_cache_destroy(kmem_cache_t *cachep); // Deallocate cache
+
+void *kmalloc(size_t size); // Alloacate one small memory buffer TODO
+void kfree(const void *objp); // Deallocate one small memory buffer TODO
+
+// Dealocira sve slotove i slabove i kes
+void kmem_cache_destroy(kmem_cache_t *cachep);
 // Ispis poruke: ime kesa, velicina objekta, broj slabova, broj slotova po slabu, broj alociranih slotova
 void kmem_cache_info(kmem_cache_t *cachep);
 

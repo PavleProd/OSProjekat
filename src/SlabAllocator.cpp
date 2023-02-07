@@ -37,3 +37,11 @@ int SlabAllocator::printErrorMessage(Cache *cache) {
 void SlabAllocator::printCacheInfo(Cache *cache) {
     cache->printCacheInfo();
 }
+
+int SlabAllocator::deallocFreeSlabs(Cache *cache) {
+    return cache->deallocFreeSlabs();
+}
+
+void SlabAllocator::deallocCache(Cache *cache) {
+    cache->deallocCache();
+}

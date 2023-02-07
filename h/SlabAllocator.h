@@ -14,6 +14,8 @@ public:
 
     static void initAllocator(void* space, int blockNum);
     static Cache* createCache(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *));
+    static int deallocFreeSlabs(Cache* cache);
+    static void deallocCache(Cache* cache);
     static void* allocSlot(Cache* cache);
     static void freeSlot(Cache *cache, void *obj);
     static int printErrorMessage(Cache* cache);

@@ -9,12 +9,13 @@ void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void 
     objectSize = size;
     constructor = ctor;
     destructor = dtor;
+    slotSize = objectSize + sizeof(Slot);
 
-    optimalSlots = getNumSlots(objectSize);
+    optimalSlots = getNumSlots(slotSize);
 }
 
 int Cache::getNumSlots(size_t objSize) {
-    return (BLKSIZE - sizeof(Cache)) / objSize;
+    return (BLKSIZE - sizeof(Slab)) / objSize;
 }
 
 void *Cache::allocateSlot() {
@@ -41,6 +42,11 @@ void *Cache::allocateSlot() {
 Cache::Slab *Cache::allocateSlab() {
     Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(1);
     slab->parentCache = this;
+    void* startAddr = (void*)((char*)slab + sizeof(Slab));
+    for(int i = 0; i < this->optimalSlots; i++) {
+        constructor((void*)((char*)startAddr + i*slotSize));
+    }
+
     return slab;
 }
 
@@ -99,12 +105,14 @@ int Cache::printErrorMessage() {
 void Cache::printCacheInfo() {
     int numSlabs = 0, numSlots = 0;
     getNumSlabsAndSlots(&numSlabs, &numSlots);
-    printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, broj alociranih slotova\n");
+    printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, broj alociranih slotova\n");
     printString(cacheName);
     printString(", ");
     printInt(objectSize);
     printString(", ");
     printInt(numSlabs);
+    printString(", ");
+    printInt(slotSize);
     printString(", ");
     printInt(optimalSlots);
     printString(", ");
@@ -122,6 +130,37 @@ void Cache::getNumSlabsAndSlots(int *numSlabs, int *numSlots) {
     }
     (*numSlabs) = slabs;
     (*numSlots) = slots;
+}
+
+int Cache::deallocFreeSlabs() {
+    int numSlabs = 0;
+    for(Slab* curr = slabList[EMPTY]; curr != nullptr;) {
+        numSlabs++;
+        Slab* old = curr;
+        curr = curr->next;
+        deallocSlab(old);
+    }
+    slabList[EMPTY] = nullptr;
+    return numSlabs;
+}
+
+void Cache::deallocSlab(Slab* slab) {
+    void* startAddr = (void*)((char*)slab + sizeof(Slab));
+    for(int i = 0; i < this->optimalSlots; i++) {
+        destructor((void*)((char*)startAddr + i*slotSize));
+    }
+    BuddyAllocator::buddyFree(slab, 1);
+}
+
+void Cache::deallocCache() {
+    for(int i = 0; i < 3; i++) {
+        Slab* curr = slabList[i];
+        while(curr) {
+            Slab* old = curr;
+            curr = curr->next;
+            deallocSlab(old);
+        }
+    }
 }
 
 

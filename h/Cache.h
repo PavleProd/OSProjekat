@@ -44,7 +44,7 @@ private:
     typedef void(*Constructor) (void *);
     typedef void(*Destructor) (void *);
     char cacheName[15];
-    size_t objectSize, optimalSlots;
+    size_t objectSize, optimalSlots, slotSize;
     Constructor constructor;
     Destructor destructor;
 
@@ -62,6 +62,10 @@ public:
     void initCache(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *));
     void* allocateSlot();
     void freeSlot(Slot* slot);
+    // oslobadja sve slabove koji su slobodni skroz, vraca broj oslobodjenih blokova
+    int deallocFreeSlabs();
+    void deallocCache();
+    void deallocSlab(Slab* slab);
     Slab* allocateSlab();
 };
 
