@@ -37,6 +37,7 @@ void Thread::dispatch() {
 }
 
 int Thread::start() {
+    if(myHandle == 0) return -1;
     thread_start(&myHandle);
     return 0;
 }

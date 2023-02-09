@@ -39,7 +39,10 @@ int thread_create_only (thread_t* handle, void(*startRoutine)(void*), void* arg)
 
 
     size_t* stack = (size_t*)mem_alloc(sizeof(size_t)*DEFAULT_STACK_SIZE); // pravimo stack procesa
-    if(stack == nullptr) return -1;
+    if(stack == nullptr) {
+        *handle = nullptr;
+        return -1;
+    }
 
     asm volatile("mv a1, a4"); // a1 = a5(handle)
     asm volatile("mv a4, %0" : : "r" (stack));

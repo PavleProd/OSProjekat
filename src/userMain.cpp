@@ -24,8 +24,8 @@ public:
             if (thread != nullptr) {
                 if (thread->start() == 0) {
 
-                    for (int i = 0; i < 50; i++) {
-                        for (int j = 0; j < 50; j++) {
+                    for (int i = 0; i < 5000; i++) {
+                        for (int j = 0; j < 5000; j++) {
 
                         }
                         thread_dispatch();
