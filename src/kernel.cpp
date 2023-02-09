@@ -12,6 +12,12 @@ void Kernel::popSppSpie() {
     asm volatile("sret");
 }
 
+
+void kPutc(char c) {
+    CCB::outputBuffer.pushBack(c);
+    CCB::semOutput->signal();
+}
+
 extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime funkcije
     size_t volatile scause = Kernel::r_scause();
     size_t volatile sepc = Kernel::r_sepc();
@@ -181,6 +187,7 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
 
     }
     else { // neka vrsta greske, neocekivan skok na prekidnu rutinu
+        kPutc('c');
     }
 
 }

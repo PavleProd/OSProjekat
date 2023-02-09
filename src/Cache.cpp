@@ -46,7 +46,7 @@ void *Cache::allocateSlot() {
 
 Cache::Slab *Cache::allocateSlab() {
 
-    Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(powerOfTwo(slabSize)); // 2 ako nije dovoljno
+    Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(powerOfTwo(slabSize) + 1); // 2 ako nije dovoljno
     slab->parentCache = this;
     slab->next = nullptr;
     slab->state = CREATED;
@@ -55,7 +55,7 @@ Cache::Slab *Cache::allocateSlab() {
     Slot* prev = nullptr;
     for(size_t i = 0; i < this->optimalSlots; i++) {
         if(constructor) {
-            constructor((void*)((char*)startAddr + i*slotSize));
+            constructor((void*)((char*)startAddr + i*slotSize + sizeof(Slot)));
         }
         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
         curr->parentSlab = slab;
@@ -107,7 +107,12 @@ void Cache::slabListRemove(Cache::Slab *slab, int listNum) {
     Slab* prev = nullptr;
     for(Slab* curr = slabList[listNum]; curr != nullptr; curr = curr->next) {
         if(curr == slab) {
-            prev->next = curr->next;
+            if(prev) {
+                prev->next = curr->next;
+            }
+            else {
+                slabList[listNum] = curr->next;
+            }
             curr->next = nullptr;
             break;
         }
@@ -142,7 +147,7 @@ void Cache::printCacheInfo() {
     printInt(slotSize);
     printString(", ");
     printInt(numSlots);
-
+    printString("\n");
 }
 
 void Cache::getNumSlabsAndSlots(int *numSlabs, int *numSlots) {
@@ -235,8 +240,10 @@ void Cache::strcpy(char *string1, const char *string2) {
 void Cache::allBufferInfo() {
     printString("ime kesa, velicina objekta, velicina slaba, broj slabova, broj slotova po slabu, velicina slota, broj alociranih slotova\n");
     for(int i = 0; i < MAXSIZEBUFFER - MINSIZEBUFFER + 1; i++) {
-        if(bufferCache[i]) bufferCache[i]->printCacheInfo();
-        printString("\n");
+        if(bufferCache[i]) {
+            bufferCache[i]->printCacheInfo();
+            printString("\n");
+        }
     }
 }
 

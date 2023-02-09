@@ -78,13 +78,9 @@ private:
         return relativeAddress(address) % MEM_BLOCK_SIZE == 0;
     }
 
-    static void* userHeapStartAddr() {
-        return (void*)((char*)HEAP_START_ADDR + (1<<24));
-    }
+    static void* userHeapStartAddr();
 
-    static void* userHeapEndAddr() {
-        return (void*)HEAP_END_ADDR;
-    }
+    static void* userHeapEndAddr();
 };
 
 

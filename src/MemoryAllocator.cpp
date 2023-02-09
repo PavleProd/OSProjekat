@@ -4,7 +4,7 @@ MemoryAllocator::FreeSegment* MemoryAllocator::head = nullptr;
 void *MemoryAllocator::mem_alloc(size_t size) {
     if(head == nullptr) { // ako prvi put alociramo memoriju, alociracemo head na pocetak mem segmenta (koji je slobodan)
         head = (FreeSegment*)userHeapStartAddr();
-        head->baseAddr = (void*)((char*)userHeapStartAddr() + (size_t)(1<<24));
+        head->baseAddr = (void*)((char*)userHeapStartAddr());
         head->size = ((size_t)userHeapEndAddr() - (size_t)userHeapStartAddr()); // HEAP_END_ADDR je adresa nakon kraja bloka
         head->next = nullptr;
     }
@@ -134,4 +134,12 @@ int MemoryAllocator::mem_free(void *memSegment) {
     }
 
     return 0;
+}
+
+void *MemoryAllocator::userHeapStartAddr() {
+    return (void*)((char*)HEAP_START_ADDR + (1<<24));
+}
+
+void *MemoryAllocator::userHeapEndAddr() {
+    return (void*)((char*)HEAP_END_ADDR);
 }

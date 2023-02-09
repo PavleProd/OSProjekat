@@ -20,13 +20,16 @@ void PCB::freeObject(void* addr) {
 kmem_cache_t* PCB::pcbCache = nullptr;
 
 PCB *PCB::createProccess(PCB::processMain main, void* arguments) {
-    return new PCB(main, DEFAULT_TIME_SLICE, arguments);
+    PCB* object = new PCB(main, DEFAULT_TIME_SLICE, arguments);
+    if(!object->registers || !object->sysStack) return nullptr;
+    return object;
 }
 
 PCB *PCB::createSysProcess(PCB::processMain main, void* arguments) {
     if(!pcbCache) initPCBCache();
     PCB* object = (PCB*) kmem_cache_alloc(pcbCache);
     object->initObject(main, DEFAULT_TIME_SLICE, arguments);
+    if(!object->registers || !object->sysStack) return nullptr;
     return object;
 }
 
@@ -93,7 +96,9 @@ void PCB::initObject(PCB::processMain main_, size_t timeSlice_, void* mainArgume
     timeSlice = timeSlice_;
     mainArguments = mainArguments_;
     registers = (size_t*)MemoryAllocator::mem_alloc(33*sizeof(size_t)); // mozemo direktno jer se zove iz sistemskog rezima samo
+    if(!registers) return; // greska
     sysStack = (size_t*)MemoryAllocator::mem_alloc(DEFAULT_STACK_SIZE*sizeof(size_t));
+    if(!sysStack) return; // greska
     registers[0] = (size_t)&sysStack[DEFAULT_STACK_SIZE]; // ssp postavljamo na vrh steka
     registers[32] = (size_t)&proccessWrapper; // u ra cuvamo proccessWrapper
     stack = nullptr; // stek pravimo u sistemskom pozivu thread_create

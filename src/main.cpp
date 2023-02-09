@@ -45,8 +45,8 @@ int main() {
 
     thread_create(&userProcess, userMainWrapper, nullptr);
     // ----
-    kmem_cache_info(PCB::pcbCache);
-    kmem_cache_info(SCB::scbCache);
+    //kmem_cache_info(PCB::pcbCache);
+    //kmem_cache_info(SCB::scbCache);
     while(!userProcess->isFinished()) {
         thread_dispatch();
     }

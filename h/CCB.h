@@ -25,12 +25,9 @@ private:
 
 class IOBuffer {
 private:
-    struct Elem {
-        Elem* next;
-        char data;
-    };
-
-    Elem *head = nullptr, *tail = nullptr;
+    const int capacity = 4000;
+    int head = 0, tail = 0, size = 0;
+    char* array = nullptr;
 public:
     void pushBack(char c);
 

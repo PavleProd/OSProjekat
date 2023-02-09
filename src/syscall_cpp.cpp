@@ -54,6 +54,7 @@ Thread::Thread() {
 
 void threadWrapper(void* thread) {
     threadArg *tArg = (threadArg*)thread;
+    if(!tArg) return;
     (((Thread*)tArg->thread)->*(tArg->run))();
     delete tArg;
 }

@@ -4,6 +4,7 @@
 #include "../h/MemoryAllocator.h"
 #include "../h/syscall_c.h"
 #include "../h/kernel.h"
+#include "../h/slab.h"
 PCB* CCB::inputProcces = nullptr;
 PCB* CCB::outputProcess = nullptr;
 SCB* CCB::semInput = nullptr;
@@ -41,34 +42,27 @@ void CCB::outputBody(void*) {
 
 
 void IOBuffer::pushBack(char c) {
-    Elem *newElem = (Elem*)MemoryAllocator::mem_alloc(sizeof(Elem));
-    newElem->next = nullptr;
-    newElem->data = c;
-    if(!head) {
-        head = tail = newElem;
+    if(!array) {
+        array = (char*)kmalloc(capacity);
     }
-    else {
-        tail->next = newElem;
-        tail = tail->next;
-    }
+    array[tail] = c;
+    size++;
+    tail = tail == capacity - 1 ? 0 : tail + 1;
 }
 
 char IOBuffer::popFront() {
-    if(!head) return 0;
+    if(!size) return 0;
 
-    Elem* curr = head;
-    head = head->next;
-    if(tail == curr) tail = nullptr;
-
-    char c = curr->data;
-    MemoryAllocator::mem_free(curr);
+    char c = array[head];
+    size--;
+    head = head == capacity - 1 ? 0 : head + 1;
     return c;
 }
 
 char IOBuffer::peekBack() {
-    return tail ? tail->data : 0;
+    return size > 0 ? array[tail] : 0;
 }
 
 char IOBuffer::peekFront() {
-    return head ? head->data : 0;
+    return size > 0 ? array[head] : 0;
 }
