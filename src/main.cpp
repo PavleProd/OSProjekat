@@ -19,7 +19,6 @@ int main() {
     // Kernel inicijalizacija
     asm volatile("csrw stvec, %0" : : "r" (&interrupt));
     kmem_init((void*)HEAP_START_ADDR, 1 << 24);
-    PCB::initPCBCache();
 
     PCB* main = PCB::createSysProcess(nullptr, nullptr); // main proces(ne pravimo stek)
     PCB::running = main;
@@ -44,10 +43,10 @@ int main() {
 
     Kernel::ms_sstatus(Kernel::SSTATUS_SIE); // dozvoljavaju se prekidi
 
-
     thread_create(&userProcess, userMainWrapper, nullptr);
     // ----
-
+    kmem_cache_info(PCB::pcbCache);
+    kmem_cache_info(SCB::scbCache);
     while(!userProcess->isFinished()) {
         thread_dispatch();
     }

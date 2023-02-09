@@ -1,11 +1,16 @@
 #include "../h/Cache.h"
 #include "../h/BuddyAllocator.h"
 #include "../h/printing.hpp"
+#include "../h/hw.h"
+
+const char* Cache::bufferNames[MAXSIZEBUFFER - MINSIZEBUFFER + 1] = {"size-32", "size-64", "size-128", "size-256",
+                                                                  "size-512", "size-1024", "size-2048",
+                                                                  "size-4096", "size-8192", "size-16384",
+                                                                  "size-32768", "size-65536", "size-131072"};
+
+Cache* Cache::bufferCache[MAXSIZEBUFFER - MINSIZEBUFFER + 1] = {};
 void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *)) {
-    for(int i = 0;; i++) {
-        cacheName[i] = name[i];
-        if(name[i] == '\0') break;
-    }
+
     for(int i = 0; i < 3; i++) {
         slabList[i] = nullptr;
     }
@@ -18,28 +23,24 @@ void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void 
 }
 
 int Cache::getNumSlots(size_t objSize) {
-    return (BLKSIZE - sizeof(Slab)) / objSize;
+    size_t size = BLKSIZE + objSize>BLKSIZE; // ako nije dovoljan jedan uzimamo dva bloka
+    return (size - sizeof(Slab)) / objSize;
 }
 
 void *Cache::allocateSlot() {
     if(slabList[PARTIAL]) {
         Slab* slab = slabList[PARTIAL];
-        slabList[PARTIAL] = slabList[PARTIAL]->next;
         return slab->getFreeSlot();
     }
     else if(slabList[EMPTY]) {
         Slab* slab = slabList[EMPTY];
-        slabList[EMPTY] = slabList[EMPTY]->next;
         Slot* slot = slab->getFreeSlot();
 
         return slot;
     }
-    else {
-        Slab* slab = allocateSlab();
-        return slab->getFreeSlot();
-    }
 
-    return nullptr;
+    Slab* slab = allocateSlab();
+    return slab->getFreeSlot();
 }
 
 Cache::Slab *Cache::allocateSlab() {
@@ -51,7 +52,9 @@ Cache::Slab *Cache::allocateSlab() {
     void* startAddr = (void*)((char*)slab + sizeof(Slab));
     Slot* prev = nullptr;
     for(size_t i = 0; i < this->optimalSlots; i++) {
-        constructor((void*)((char*)startAddr + i*slotSize));
+        if(constructor) {
+            constructor((void*)((char*)startAddr + i*slotSize));
+        }
         Slot* curr = (Slot*)((char*)startAddr + i*slotSize);
         curr->parentSlab = slab;
         curr->allocated = false;
@@ -130,9 +133,9 @@ void Cache::printCacheInfo() {
     printString(", ");
     printInt(numSlabs);
     printString(", ");
-    printInt(slotSize);
-    printString(", ");
     printInt(optimalSlots);
+    printString(", ");
+    printInt(slotSize);
     printString(", ");
     printInt(numSlots);
 
@@ -164,8 +167,10 @@ int Cache::deallocFreeSlabs() {
 
 void Cache::deallocSlab(Slab* slab) {
     void* startAddr = (void*)((char*)slab + sizeof(Slab));
-    for(size_t i = 0; i < this->optimalSlots; i++) {
-        destructor((void*)((char*)startAddr + i*slotSize));
+    if(destructor) {
+        for(size_t i = 0; i < this->optimalSlots; i++) {
+            destructor((void*)((char*)startAddr + i*slotSize));
+        }
     }
     BuddyAllocator::buddyFree(slab, 1);
 }
@@ -179,6 +184,45 @@ void Cache::deallocCache() {
             deallocSlab(old);
         }
     }
+}
+
+// Alocira jedan mali mem bafer velicine size(kao objectSize parametar)
+void *Cache::allocateBuffer(size_t size) {
+    size_t objectPowSize = powerOfTwo(size);
+    size_t entry = objectPowSize - MINSIZEBUFFER;
+    if(bufferCache[entry] == nullptr) {
+        bufferCache[entry] = createCache();
+        bufferCache[entry]->initCache(bufferNames[entry], 1<<objectPowSize, NULL,NULL);
+    }
+    return bufferCache[entry]->allocateSlot();
+}
+
+void Cache::freeBuffer(Slot* slot) {
+    Cache* parentCache = slot->parentSlab->parentCache;
+    parentCache->freeSlot(slot);
+}
+
+size_t Cache::powerOfTwo(size_t size) {
+    size_t t = size;
+    size_t pow = 0;
+    while(t > 0) {
+        t >>=1;
+        pow++;
+    }
+
+    if(t != 1<<pow) pow++;
+    return pow;
+}
+
+Cache *Cache::createCache() {
+    return (Cache*)BuddyAllocator::buddyAlloc(1);
+}
+
+void Cache::strcpy(char *string1, char *string2) {
+        for(int i = 0;; i++) {
+            string1[i] = string2[i];
+            if(string2[i] == '\0') break;
+        }
 }
 
 

@@ -87,15 +87,15 @@ private:
     // pokazivac na sledeci proces u listi spremnih procesa (ako nije u listi spremnih nullptr, ako jeste bice garantovano razlicit on nullptr)
     // jer ce poslednji element pokazivati na idle proces
     // Pokazivac u listi: uspavanih, blokiranih i spremnih procesa(nijedno stanje se ne desava u isto vreme);
-    PCB* nextInList = nullptr;
+    PCB* nextInList;
     size_t* stack; // korisnicki stek procesa
     size_t* sysStack; // sistemski stek procesa
-    size_t* registers = nullptr; // kontekst procesora(ssp x1..31)
+    size_t* registers; // kontekst procesora(ssp x1..31)
     processMain main; // glavna funkcija koju proces izvrsava
     bool finished; // govori da li se proces zavrsio
     bool blocked; // govori da li je proces blokiran(sleep ili semafor)
     bool semDeleted; // govori da li se semafor obrisao pre nego sto je proces odblokiran
-    size_t timeSleeping = 0; // broj perioda tajmera na koju je proces uspavan
+    size_t timeSleeping; // broj perioda tajmera na koju je proces uspavan
 
     void* mainArguments; // argumenti main funkcije procesa
     size_t timeSlice; // vremenski odsecak dodeljen procesu
@@ -110,7 +110,7 @@ private:
     static void switchContext2(size_t* oldContext, size_t* newContext); // kada se ne poziva prvi put
 
     // da li se proces poziva prvi put(ide se u wrapper, ne vraca se kontekst)
-    bool firstCall = true;
+    bool firstCall;
 
     // okruzujuca funkcija main funkcije procesa, kada se izvrsi promena konteksta, skace se na ovu metodu
     static void proccessWrapper();

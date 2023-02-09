@@ -61,7 +61,12 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 void *arg = (void*)PCB::running->registers[13];
 
                 PCB **handle = (PCB**)PCB::running->registers[11];
-                *handle = PCB::createProccess(main, arg);
+                if(scause == 9) { // sistemski rezim
+                    *handle = PCB::createSysProcess(main, arg);
+                }
+                else {
+                    *handle = PCB::createProccess(main, arg);
+                }
 
                 // stavljamo handle u a0 (verovatno vec jeste ali za svaki slucaj)
                 PCB::running->registers[10] = (size_t)handle;
@@ -79,8 +84,12 @@ extern "C" void interruptHandler() { // extern C da kompajler ne bi menjao ime f
                 SCB **handle = (SCB**) PCB::running->registers[11];
                 size_t init = (int) PCB::running->registers[12];
 
-                (*handle) = SCB::createSemaphore(init);
-
+                if(scause == 9) { // sistemski rezim
+                    (*handle) = SCB::createSysSemaphore(init);
+                }
+                else {
+                    (*handle) = SCB::createSemaphore(init);
+                }
                 PCB::running->registers[10] = (size_t)handle;
                 break;
             }

@@ -2,6 +2,8 @@
 #include "../h/kernel.h"
 #include "../h/MemoryAllocator.h"
 
+kmem_cache_t* SCB::scbCache = nullptr;
+
 void SCB::block() {
     PCB::running->setNextInList(nullptr);
     if(tail == nullptr) { // ako ne postoji kraj liste nece postojati ni pocetak
@@ -74,3 +76,22 @@ void SCB::signalClosing() {
     head = tail = nullptr;
 }
 
+SCB *SCB::createSysSemaphore(int semValue) {
+    if(!scbCache) initSCBCache();
+    SCB* object = (SCB*) kmem_cache_alloc(scbCache);
+    object->scbInit(semValue);
+    return object;
+}
+
+SCB *SCB::createSemaphore(int semValue) {
+    return new SCB(semValue);
+}
+
+void SCB::scbInit(int semValue_) {
+    head = tail = nullptr;
+    semValue = semValue_;
+}
+
+void SCB::initSCBCache() {
+    scbCache = kmem_cache_create("SCB", sizeof(SCB), &createObject, &freeObject);
+}

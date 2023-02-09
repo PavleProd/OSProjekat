@@ -53,7 +53,11 @@ private:
     static int getNumSlots(size_t objSize);
     static const int MINSIZEBUFFER = 5, MAXSIZEBUFFER = 17;
     static const int BLKSIZE = 4096;
+    static Cache* bufferCache[MAXSIZEBUFFER - MINSIZEBUFFER + 1];
+    static const char* bufferNames[MAXSIZEBUFFER - MINSIZEBUFFER + 1];
 public:
+    // pravi kes preko badi elokatora(ne vrsi inicijalizaciju)
+    static Cache* createCache();
     // štampanje greške prilikom rada sa kešom; povratna vrednost funkcije je 0 ukoliko
     //greške nije bilo, u suprotnom vrednost različita od 0.
     int printErrorMessage();
@@ -67,6 +71,12 @@ public:
     void deallocCache();
     void deallocSlab(Slab* slab);
     Slab* allocateSlab();
+    static void* allocateBuffer(size_t size);
+    static void freeBuffer(Slot* slot);
+    // raucna prvi >= stepen dvojke
+    static size_t powerOfTwo(size_t size);
+    // kopira string 1 u string s2
+    static void strcpy(char* string1, char* string2);
 };
 
 

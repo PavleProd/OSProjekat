@@ -20,6 +20,9 @@ public:
     static void freeSlot(Cache *cache, void *obj);
     static int printErrorMessage(Cache* cache);
     static void printCacheInfo(Cache* cache);
+    static void* allocBuff(size_t size);
+    static void freeBuff(const void* buff);
+
 
     SlabAllocator(SlabAllocator const&) = delete;
     void operator=(SlabAllocator const&) = delete;

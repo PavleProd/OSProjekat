@@ -24,6 +24,7 @@ PCB *PCB::createProccess(PCB::processMain main, void* arguments) {
 }
 
 PCB *PCB::createSysProcess(PCB::processMain main, void* arguments) {
+    if(!pcbCache) initPCBCache();
     PCB* object = (PCB*) kmem_cache_alloc(pcbCache);
     object->initObject(main, DEFAULT_TIME_SLICE, arguments);
     return object;
@@ -83,6 +84,10 @@ size_t *PCB::getContext() {
 }
 
 void PCB::initObject(PCB::processMain main_, size_t timeSlice_, void* mainArguments_) {
+    firstCall = true;
+    registers = nullptr;
+    nextInList = nullptr;
+    timeSleeping = 0;
     finished = blocked = semDeleted = false;
     main = main_;
     timeSlice = timeSlice_;

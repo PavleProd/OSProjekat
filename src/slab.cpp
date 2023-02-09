@@ -22,8 +22,14 @@ void kmem_cache_free(kmem_cache_t *cachep, void *objp) {
     SlabAllocator::freeSlot((Cache*)cachep, objp);
 }
 
-void *kmalloc(size_t size); // Alloacate one small memory buffer
-void kfree(const void *objp); // Deallocate one small memory buffer
+void *kmalloc(size_t size) {
+    return SlabAllocator::allocBuff(size);
+}
+
+void kfree(const void *objp) {
+    SlabAllocator::freeBuff(objp);
+}
+
 void kmem_cache_destroy(kmem_cache_t *cachep) {
     SlabAllocator::deallocCache((Cache*)cachep);
 }

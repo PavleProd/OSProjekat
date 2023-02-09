@@ -22,13 +22,20 @@ public:
     void* operator new(size_t size);
     void operator delete(void* memSegment);
 
-    static SCB* createSemaphore(int semValue = 1) {
-        return new SCB(semValue);
-    }
+    static SCB* createSemaphore(int semValue = 1);
+
+    static SCB* createSysSemaphore(int semValue = 1);
 
     // Pre zatvaranja svim procesima koji su cekali na semaforu signalizira da je semafor obrisan i budi ih
     void signalClosing();
+
+    static void createObject(void* addr) {}
+    static void freeObject(void* addr) {}
+    static kmem_cache_t* scbCache;//TODO private
+    static void initSCBCache();
 private:
+
+    void scbInit(int semValue);
     SCB(int semValue_ = 1) {
         semValue = semValue_;
     }
