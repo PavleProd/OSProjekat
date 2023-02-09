@@ -10,7 +10,7 @@ const char* Cache::bufferNames[MAXSIZEBUFFER - MINSIZEBUFFER + 1] = {"size-32", 
 
 Cache* Cache::bufferCache[MAXSIZEBUFFER - MINSIZEBUFFER + 1] = {};
 void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void (*dtor)(void *)) {
-
+    strcpy(cacheName, name);
     for(int i = 0; i < 3; i++) {
         slabList[i] = nullptr;
     }
@@ -18,13 +18,14 @@ void Cache::initCache(const char *name, size_t size, void (*ctor)(void *), void 
     constructor = ctor;
     destructor = dtor;
     slotSize = objectSize + sizeof(Slot);
+    slabSize = slotSize / BLKSIZE;
+    if(slotSize % BLKSIZE != 0) slabSize++; // u blokovima
 
-    optimalSlots = getNumSlots(slotSize);
+    optimalSlots = getNumSlots(slabSize, slotSize);
 }
 
-int Cache::getNumSlots(size_t objSize) {
-    size_t size = BLKSIZE + objSize>BLKSIZE; // ako nije dovoljan jedan uzimamo dva bloka
-    return (size - sizeof(Slab)) / objSize;
+int Cache::getNumSlots(size_t slabSize, size_t objSize) {
+    return (slabSize*BLKSIZE - sizeof(Slab)) / objSize;
 }
 
 void *Cache::allocateSlot() {
@@ -44,7 +45,8 @@ void *Cache::allocateSlot() {
 }
 
 Cache::Slab *Cache::allocateSlab() {
-    Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(1);
+
+    Slab* slab = (Slab*)BuddyAllocator::buddyAlloc(powerOfTwo(slabSize)); // 2 ako nije dovoljno
     slab->parentCache = this;
     slab->next = nullptr;
     slab->state = CREATED;
@@ -83,7 +85,7 @@ void Cache::slabListPut(Cache::Slab *slab, int listNum) {
 
 void Cache::freeSlot(Slot* slot) {
     if(slot->parentSlab->parentCache != this) {
-        errortype = FREESLOTERROR;
+        errortype = FreeSlotError;
         return;
     }
 
@@ -115,7 +117,7 @@ void Cache::slabListRemove(Cache::Slab *slab, int listNum) {
 
 int Cache::printErrorMessage() {
     switch(errortype) {
-        case FREESLOTERROR:
+        case FreeSlotError:
             printString("Greska u oslobadjanju slota");
         default:
             printString("Nije bilo greske u radu sa kesom");
@@ -126,10 +128,12 @@ int Cache::printErrorMessage() {
 void Cache::printCacheInfo() {
     int numSlabs = 0, numSlots = 0;
     getNumSlabsAndSlots(&numSlabs, &numSlots);
-    printString("ime kesa, velicina objekta, broj slabova, broj slotova po slabu, velicina slota, broj alociranih slotova\n");
+   // printString("ime kesa, velicina objekta, velicina slaba, broj slabova, broj slotova po slabu, velicina slota, broj alociranih slotova\n");
     printString(cacheName);
     printString(", ");
     printInt(objectSize);
+    printString(", ");
+    printInt(BLKSIZE*slabSize);
     printString(", ");
     printInt(numSlabs);
     printString(", ");
@@ -189,6 +193,9 @@ void Cache::deallocCache() {
 // Alocira jedan mali mem bafer velicine size(kao objectSize parametar)
 void *Cache::allocateBuffer(size_t size) {
     size_t objectPowSize = powerOfTwo(size);
+    if(objectPowSize <  MINSIZEBUFFER || objectPowSize > MAXSIZEBUFFER) {
+        return nullptr;
+    }
     size_t entry = objectPowSize - MINSIZEBUFFER;
     if(bufferCache[entry] == nullptr) {
         bufferCache[entry] = createCache();
@@ -204,13 +211,13 @@ void Cache::freeBuffer(Slot* slot) {
 
 size_t Cache::powerOfTwo(size_t size) {
     size_t t = size;
-    size_t pow = 0;
-    while(t > 0) {
-        t >>=1;
+    size_t pow = 0, powerValue = 1;
+    while(t > 1) {
+        t /= 2;
+        powerValue *= 2;
         pow++;
     }
-
-    if(t != 1<<pow) pow++;
+    if(size != powerValue) pow++;
     return pow;
 }
 
@@ -218,11 +225,19 @@ Cache *Cache::createCache() {
     return (Cache*)BuddyAllocator::buddyAlloc(1);
 }
 
-void Cache::strcpy(char *string1, char *string2) {
+void Cache::strcpy(char *string1, const char *string2) {
         for(int i = 0;; i++) {
             string1[i] = string2[i];
             if(string2[i] == '\0') break;
         }
+}
+
+void Cache::allBufferInfo() {
+    printString("ime kesa, velicina objekta, velicina slaba, broj slabova, broj slotova po slabu, velicina slota, broj alociranih slotova\n");
+    for(int i = 0; i < MAXSIZEBUFFER - MINSIZEBUFFER + 1; i++) {
+        if(bufferCache[i]) bufferCache[i]->printCacheInfo();
+        printString("\n");
+    }
 }
 
 

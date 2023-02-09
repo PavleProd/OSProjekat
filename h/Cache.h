@@ -7,10 +7,10 @@ class Cache {
     friend class SlabAllocator;
 public:
     enum ERRORTYPE {
-        NOERROR, FREESLOTERROR
+        NoError, FreeSlotError
     };
 private:
-    ERRORTYPE errortype = NOERROR;
+    ERRORTYPE errortype = NoError;
 
     enum SlabState {
         EMPTY = 0, PARTIAL = 1, FULL = 2, CREATED = 3
@@ -44,13 +44,13 @@ private:
     typedef void(*Constructor) (void *);
     typedef void(*Destructor) (void *);
     char cacheName[15];
-    size_t objectSize, optimalSlots, slotSize;
+    size_t objectSize, optimalSlots, slotSize, slabSize;
     Constructor constructor;
     Destructor destructor;
 
     void getNumSlabsAndSlots(int* numSlabs, int* numSlots);
 
-    static int getNumSlots(size_t objSize);
+    static int getNumSlots(size_t slabSize, size_t objSize);
     static const int MINSIZEBUFFER = 5, MAXSIZEBUFFER = 17;
     static const int BLKSIZE = 4096;
     static Cache* bufferCache[MAXSIZEBUFFER - MINSIZEBUFFER + 1];
@@ -76,7 +76,8 @@ public:
     // raucna prvi >= stepen dvojke
     static size_t powerOfTwo(size_t size);
     // kopira string 1 u string s2
-    static void strcpy(char* string1, char* string2);
+    static void strcpy(char* string1, const char* string2);
+    static void allBufferInfo();
 };
 
 

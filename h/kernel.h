@@ -3,8 +3,6 @@
 
 #include "hw.h"
 
-#define NULL 0;
-
 class Kernel {
 public:
     // postavlja code u registar a0
